@@ -44,6 +44,7 @@ const classes = ["btn", `btn-${variant}`, `btn-${size}`, className];
     target={external ? "_blank" : undefined}
     rel={external ? "noopener noreferrer" : undefined}
     download={download || undefined}
+    {...rest}
   >
     {icon && <Icon name={icon} />}
     <slot />
@@ -112,7 +113,7 @@ const classes = ["btn", `btn-${variant}`, `btn-${size}`, className];
   }
 
   .btn :global(.arrow) {
-    transition: transform 180ms var(--ease);
+    transition: transform var(--dur-fast) var(--ease);
   }
 
   .btn:hover :global(.arrow) {
