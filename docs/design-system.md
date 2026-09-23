@@ -106,7 +106,6 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 | **Timeline role** | Date column (150px, tabular) + title, place, 1–4 bullets with accent markers; hairline between roles                                                                                                                                                |
 | **Panel**         | Surface, line border, radius 18px; used for CV download and skills                                                                                                                                                                                  |
 | **Result tile**   | Surface card with a 34px serif accent figure + short label                                                                                                                                                                                          |
-| **Copy button**   | Small pill; "Copy email" → "Copied" for 1.6s; falls back to opening `mailto:`                                                                                                                                                                       |
 
 ## Voice
 

@@ -28,7 +28,7 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 2. **How I work** (`#how`): tonal band. Headline, one-line intro, a 7-stage track (Plan → Foundations → Architect → Build → Test → Deploy → Iterate). Selecting a stage shows its plain explanation and an "In practice" example from real work. Default selection: Build.
 3. **Selected work** (`#projects`): one featured card (full width) + three cards. The whole card is a link to the case study.
 4. **Resume** (`#resume`): experience timeline (roles and education, 1–4 plain bullets each) + sticky aside with "Download CV" and grouped skills.
-5. **Contact** (`#contact`): headline, availability line, buttons (Email me, LinkedIn, GitHub, Download CV), a "Copy email" button (the address itself is not shown as text).
+5. **Contact** (`#contact`): headline, availability line, buttons (Email me, LinkedIn, GitHub, Download CV).
 
 ## Case study `/projects/<slug>`
 

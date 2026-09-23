@@ -30,7 +30,7 @@ Approved hero copy (from the design mockup):
 
 Every page leads to one conversion path:
 
-1. **Contact**: email (with copy button) and LinkedIn, one click from any page via the persistent header "Contact me" button. The button appears once per view, not repeated in every section.
+1. **Contact**: email (`mailto:`) and LinkedIn, one click from any page via the persistent header "Contact me" button. The button appears once per view, not repeated in every section.
 2. **CV download**: always next to contact and in the Resume section.
 
 Secondary action: open a case study. Every case study ends with "Next project" (or "Contact me" on the last one).

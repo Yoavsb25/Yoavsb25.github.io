@@ -1,7 +1,7 @@
 ---
 /**
- * Contact (docs/information-architecture.md → Home 5; design-system → Copy button).
- * The email address is not shown as text; the Copy button is an enhancement.
+ * Contact (docs/information-architecture.md → Home 5).
+ * Email me / LinkedIn / GitHub / Download CV — no client JS.
  */
 import type { CollectionEntry } from "astro:content";
 
@@ -40,34 +40,8 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
         Download CV
       </Button>
     </div>
-    <p class="email">
-      <button type="button" class="copy" data-copy={email} hidden>
-        Copy email
-      </button>
-    </p>
   </div>
 </section>
-
-<script>
-  // Client JS justified: the copy-email button is allowed interactivity
-  // (docs/architecture.md); without it the "Email me" link still works.
-  for (const button of document.querySelectorAll<HTMLButtonElement>(
-    "[data-copy]",
-  )) {
-    const email = button.dataset["copy"];
-    if (!email || !navigator.clipboard) continue;
-    button.hidden = false;
-    button.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(email);
-        button.textContent = "Copied";
-        setTimeout(() => (button.textContent = "Copy email"), 1600);
-      } catch {
-        location.href = `mailto:${email}`;
-      }
-    });
-  }
-</script>
 
 <style>
   .contact {
@@ -96,29 +70,6 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
     justify-content: center;
     gap: var(--space-3);
     margin-top: 2.25rem;
-  }
-
-  .email {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: var(--space-5);
-    color: var(--ink-2);
-    font-size: 0.96875rem;
-  }
-
-  .copy {
-    padding: 7px 12px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-pill);
-    background: none;
-    color: var(--accent);
-    font: 500 var(--text-meta) / 1 var(--sans);
-    cursor: pointer;
-  }
-
-  .copy:hover {
-    border-color: var(--accent);
   }
 
   @media (max-width: 900px) {
