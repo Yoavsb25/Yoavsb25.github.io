@@ -3,60 +3,51 @@
 ## Site map
 
 ```
-/                     Home
-/projects             All projects
+/                     Home (single page: hero, how I work, work, resume, contact)
 /projects/<slug>      Case study
-/about                Experience, skills, CV
-/contact              Hire me: email, LinkedIn, CV, availability
 /404                  Not found
-/cv.pdf               CV download (static file)
+/cv.pdf               CV download (static file, no phone number)
 /sitemap-index.xml, /robots.txt, /llms.txt   (machine-readable)
 
-Phase 2 (reserved, not built at launch):
-/writing, /writing/<slug>, /rss.xml
+Later:
+/projects             All projects (add when there are more than ~6)
+/writing, /writing/<slug>, /rss.xml   (phase 2, brand)
 ```
+
+Home is one page with anchored sections so a recruiter never has to navigate. Case studies are real pages (shareable URLs, SEO), not overlays.
 
 ## Global elements
 
-- **Header**: name/logo (→ home), Projects, About, and a primary **Hire me** button (→ /contact). Sticky on scroll, collapses to a menu on mobile.
-- **Footer**: email, LinkedIn, GitHub, CV download, "How this site is built" link, copyright.
-- Skip link, light/dark theme toggle (the only client-side script expected).
+- **Header** (sticky, translucent): YS mark + name (→ home), Work, How I work, Resume, theme toggle (sun/moon), and a primary **Hire me** button (→ #contact). Links collapse on mobile; theme toggle and Hire me stay visible.
+- **Footer**: copyright and a one-line sign-off ("Planned, built, and tested with care.").
+- Skip link; visible focus states everywhere.
 
-## Pages
+## Home `/`
 
-### Home `/`
+1. **Hero** (`#top`): status line with a pulsing dot ("Open to AI engineering roles · London"), serif headline with one italic accent word, one-paragraph lede, _Hire me_ (primary) and _See my work_ (secondary). Portrait on the right with a badge ("Automation Engineer · at SysAid · London"). Plain-language skill chips under a hairline.
+2. **How I work** (`#how`): tonal band. Headline, one-line intro, a 7-stage track (Plan → Foundations → Architect → Build → Test → Deploy → Iterate). Selecting a stage shows its plain explanation and an "In practice" example from real work. Default selection: Build.
+3. **Selected work** (`#work`): one featured card (full width) + three cards. The whole card is a link to the case study.
+4. **Resume** (`#resume`): experience timeline (roles and education, 1–4 plain bullets each) + sticky aside with "Download CV" and grouped skills.
+5. **Contact** (`#contact`): headline, availability line, buttons (Email me, LinkedIn, GitHub, Download CV), email as selectable text with a Copy button.
 
-1. **Hero**: name, title, one-liner, location/availability, CTAs: _Hire me_ (primary), _Download CV_ (secondary).
-2. **Featured projects**: 3 cards (title, one-line outcome, stack tags) → case studies.
-3. **What I do**: 3 capability pillars (e.g. AI agents and automation · full-stack AI apps · ML fundamentals), each backed by a project.
-4. **Experience snapshot**: latest 2–3 roles → /about.
-5. **Closing CTA**: "Let's build something" → /contact.
+## Case study `/projects/<slug>`
 
-### Projects `/projects`
+Fixed structure, enforced by the content schema (ADR-0005):
 
-Grid of all projects, featured first. Filter by tag (static, no JS required: tag links or anchors). Each card: title, summary, tags, links (case study, repo, live demo).
-
-### Case study `/projects/<slug>`
-
-Fixed structure, enforced by the content schema:
-
-1. Header: title, one-line outcome, role, timeframe, stack, links.
-2. **Problem**: context and constraints.
-3. **Approach and architecture**: diagram + key decisions and trade-offs.
-4. **Results**: concrete outcomes (numbers where possible).
-5. **What I'd do next / lessons**.
-6. Next project + Hire me CTA.
-
-### About `/about`
-
-Short bio (human, first person) → experience timeline → skills grouped by area → education → CV download.
-
-### Contact `/contact`
-
-One clear block: what roles he's looking for, availability, email (mailto), LinkedIn, CV download. No form.
+1. "← All projects" back link (→ /#work).
+2. Header: kicker ("Case study · SysAid · 2025"), title, one-sentence outcome.
+3. Meta row: Role, Timeline, Stack, Links.
+4. Visual: screenshot or window illustration.
+5. Sections with a sticky side table of contents (hidden on mobile):
+   - **The problem**: why it mattered
+   - **What I built**: 3 bullets
+   - **How I approached it**: one paragraph, framed by the lifecycle
+   - **Results**: 3 result tiles (big serif figure + label)
+6. Next project + Hire me.
 
 ## Navigation rules
 
-- Every page is at most 1 click from Hire me.
+- Every page is at most 1 click from Hire me and the CV.
 - Every case study links to the next project and to contact.
 - URLs are lowercase, kebab-case, stable (a slug never changes once published).
+- In-page anchors are plain words (`#work`, `#resume`) so links can be shared.

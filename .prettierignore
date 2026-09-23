@@ -2,3 +2,6 @@ dist/
 .astro/
 node_modules/
 package-lock.json
+
+# design reference (hand-authored HTML mockup)
+docs/design/

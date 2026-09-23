@@ -21,7 +21,9 @@ src/
     experience/<id>.yaml    roles
     profile.yaml            bio, skills, availability
   lib/                      pure helpers: seo, dates, sorting, formatting — unit tested
-  styles/tokens.css         design tokens (from the design PR)
+  styles/tokens.css         design tokens, light + dark (ADR-0007)
+  styles/global.css         reset, base type, shared utilities
+  assets/portrait.jpg       hero photo (optimized at build)
   components/
     ui/                     primitives: Button, Link, Tag, Card, Icon, Prose
     sections/               page sections: Hero, FeaturedProjects, ExperienceTimeline, CtaBlock
@@ -53,7 +55,7 @@ Data flows one way: content/config → pages → sections → ui.
 ## Rendering and interactivity
 
 - Everything is prerendered HTML; zero client JS by default.
-- Allowed islands: theme toggle and mobile nav. Each `client:*` use needs a justification comment.
+- Allowed scripts: the theme bootstrap (inline, CSP-hashed, ADR-0008), the theme toggle, the How I work stage selector, and the copy-email button. All are progressive enhancements; content renders without JS. Each needs a justification comment.
 - Images use Astro's `<Image>` (build-time optimization, width/height set, lazy by default).
 
 ## SEO and machine-readability
