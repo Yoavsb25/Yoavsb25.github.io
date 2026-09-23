@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { site } from "@/config/site";
 import {
   absoluteUrl,
+  canonicalUrl,
   creativeWorkJsonLd,
   ogImagePath,
   pageTitle,
@@ -17,6 +18,14 @@ describe("pageTitle", () => {
 
   it("prefixes the page name", () => {
     expect(pageTitle("Projects")).toBe(`Projects | ${site.name}`);
+  });
+});
+
+describe("canonicalUrl", () => {
+  it("keeps a based pathname as is, without adding the base twice", () => {
+    expect(canonicalUrl("/portfolio/projects/x/")).toBe(
+      `${site.url}/portfolio/projects/x/`,
+    );
   });
 });
 
