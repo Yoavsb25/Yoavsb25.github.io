@@ -26,18 +26,18 @@ Approved hero copy (from the design mockup):
 
 **Recruiters come first.** The site must be easy to read and use: plain language, no jargon, few numbers, no diagrams on the home page, no developer-terminal aesthetic. Technical depth lives inside case studies, for those who look for it.
 
-## Primary action: "Hire me"
+## Primary action: "Contact me"
 
 Every page leads to one conversion path:
 
-1. **Contact**: email (with copy button) and LinkedIn, one click from any page via the persistent header "Hire me" button.
+1. **Contact**: email (with copy button) and LinkedIn, one click from any page via the persistent header "Contact me" button. The button appears once per view, not repeated in every section.
 2. **CV download**: always next to contact and in the Resume section.
 
-Secondary action: open a case study. Every case study ends with "Next project" and "Hire me".
+Secondary action: open a case study. Every case study ends with "Next project" (or "Contact me" on the last one).
 
 ## Key journeys
 
-- **Recruiter scan**: hero (photo, title, location, Hire me) → Selected work → Resume → Download CV. Works in under 30 seconds on a phone.
+- **Recruiter scan**: hero (photo, title, location, See my work) → Selected work → Resume → Download CV. Works in under 30 seconds on a phone.
 - **Hiring manager deep dive**: home → case study (problem, what I built, approach, results) → GitHub → contact.
 - **Peer / brand**: home → "How I work" → "This website, built with AI" case study.
 

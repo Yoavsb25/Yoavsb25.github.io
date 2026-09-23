@@ -24,7 +24,7 @@ export const site = {
 
 /** Primary navigation: in-page sections of the home page. */
 export const nav = [
-  { label: "Work", href: "/#work" },
   { label: "How I work", href: "/#how" },
+  { label: "Projects", href: "/#projects" },
   { label: "Resume", href: "/#resume" },
 ] as const;

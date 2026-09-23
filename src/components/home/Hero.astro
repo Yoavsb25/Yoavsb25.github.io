@@ -7,17 +7,15 @@ import portrait from "@/assets/portrait.jpg";
 import Emphasized from "@/components/home/Emphasized.astro";
 import Button from "@/components/ui/Button.astro";
 import Chip from "@/components/ui/Chip.astro";
-import { sentences, splitFirst } from "@/lib/text";
+import { sentences } from "@/lib/text";
 
 interface Props {
   profile: CollectionEntry<"profile">["data"];
   name: string;
-  contactHref: string;
   workHref: string;
 }
 
-const { profile, name, contactHref, workHref } = Astro.props;
-const [role, place] = splitFirst(profile.badge);
+const { profile, name, workHref } = Astro.props;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -36,10 +34,7 @@ const [role, place] = splitFirst(profile.badge);
       </h1>
       <p class="lede">{profile.lede}</p>
       <div class="actions">
-        <Button href={contactHref} trailingArrow>
-          Hire me
-        </Button>
-        <Button href={workHref} variant="ghost">
+        <Button href={workHref} trailingArrow>
           See my work
         </Button>
       </div>
@@ -58,10 +53,6 @@ const [role, place] = splitFirst(profile.badge);
         loading="eager"
         fetchpriority="high"
       />
-      <figcaption class="badge">
-        <strong>{role}</strong>
-        {place && <span>{place}</span>}
-      </figcaption>
     </figure>
 
     <ul class="skills" aria-label="Skills">
@@ -179,29 +170,6 @@ const [role, place] = splitFirst(profile.badge);
     box-shadow: var(--shadow);
   }
 
-  .badge {
-    position: absolute;
-    left: -22px;
-    bottom: 28px;
-    display: grid;
-    gap: 2px;
-    padding: var(--space-3) var(--space-4);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-  }
-
-  .badge strong {
-    font-size: var(--text-small);
-    font-weight: 600;
-  }
-
-  .badge span {
-    color: var(--ink-3);
-    font-size: var(--text-meta);
-  }
-
   .skills {
     grid-column: 1 / -1;
     display: flex;
@@ -227,11 +195,6 @@ const [role, place] = splitFirst(profile.badge);
       order: -1;
       justify-self: start;
       max-width: 16.25rem;
-    }
-
-    .badge {
-      left: auto;
-      right: -16px;
     }
   }
 </style>

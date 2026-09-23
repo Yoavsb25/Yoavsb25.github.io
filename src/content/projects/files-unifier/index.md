@@ -25,4 +25,7 @@ results:
   - figure: "1"
     label: file installer, no setup needed
 order: 3
+cover:
+  src: ./cover.png
+  alt: "The PDF Batch Merger desktop app: fields for the serial numbers column, the instructions spreadsheet, and the source and output folders, a Run Merge button, and a detailed log panel."
 ---

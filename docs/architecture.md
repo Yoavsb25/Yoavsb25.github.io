@@ -23,7 +23,7 @@ src/
     projects/<slug>/cover.png optional colocated image, validated by the schema's image() helper
     experience/<id>.yaml      roles and education (kind: role | education)
     stages.yaml               How I work stages (one file, array)
-    profile.yaml              prose only: status line, headline, lede, badge, skills, contact copy
+    profile.yaml              prose only: status line, headline, lede, skills, contact copy
   lib/                        pure helpers: seo, og, crawlers, url, content ordering — unit tested
   assets/og/                  WOFF fonts for Open Graph images (ADR-0015)
   styles/tokens.css           design tokens, light + dark (ADR-0007)
