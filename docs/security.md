@@ -10,10 +10,16 @@ There is no backend, auth, or user data. The main risks are:
 | Compromised / mutable GitHub Action | Actions pinned to commit SHAs, Dependabot for actions, actionlint                                                                                                                                                                                                                             |
 | Over-privileged workflows           | `permissions: contents: read` by default; extra scopes per job only (`pages: write` + `id-token: write` on the deploy job alone)                                                                                                                                                              |
 | Leaked secrets                      | No secrets needed; `.env*` gitignored and denied to Claude; secret scan in Claude hooks and pre-commit (`scripts/guards`); GitHub secret scanning + push protection                                                                                                                           |
-| XSS / injected third-party code     | No third-party scripts; Content-Security-Policy via Astro `security.csp` (ADR-0008)                                                                                                                                                                                                           |
+| XSS / injected third-party code     | No third-party scripts; Content-Security-Policy `<meta>` via Astro `security.csp` (ADR-0008): `default-src 'self'`, hashed scripts and styles, `object-src 'none'`, `base-uri 'self'`, `form-action 'none'`; no inline `style` attributes. e2e fails on any CSP violation                     |
 | Unreviewed changes to `main`        | Branch protection: PR + required checks; CODEOWNERS on guardrails, agents, MCP config, and dependency files                                                                                                                                                                                   |
 | Code vulnerabilities                | CodeQL (security-extended) on PRs and weekly                                                                                                                                                                                                                                                  |
 | Personal data exposure              | Phone number never published; public CV is a copy without it                                                                                                                                                                                                                                  |
+
+CSP limits:
+
+- GitHub Pages cannot send response headers, and a `<meta>` policy cannot set `frame-ancestors` or reporting. Framing (clickjacking) is accepted: the site has no forms, logins, or actions to trick a visitor into.
+- A `<meta>` policy applies only to what follows it, and Astro emits it after the fonts, the theme script, and JSON-LD. Everything before it is ours; JSON-LD goes through `serializeJsonLd` (escapes `<`, unit tested). Never interpolate content into `<head>` without escaping.
+- On `yoavsb25.github.io/portfolio`, `'self'` (and `localStorage`) covers every GitHub Pages repo on the account. Accepted: all are ours. The custom domain (`chore/launch`) removes this.
 
 ## AI tooling (Claude Code) threat model
 

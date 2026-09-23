@@ -7,7 +7,7 @@
 /projects/<slug>      Case study
 /404                  Not found
 /cv.pdf               CV download (static file, no phone number)
-/sitemap-index.xml, /robots.txt, /llms.txt   (machine-readable)
+/sitemap.xml, /robots.txt, /llms.txt   (machine-readable, ADR-0016)
 
 Later:
 /projects             All projects (add when there are more than ~6)

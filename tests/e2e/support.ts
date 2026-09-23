@@ -1,5 +1,7 @@
-import { readdirSync } from "node:fs";
-import { sep } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { join, sep } from "node:path";
+
+import { site } from "../../src/config/site.ts";
 
 /**
  * Per-page byte budgets, before gzip. Source of truth for CI and /perf-audit.
@@ -23,5 +25,27 @@ export function builtRoutes(dir = "dist"): string[] {
         .join("/")
         .replace(/index\.html$/, ""),
     )
+    .sort();
+}
+
+/** Public URL prefix of the site ("https://…/portfolio/"), stripped to compare with routes. */
+export const publicRoot = new URL(`${site.base.replace(/\/$/, "")}/`, site.url)
+  .href;
+
+/** Built routes without a robots noindex meta: the pages the sitemap must list. */
+export function indexableRoutes(dir = "dist"): string[] {
+  return builtRoutes(dir).filter(
+    (route) =>
+      !/<meta name="robots" content="noindex"/.test(
+        readFileSync(join(dir, route, "index.html"), "utf8"),
+      ),
+  );
+}
+
+/** Routes listed in dist/sitemap.xml, relative to the public root. */
+export function sitemapRoutes(dir = "dist"): string[] {
+  const xml = readFileSync(join(dir, "sitemap.xml"), "utf8");
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map(([, loc = ""]) => loc.replace(publicRoot, ""))
     .sort();
 }

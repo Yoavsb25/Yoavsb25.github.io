@@ -9,6 +9,7 @@ export const site = {
   base: "/portfolio",
   name: "Yoav Sborovsky",
   initials: "YS",
+  jobTitle: "AI Engineer",
   title: "Yoav Sborovsky — AI Engineer",
   description:
     "AI engineer who takes products from idea to production: planned, built, tested, and shipped.",

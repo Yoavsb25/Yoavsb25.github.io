@@ -24,7 +24,8 @@ src/
     experience/<id>.yaml      roles and education (kind: role | education)
     stages.yaml               How I work stages (one file, array)
     profile.yaml              prose only: status line, headline, lede, badge, skills, contact copy
-  lib/                        pure helpers: seo, url, content ordering and periods — unit tested
+  lib/                        pure helpers: seo, og, crawlers, url, content ordering — unit tested
+  assets/og/                  WOFF fonts for Open Graph images (ADR-0015)
   styles/tokens.css           design tokens, light + dark (ADR-0007)
   styles/global.css           reset, base type, shared utilities
   assets/portrait.jpg         hero photo (optimized at build)
@@ -77,7 +78,10 @@ Data flows one way: content/config → pages → features → ui. When a second 
 
 ## SEO and machine-readability
 
-One `seo` helper in `src/lib` builds title, description, canonical, Open Graph, and JSON-LD (`Person` on home, `CreativeWork` on case studies). Build-time OG images, `sitemap`, `robots.txt`, `llms.txt`.
+`src/lib/seo.ts` builds titles, absolute URLs, and JSON-LD (`Person` on home, `CreativeWork` on case studies); `BaseLayout` renders the canonical URL, Open Graph, and X card tags from its props (`title`, `description`, `image`, `type`, `jsonLd`, `noindex`).
+
+- Open Graph images: one 1200×630 PNG per indexable page, rendered at build by `src/lib/og.ts` (satori + sharp, ADR-0015) and served from `/og/`.
+- `/sitemap.xml`, `/robots.txt`, `/llms.txt`: endpoints in `src/pages/` built by `src/lib/crawlers.ts` (ADR-0016). e2e checks the sitemap matches the indexable built pages.
 
 ## Security
 
