@@ -5,8 +5,8 @@
  */
 export const site = {
   url: "https://yoavsb25.github.io",
-  /** Path the site is served under: "/portfolio" as a project page, "/" on a custom domain (ADR-0010). */
-  base: "/portfolio",
+  /** Path the site is served under: "/" from the user-site repo (ADR-0017); a project page would use "/<repo>" (ADR-0010). */
+  base: "/",
   name: "Yoav Sborovsky",
   initials: "YS",
   jobTitle: "AI Engineer",

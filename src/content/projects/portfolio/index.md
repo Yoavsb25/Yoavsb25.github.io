@@ -10,7 +10,7 @@ meta:
   stack: [Astro, TypeScript, Claude Code]
   links:
     - label: GitHub
-      href: https://github.com/Yoavsb25/portfolio
+      href: https://github.com/Yoavsb25/Yoavsb25.github.io
 problem: Most portfolios say "I write quality code" without showing it. I wanted the website itself to be the evidence, including how it was built with AI.
 built:
   - A fast, accessible website with no unnecessary code sent to visitors.

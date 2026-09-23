@@ -16,8 +16,9 @@ One PR at a time; the next starts only after the previous is merged.
 | 10  | `feat/content-model`           | Content collections + schemas, `/new-case-study`, `/sync-projects`; delete `content-inventory.md`                                    | ✅ merged      |
 | 11  | `feat/seo`                     | SEO/JSON-LD, CSP, OG images, sitemap, robots, `llms.txt`                                                                             | ✅ merged      |
 | 12  | `feat/pages`                   | Home (hero, how I work, work, resume, contact), case study pages, 404; enable link fragment checks; delete `docs/design/mockup.html` | ✅ merged      |
-| 13  | `content/launch-content`       | Real case studies, experience, CV, portrait; resolve every `TODO(confirm)`                                                           | 🚧 in progress |
-| 14  | `chore/launch`                 | Custom domain (`site.base` → `/`), final audits, `v1.0.0`                                                                            | ⏳             |
+| 13  | `content/launch-content`       | Real case studies, experience, CV, portrait; resolve every `TODO(confirm)`                                                           | ✅ merged      |
+| 14  | `chore/launch`                 | Final audits, `v1.0.0` (custom domain deferred)                                                                                      | ✅ merged      |
+| 15  | `chore/root-domain`            | Rename the repo to `Yoavsb25.github.io`, `site.base` → `/` (ADR-0017)                                                                | 🚧 in progress |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
 `

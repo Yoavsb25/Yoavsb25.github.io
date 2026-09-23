@@ -10,7 +10,7 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 | Command            | Purpose                                                                 |
 | ------------------ | ----------------------------------------------------------------------- |
-| `npm run dev`      | Local dev server at http://localhost:4321/portfolio/ (`site.base`)      |
+| `npm run dev`      | Local dev server at http://localhost:4321/ (`site.base`)                |
 | `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build   |
 | `npm run format`   | Auto-format everything                                                  |
 | `npm run test`     | Unit tests (Vitest)                                                     |

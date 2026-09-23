@@ -1,6 +1,6 @@
 # 0010. Pages deploy under a base path
 
-- Status: accepted
+- Status: accepted; the project-page base and the rejected rename are superseded by 0017
 - Date: 2026-09-23
 
 ## Context

@@ -9,5 +9,5 @@ exclude = ['^https://(www\.)?linkedin\.com/']
 
 # Check #anchors on internal pages too (TOC links, #projects, #contact).
 include_fragments = "anchor-only"
-# Resolve directory links like GitHub Pages does, so /portfolio/#projects is checked in index.html.
+# Resolve directory links like GitHub Pages does, so /#projects is checked in index.html.
 index_files = ["index.html"]

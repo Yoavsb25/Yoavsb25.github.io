@@ -28,7 +28,7 @@ export function builtRoutes(dir = "dist"): string[] {
     .sort();
 }
 
-/** Public URL prefix of the site ("https://…/portfolio/"), stripped to compare with routes. */
+/** Public URL prefix of the site ("https://yoavsb25.github.io/"), stripped to compare with routes. */
 export const publicRoot = new URL(`${site.base.replace(/\/$/, "")}/`, site.url)
   .href;
 
