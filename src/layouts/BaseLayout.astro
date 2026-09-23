@@ -11,6 +11,7 @@ import SkipLink from "@/components/site/SkipLink.astro";
 import { site } from "@/config/site";
 import {
   absoluteUrl,
+  canonicalUrl,
   ogImagePath,
   ogSize,
   pageTitle,
@@ -42,7 +43,7 @@ const {
 } = Astro.props;
 
 const fullTitle = pageTitle(title);
-const canonical = new URL(Astro.url.pathname, site.url).href;
+const canonical = canonicalUrl(Astro.url.pathname);
 const imageUrl = absoluteUrl(ogImagePath(image));
 ---
 

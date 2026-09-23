@@ -11,6 +11,11 @@ export function absoluteUrl(path: string, base: string = site.base): string {
   return new URL(withBase(path, base), site.url).href;
 }
 
+/** Absolute URL for a request path that already carries the base (Astro.url.pathname). */
+export function canonicalUrl(pathname: string): string {
+  return new URL(pathname, site.url).href;
+}
+
 /** Root-relative path of a page's Open Graph image, e.g. "/og/projects/portfolio.png". */
 export function ogImagePath(key: string): string {
   return `/og/${key}.png`;

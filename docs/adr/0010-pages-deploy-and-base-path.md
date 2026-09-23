@@ -11,6 +11,7 @@ ADR-0002 deploys to GitHub Pages. The repository is `portfolio`, so Pages serves
 
 - `site.base` in `src/config/site.ts` holds the path the site is served under (`"/portfolio"` now, `"/"` on a custom domain). `astro.config.mjs` reads it as `base`, so Astro prefixes its own assets.
 - Every hand-written internal link goes through `withBase()` from `src/lib/url.ts`. `ui/` primitives cannot import `lib/`, so callers pass already-prefixed hrefs.
+- Absolute URLs come from `src/lib/seo.ts`: `absoluteUrl(path)` for a root-relative path (sitemap, JSON-LD, OG images), and `canonicalUrl(Astro.url.pathname)` for the current page, whose pathname already includes the base.
 - `.github/workflows/deploy.yml` runs on every push to `main` (and manually): `npm run verify`, then `actions/upload-pages-artifact` and `actions/deploy-pages`. Only the deploy job gets `pages: write` and `id-token: write`. Deploys queue and are never cancelled midway.
 - `npm run stage` copies `dist/` to `_site/<base>/` so static checks (Lighthouse, lychee) see the same URL layout as Pages.
 
