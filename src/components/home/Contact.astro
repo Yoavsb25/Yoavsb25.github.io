@@ -45,7 +45,7 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
 
 <style>
   .contact {
-    padding-block: var(--space-10) 8rem;
+    padding-block: var(--section-y);
     background: linear-gradient(to bottom, var(--ground), var(--ground-2));
     text-align: center;
   }
@@ -53,7 +53,7 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
   h2 {
     max-width: 14ch;
     margin: var(--space-4) auto 0;
-    font-size: clamp(2.375rem, 5.6vw, 3.875rem);
+    font-size: var(--text-h2);
     line-height: 1.05;
   }
 
@@ -70,11 +70,5 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
     justify-content: center;
     gap: var(--space-3);
     margin-top: 2.25rem;
-  }
-
-  @media (max-width: 900px) {
-    .contact {
-      padding-block: var(--space-9);
-    }
   }
 </style>
