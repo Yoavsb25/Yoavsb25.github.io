@@ -7,7 +7,7 @@ A fully static site: Astro renders every page to HTML at build time and GitHub P
 ```
 src/content (MD + YAML) ──┐
 src/config/site.ts ───────┼─▶ Astro build (CI) ─▶ dist/ (HTML, CSS, images) ─▶ GitHub Pages
-public/ (cv.pdf, icons) ──┘
+public/ (CV PDF, icons) ──┘
 ```
 
 ## Target structure
