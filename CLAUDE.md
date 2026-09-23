@@ -26,6 +26,9 @@ tests/unit/          Vitest tests, mirror src/lib
 docs/                architecture, security, roadmap, ADRs
 .claude/settings.json  shared permissions + hook wiring (protected)
 .claude/hooks/       Claude Code hook entry scripts (thin wrappers)
+.claude/skills/      project skills (/adr, /ship)
+.claude/agents/      review and content subagents
+.mcp.json            project MCP servers (Playwright, pinned)
 scripts/guards/      shared guard rules for Claude + git hooks (protected, tested in tests/unit/guards.test.ts)
 .github/workflows/   CI (protected — change only when asked)
 ```
@@ -42,6 +45,21 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 - No third-party scripts, trackers, or CDNs (see `docs/security.md`).
 - Pin GitHub Actions to full commit SHAs with a version comment.
 - A significant decision (new dependency, pattern, or service) needs an ADR in `docs/adr/`.
+
+## Workflow: skills and agents
+
+| Use                       | When                                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------------- |
+| `/adr`                    | A significant decision is made or reversed                                                |
+| `/ship`                   | Before calling a PR ready: preflight checks, scope check, PR title and body. Never pushes |
+| `code-reviewer` agent     | Before `/ship` on any PR that changes code                                                |
+| `security-reviewer` agent | PRs touching `.github/`, `.claude/`, `scripts/guards/`, dependencies, or `<head>`         |
+| `a11y-reviewer` agent     | PRs that change pages, components, or styles (needs `npm run dev`)                        |
+| `content-editor` agent    | Writing or editing site copy in `src/content/` or `docs/content-inventory.md`             |
+
+Standard PR flow: plan in scope → build → `npm run verify` → review agents → `/ship` → the user pushes, opens the PR, merges when green.
+
+The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless, isolated browser limited to `http://localhost:4321` for the a11y and design reviews; artifacts go to `.playwright-mcp/` (gitignored). First-time setup: `npm ci && npx playwright install chromium`.
 
 ## Guardrail layers
 
@@ -63,7 +81,9 @@ One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 | After Bash        | `dependency-reminder.mjs` | After `npm install <pkg>`, reminds that new dependencies need an ADR                                                                                                              |
 | Before stopping   | `quick-check.mjs`         | If source changed, runs lint + `astro check`; failures must be fixed                                                                                                              |
 
-Protected paths (see `scripts/guards/rules.mjs`): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/settings.json`, `.claude/hooks/`, `scripts/guards/`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+Protected paths (see `scripts/guards/rules.mjs`, resolved and case-insensitive): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/` (all of it, including `settings.local.json`), `CLAUDE.md`, `.mcp.json`, `scripts/guards/`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+
+Agent boundaries are enforced by the global guard hooks using the subagent's `agent_type` (ADR-0009): reviewers get one plain read-only command at a time, `a11y-reviewer` has no shell, `content-editor` writes only site copy. Guard hooks fail closed.
 
 Known limits: `guard-bash` matches command text, so a command that merely mentions a blocked pattern (e.g. in a heredoc) is also denied — write that content with the Write tool instead. Scripts (python, node) that write files are not inspected; CODEOWNERS review is the backstop.
 Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake secrets must be built at runtime (see `tests/unit/guards.test.ts`).

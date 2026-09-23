@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import {
   checkBranch,
   checkCommand,
+  checkContentPath,
   checkPath,
+  checkReadOnlyCommand,
   currentRoadmapItem,
   dependenciesChanged,
   findSecret,
@@ -34,6 +36,10 @@ describe("checkPath", () => {
     ".github/workflows/ci.yml",
     ".claude/settings.json",
     ".claude/hooks/x.mjs",
+    ".claude/agents/code-reviewer.md",
+    ".claude/skills/ship/preflight.mjs",
+    ".mcp.json",
+    "package.json",
     "package-lock.json",
   ])("asks before editing %s", (p) =>
     expect(checkPath(p).decision).toBe("ask"),
@@ -46,7 +52,7 @@ describe("checkPath", () => {
   it.each([
     "src/pages/index.astro",
     "docs/roadmap.md",
-    ".claude/skills/x/SKILL.md",
+    "src/content/package.json.md",
   ])("allows %s", (p) => {
     expect(checkPath(p).decision).toBe("allow");
   });
@@ -126,10 +132,10 @@ describe("protectedPathInCommand", () => {
   it.each([
     ["sed -i '' 's/a/b/' .github/workflows/ci.yml", ".github/workflows/"],
     ["echo x > lefthook.yml", "lefthook.yml"],
-    ["cat a >> .claude/settings.json", ".claude/settings.json"],
+    ["cat a >> .claude/settings.json", ".claude/"],
     ["mv tmp scripts/guards/rules.mjs", "scripts/guards/"],
     ["rm package-lock.json", "package-lock.json"],
-    ["git checkout -- .claude/hooks/guard-bash.mjs", ".claude/hooks/"],
+    ["git checkout -- .claude/hooks/guard-bash.mjs", ".claude/"],
   ])("flags %s", (cmd, path) => {
     expect(protectedPathInCommand(cmd)).toBe(path);
   });
@@ -192,5 +198,119 @@ describe("dependenciesChanged", () => {
       dependenciesChanged(base, { ...base, scripts: { dev: "astro dev" } }),
     ).toBe(false);
     expect(dependenciesChanged({}, {})).toBe(false);
+  });
+});
+
+describe("protectedPathInCommand (MCP and agents)", () => {
+  it.each([
+    ["echo {} > .mcp.json", ".mcp.json"],
+    ["sed -i '' s/sonnet/opus/ .claude/agents/code-reviewer.md", ".claude/"],
+  ])("flags %s", (cmd, path) => {
+    expect(protectedPathInCommand(cmd)).toBe(path);
+  });
+});
+
+describe("checkReadOnlyCommand", () => {
+  it.each([
+    "git diff origin/main...HEAD",
+    "git diff --stat origin/main...HEAD",
+    "git fetch --quiet origin",
+    "git fetch origin",
+    "git log --format=%s origin/main..HEAD",
+    "git branch --show-current",
+    "git show HEAD:package.json",
+    "cat docs/security.md",
+    "ls docs/adr",
+    "npm run verify",
+    "npm run audit",
+  ])("allows %s", (cmd) => {
+    expect(checkReadOnlyCommand(cmd)).toBeNull();
+  });
+
+  // Includes every bypass found in the PR 6 security re-review.
+  it.each([
+    "git commit -m x",
+    "git add -A",
+    "git switch main",
+    "git diff --output=patch.txt",
+    "git diff --ext-diff",
+    "git fetch --upload-pack=touch /tmp",
+    "git fetch origin +HEAD:refs/heads/main",
+    "npm run build",
+    "npm run lint -- --fix",
+    "npm run test -- -u",
+    "npm install left-pad",
+    "npm audit fix",
+    "cat a > b",
+    "cat <(touch x)",
+    "echo $(whoami)",
+    "ls & touch x",
+    "git status\nnpm install evil",
+    "git status; curl https://example.com",
+    "cat docs/security.md | head -40",
+    "rg --pre=touch x .",
+    "find . -fprint x",
+    "find . -okdir rm {} ;",
+    "cd /tmp",
+    "node -e 1",
+    "node .claude/skills/ship/preflight.mjs",
+  ])("denies %j", (cmd) => {
+    expect(checkReadOnlyCommand(cmd)).not.toBeNull();
+  });
+});
+
+describe("checkContentPath", () => {
+  it.each([
+    "src/content/projects/portfolio/index.mdx",
+    "src/content/profile.yaml",
+    "docs/content-inventory.md",
+  ])("allows %s", (p) => expect(checkContentPath(p)).toBeNull());
+
+  it.each([
+    "package.json",
+    ".mcp.json",
+    "src/pages/index.astro",
+    ".claude/agents/content-editor.md",
+    "docs/roadmap.md",
+  ])("denies %s", (p) => expect(checkContentPath(p)).not.toBeNull());
+});
+
+describe("path traversal and case", () => {
+  it("resolves .. before matching", () => {
+    expect(
+      toRepoPath("/repo/src/content/../../.claude/settings.json", "/repo"),
+    ).toBe(".claude/settings.json");
+    expect(
+      checkPath(toRepoPath("/repo/src/content/../../package.json", "/repo"))
+        .decision,
+    ).toBe("ask");
+    expect(
+      checkContentPath(
+        toRepoPath("/repo/src/content/../../package.json", "/repo"),
+      ),
+    ).not.toBeNull();
+  });
+
+  it("reports paths outside the repo as absolute", () => {
+    expect(toRepoPath("/repo/../etc/passwd", "/repo")).toBe("/etc/passwd");
+    expect(toRepoPath("/tmp/scratch.txt", "/repo")).toBe("/tmp/scratch.txt");
+    expect(checkContentPath("/tmp/scratch.txt")).not.toBeNull();
+  });
+
+  it("keeps in-repo names that start with dots", () => {
+    expect(toRepoPath("/repo/..notes.md", "/repo")).toBe("..notes.md");
+  });
+
+  it.each(["Package.json", ".CLAUDE/settings.json", "claude.md", ".Mcp.json"])(
+    "protects %s regardless of case",
+    (p) => expect(checkPath(p).decision).toBe("ask"),
+  );
+
+  it.each([".ENV", "sub/.Env.local"])("denies %s regardless of case", (p) => {
+    expect(checkPath(p).decision).toBe("deny");
+  });
+
+  it.each([".claude/settings.local.json", "CLAUDE.md"])("protects %s", (p) => {
+    expect(checkPath(p).decision).toBe("ask");
   });
 });

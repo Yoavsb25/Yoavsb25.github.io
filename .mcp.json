@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--no-install",
+        "playwright-mcp",
+        "--browser",
+        "chromium",
+        "--headless",
+        "--isolated",
+        "--allowed-origins",
+        "http://localhost:4321",
+        "--output-dir",
+        ".playwright-mcp"
+      ]
+    }
+  }
+}

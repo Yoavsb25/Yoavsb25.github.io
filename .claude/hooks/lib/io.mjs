@@ -26,3 +26,18 @@ export function preToolUseDecision(decision, reason) {
     }),
   );
 }
+
+/**
+ * Run a PreToolUse guard and fail closed: if the guard throws (bad input, missing module),
+ * the tool call is denied instead of silently allowed.
+ */
+export function runGuard(guard) {
+  try {
+    guard(readInput());
+  } catch (error) {
+    preToolUseDecision(
+      "deny",
+      `Guard hook failed, so the action was blocked: ${error.message}`,
+    );
+  }
+}
