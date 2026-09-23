@@ -22,8 +22,8 @@ body {
   font: 400 var(--text-body) / 1.6 var(--sans);
   -webkit-font-smoothing: antialiased;
   transition:
-    background-color var(--dur-slow) ease,
-    color var(--dur-slow) ease;
+    background-color var(--dur-slow) var(--ease),
+    color var(--dur-slow) var(--ease);
 }
 
 main {
