@@ -47,7 +47,7 @@ Secondary action: open a case study. Every case study ends with "Next project" a
 - Experience, education, skills, CV
 - Later (phase 2, brand): writing/blog, talks, open-source highlights
 
-Full copy and data: `docs/content-inventory.md`.
+Full copy and data: `src/content/` (schemas in `src/content.config.ts`). Anything not yet confirmed is marked `TODO(confirm)`.
 
 ## Success criteria
 

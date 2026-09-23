@@ -261,9 +261,8 @@ describe("checkReadOnlyCommand", () => {
 
 describe("checkContentPath", () => {
   it.each([
-    "src/content/projects/portfolio/index.mdx",
+    "src/content/projects/portfolio/index.md",
     "src/content/profile.yaml",
-    "docs/content-inventory.md",
   ])("allows %s", (p) => expect(checkContentPath(p)).toBeNull());
 
   it.each([
@@ -272,6 +271,7 @@ describe("checkContentPath", () => {
     "src/pages/index.astro",
     ".claude/agents/content-editor.md",
     "docs/roadmap.md",
+    "docs/content-inventory.md",
   ])("denies %s", (p) => expect(checkContentPath(p)).not.toBeNull());
 });
 

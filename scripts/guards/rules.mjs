@@ -219,11 +219,11 @@ export function checkReadOnlyCommand(command) {
 }
 
 /** Paths the content-editor agent may write. */
-const CONTENT_PATHS = [/^src\/content\//, /^docs\/content-inventory\.md$/];
+const CONTENT_PATHS = [/^src\/content\//];
 
 /** @returns {string | null} why the content editor may not write this path, or null if allowed. */
 export function checkContentPath(repoPath) {
   return CONTENT_PATHS.some((re) => re.test(repoPath.toLowerCase()))
     ? null
-    : `content-editor may only write src/content/** and docs/content-inventory.md, not ${repoPath}.`;
+    : `content-editor may only write src/content/**, not ${repoPath}.`;
 }

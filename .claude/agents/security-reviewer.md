@@ -27,7 +27,7 @@ Bash is limited by the project guard hook to one plain read-only command at a ti
 - **Workflows**: least-privilege `permissions:`; actions pinned to full SHAs with a version comment; no `pull_request_target`; no untrusted input (`github.event.*` titles and bodies) interpolated into `run:`; `persist-credentials: false` on checkout.
 - **Guardrails**: changes to `scripts/guards/` or `.claude/` do not weaken a rule without a stated reason; tests cover new rules.
 - **CSP and head**: strict `default-src 'self'`; no `unsafe-inline` or `unsafe-eval`; no third-party scripts, fonts, or analytics; external links use `rel="noopener noreferrer"`.
-- **Content**: no private or employer-confidential detail beyond what `docs/content-inventory.md` approves.
+- **Content**: no private or employer-confidential detail beyond what is already published in `src/content/` or explicitly approved; no private repositories.
 
 ## Report
 
