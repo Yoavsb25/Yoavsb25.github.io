@@ -22,7 +22,11 @@ const projects = defineCollection({
         role: text,
         timeline: text.optional(),
         stack: z.array(text).min(1),
-        links: z.array(z.object({ label: text, href: z.url() })).default([]),
+        links: z
+          .array(
+            z.object({ label: text, href: z.url({ protocol: /^https$/ }) }),
+          )
+          .default([]),
       }),
       problem: text,
       built: z.array(text).length(3),
