@@ -6,7 +6,7 @@
 /                     Home (single page: hero, how I work, work, resume, contact)
 /projects/<slug>      Case study
 /404                  Not found
-/cv.pdf               CV download (static file, no phone number)
+/yoav-sborovsky-cv.pdf  CV download (static file, no phone number)
 /sitemap.xml, /robots.txt, /llms.txt   (machine-readable, ADR-0016)
 
 Later:

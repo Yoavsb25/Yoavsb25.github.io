@@ -11,7 +11,7 @@ Content (case studies, experience, profile) must be easy to update by hand or wi
 
 Store content as MDX (case studies) and YAML (experience, stages, profile) under `src/content/`, validated by Astro content collections with zod schemas in `src/content.config.ts`.
 
-- A case study is a folder (`projects/<slug>/index.mdx` plus its images). Its required sections are frontmatter fields, so zod enforces them: `problem`, `built` (exactly 3), `approach`, `results` (exactly 3, each a figure and a label), `meta`, and `order` / `featured` / `draft`. `CaseStudyLayout` renders them; the MDX body is an optional deep dive.
+- A case study is a folder (`projects/<slug>/index.mdx` plus its images). Its required sections are frontmatter fields, so zod enforces them: `problem`, `built` (exactly 3), `approach`, `results` (exactly 3, each a figure and a label), `meta`, and `order` / `featured` / `draft`. The case study page renders them (`components/case-study/CaseStudy.astro`); the MDX body is an optional deep dive.
 - Content holds prose only. Facts that code depends on (URL, name, email, socials) stay in `src/config/site.ts`.
 
 ## Consequences

@@ -32,12 +32,16 @@ export function builtRoutes(dir = "dist"): string[] {
 export const publicRoot = new URL(`${site.base.replace(/\/$/, "")}/`, site.url)
   .href;
 
+/** The HTML file for a route: "" → "index.html", "404.html" → "404.html". */
+const htmlFile = (route: string) =>
+  route.endsWith(".html") ? route : `${route}index.html`;
+
 /** Built routes without a robots noindex meta: the pages the sitemap must list. */
 export function indexableRoutes(dir = "dist"): string[] {
   return builtRoutes(dir).filter(
     (route) =>
       !/<meta name="robots" content="noindex"/.test(
-        readFileSync(join(dir, route, "index.html"), "utf8"),
+        readFileSync(join(dir, htmlFile(route)), "utf8"),
       ),
   );
 }

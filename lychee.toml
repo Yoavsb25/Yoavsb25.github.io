@@ -6,3 +6,8 @@ timeout = 20
 
 # LinkedIn answers automated requests with HTTP 999; check it by hand before launch.
 exclude = ['^https://(www\.)?linkedin\.com/']
+
+# Check #anchors on internal pages too (TOC links, #work, #contact).
+include_fragments = "anchor-only"
+# Resolve directory links like GitHub Pages does, so /portfolio/#work is checked in index.html.
+index_files = ["index.html"]

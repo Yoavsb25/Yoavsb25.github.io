@@ -1,0 +1,14 @@
+---
+/** Renders content text, drawing `*word*` as the italic accent (docs/design-system.md → Typography). */
+import { emphasisParts } from "@/lib/text";
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+{emphasisParts(text).map((part) =>
+  part.em ? <em>{part.text}</em> : part.text,
+)}

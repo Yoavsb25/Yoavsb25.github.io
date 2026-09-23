@@ -80,4 +80,3 @@ Full copy and data: `src/content/` (schemas in `src/content.config.ts`). Anythin
 1. Custom domain name.
 2. Exact dates for Files Unifier and Pitch Star.
 3. Confirm SysAid work can be described publicly at the level in the content inventory.
-4. A web version of the CV without the phone number (`public/cv.pdf`).

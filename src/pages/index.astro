@@ -1,39 +1,58 @@
 ---
-/** Home. Temporary shell until the pages PR (roadmap row 12) builds the real sections. */
-import Button from "@/components/ui/Button.astro";
+/** Home: hero, How I work, Selected work, Resume, Contact (docs/information-architecture.md → Home). */
+import { getCollection, getEntry } from "astro:content";
+
+import Contact from "@/components/home/Contact.astro";
+import Hero from "@/components/home/Hero.astro";
+import HowIWork from "@/components/home/HowIWork.astro";
+import Resume from "@/components/home/Resume.astro";
+import WorkGrid from "@/components/home/WorkGrid.astro";
 import { site } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  byOrder,
+  defaultStage,
+  projectPath,
+  publishedProjects,
+} from "@/lib/content";
 import { personJsonLd } from "@/lib/seo";
 import { withBase } from "@/lib/url";
+
+const profile = await getEntry("profile", "profile");
+if (!profile) throw new Error("src/content/profile.yaml is missing");
+
+const stages = byOrder(await getCollection("stages"));
+const selected = defaultStage(stages);
+const projects = publishedProjects(await getCollection("projects")).map(
+  (entry) => ({ entry, href: withBase(projectPath(entry.id)) }),
+);
+const experience = byOrder(await getCollection("experience"));
+const cvHref = withBase(site.cvPath);
+const contactHref = withBase("/#contact");
 ---
 
 <BaseLayout jsonLd={personJsonLd()}>
-  <section class="wrap intro">
-    <span class="label">{site.location}</span>
-    <h1 class="serif">{site.name}</h1>
-    <p>{site.description}</p>
-    <Button href={withBase("/styleguide")} variant="ghost" trailingArrow>
-      View the style guide
-    </Button>
-  </section>
+  <Hero
+    profile={profile.data}
+    name={site.name}
+    contactHref={contactHref}
+    workHref={withBase("/#work")}
+  />
+  <HowIWork
+    stages={stages}
+    selected={selected ? stages.indexOf(selected) : 0}
+  />
+  <WorkGrid projects={projects} />
+  <Resume
+    entries={experience}
+    skillGroups={profile.data.skillGroups}
+    cvHref={cvHref}
+  />
+  <Contact
+    contact={profile.data.contact}
+    email={site.email}
+    linkedin={site.socials.linkedin}
+    github={site.socials.github}
+    cvHref={cvHref}
+  />
 </BaseLayout>
-
-<style>
-  .intro {
-    display: grid;
-    gap: var(--space-5);
-    justify-items: start;
-    padding-block: var(--space-9);
-  }
-
-  h1 {
-    font-size: var(--text-hero);
-    line-height: 1;
-  }
-
-  p {
-    max-width: 34em;
-    color: var(--ink-2);
-    font-size: var(--text-lede);
-  }
-</style>

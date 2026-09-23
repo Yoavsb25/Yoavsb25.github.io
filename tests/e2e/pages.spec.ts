@@ -47,7 +47,7 @@ for (const route of routes) {
       expect(errors).toEqual([]);
     });
 
-    test("has a CSP, canonical URL, and Open Graph image", async ({
+    test("has a CSP, canonical URL (unless noindex), and Open Graph image", async ({
       page,
       request,
     }, testInfo) => {
@@ -61,10 +61,12 @@ for (const route of routes) {
       await expect(
         head.locator('meta[http-equiv="content-security-policy"]'),
       ).toHaveAttribute("content", /default-src 'self'/);
-      await expect(head.locator('link[rel="canonical"]')).toHaveAttribute(
-        "href",
-        publicRoot + route,
-      );
+      const noindex = await head
+        .locator('meta[name="robots"][content="noindex"]')
+        .count();
+      const canonical = head.locator('link[rel="canonical"]');
+      if (noindex) await expect(canonical).toHaveCount(0);
+      else await expect(canonical).toHaveAttribute("href", publicRoot + route);
       await expect(head.locator('meta[name="description"]')).toHaveAttribute(
         "content",
         /\S/,

@@ -15,7 +15,7 @@ export const site = {
     "AI engineer who takes products from idea to production: planned, built, tested, and shipped.",
   location: "London",
   email: "Yoavsb25@gmail.com",
-  cvPath: "/cv.pdf",
+  cvPath: "/yoav-sborovsky-cv.pdf",
   socials: {
     github: "https://github.com/Yoavsb25",
     linkedin: "https://www.linkedin.com/in/yoav-sborovsky-5a85b41a1/",

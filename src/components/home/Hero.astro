@@ -1,0 +1,237 @@
+---
+/** Home hero (docs/information-architecture.md → Home 1; design-system → Status line, Portrait, Skill chip). */
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+
+import portrait from "@/assets/portrait.jpg";
+import Emphasized from "@/components/home/Emphasized.astro";
+import Button from "@/components/ui/Button.astro";
+import Chip from "@/components/ui/Chip.astro";
+import { sentences, splitFirst } from "@/lib/text";
+
+interface Props {
+  profile: CollectionEntry<"profile">["data"];
+  name: string;
+  contactHref: string;
+  workHref: string;
+}
+
+const { profile, name, contactHref, workHref } = Astro.props;
+const [role, place] = splitFirst(profile.badge);
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap grid">
+    <div class="copy">
+      <p class="status">
+        <span class="pulse" aria-hidden="true"></span>
+        {profile.status}
+      </p>
+      <h1 id="hero-title" class="serif">
+        {sentences(profile.headline).map((line) => (
+          <span class="line">
+            <Emphasized text={line} />
+          </span>
+        ))}
+      </h1>
+      <p class="lede">{profile.lede}</p>
+      <div class="actions">
+        <Button href={contactHref} trailingArrow>
+          Hire me
+        </Button>
+        <Button href={workHref} variant="ghost">
+          See my work
+        </Button>
+      </div>
+    </div>
+
+    <figure class="portrait">
+      <Image
+        src={portrait}
+        alt={`Portrait of ${name}`}
+        width={340}
+        height={425}
+        widths={[340, 460]}
+        sizes="(max-width: 900px) 260px, 340px"
+        fit="cover"
+        position="top"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption class="badge">
+        <strong>{role}</strong>
+        {place && <span>{place}</span>}
+      </figcaption>
+    </figure>
+
+    <ul class="skills" aria-label="Skills">
+      {profile.skills.map((skill) => (
+        <li>
+          <Chip>{skill}</Chip>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: 5rem 5.5rem;
+    background: radial-gradient(
+      50% 60% at 85% 20%,
+      var(--glow),
+      transparent 70%
+    );
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 21.25rem;
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-2);
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
+    }
+
+    70%,
+    100% {
+      box-shadow: 0 0 0 9px transparent;
+    }
+  }
+
+  h1 {
+    margin-top: 1.625rem;
+    font-size: var(--text-hero);
+    line-height: 1;
+  }
+
+  .line {
+    display: block;
+    animation: rise 700ms var(--ease) both;
+  }
+
+  .line + .line {
+    animation-delay: 90ms;
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(12px);
+      opacity: 0.4;
+    }
+
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .lede {
+    max-width: 34em;
+    margin-top: 1.75rem;
+    color: var(--ink-2);
+    font-size: var(--text-lede);
+    line-height: 1.55;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: 2.25rem;
+  }
+
+  .portrait {
+    position: relative;
+    justify-self: end;
+    width: 100%;
+    max-width: 21.25rem;
+  }
+
+  .portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+  }
+
+  .badge {
+    position: absolute;
+    left: -22px;
+    bottom: 28px;
+    display: grid;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .badge strong {
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  .badge span {
+    color: var(--ink-3);
+    font-size: var(--text-meta);
+  }
+
+  .skills {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: var(--space-8) 0 0;
+    padding: 1.75rem 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding-block: var(--space-7) var(--space-8);
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .portrait {
+      order: -1;
+      justify-self: start;
+      max-width: 16.25rem;
+    }
+
+    .badge {
+      left: auto;
+      right: -16px;
+    }
+  }
+</style>

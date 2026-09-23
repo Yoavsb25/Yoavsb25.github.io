@@ -1,0 +1,53 @@
+---
+/** Sticky "On this page" links beside a case study (docs/information-architecture.md → Case study 5). Hidden on mobile. */
+interface Props {
+  items: readonly { id: string; label: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="toc" aria-label="On this page">
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a href={`#${item.id}`}>{item.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .toc {
+    position: sticky;
+    top: calc(
+      var(--header-height) + var(--space-6) + env(safe-area-inset-top, 0px)
+    );
+    align-self: start;
+  }
+
+  ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+  }
+
+  a {
+    color: var(--ink-3);
+    text-decoration: none;
+    transition: color var(--dur-fast) ease;
+  }
+
+  a:hover {
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

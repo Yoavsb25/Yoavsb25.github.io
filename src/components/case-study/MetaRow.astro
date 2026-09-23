@@ -1,0 +1,68 @@
+---
+/** Case study meta row: role, timeline, stack, links (docs/information-architecture.md → Case study 3). */
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  meta: CollectionEntry<"projects">["data"]["meta"];
+}
+
+const { meta } = Astro.props;
+---
+
+<dl class="meta">
+  <div>
+    <dt>Role</dt>
+    <dd>{meta.role}</dd>
+  </div>
+  {meta.timeline && (
+    <div>
+      <dt>Timeline</dt>
+      <dd>{meta.timeline}</dd>
+    </div>
+  )}
+  <div>
+    <dt>Stack</dt>
+    <dd>{meta.stack.join(", ")}</dd>
+  </div>
+  <div>
+    <dt>Links</dt>
+    <dd>
+      {meta.links.length > 0
+        ? meta.links.map((link, i) => (
+            <>
+              {i > 0 && ", "}
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                {link.label}
+              </a>
+            </>
+          ))
+        : "Internal project"}
+    </dd>
+  </div>
+</dl>
+
+<style>
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: var(--space-5);
+    margin-top: 2.75rem;
+    padding-block: var(--space-5);
+    border-block: 1px solid var(--line);
+  }
+
+  dt {
+    color: var(--ink-3);
+    font-size: var(--text-meta);
+  }
+
+  dd {
+    margin-top: 4px;
+    font-size: 0.96875rem;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+</style>

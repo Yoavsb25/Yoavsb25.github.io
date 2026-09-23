@@ -1,0 +1,210 @@
+---
+/**
+ * Selected work (docs/information-architecture.md → Home 3; design-system → Work card).
+ * Each card is one link to its case study; the featured card spans the grid.
+ */
+import type { CollectionEntry } from "astro:content";
+
+import Icon from "@/components/ui/Icon.astro";
+import Window from "@/components/ui/Window.astro";
+
+interface Props {
+  projects: { entry: CollectionEntry<"projects">; href: string }[];
+}
+
+const { projects } = Astro.props;
+// Columns match the non-featured cards (up to three), so none leaves a hole.
+const columns = Math.min(
+  3,
+  Math.max(1, projects.filter((p) => !p.entry.data.featured).length),
+);
+---
+
+<section class="section" id="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="label">Selected work</span>
+        <h2 id="work-title" class="serif">
+          Real projects, <em>shipped</em>.
+        </h2>
+      </div>
+      <p>
+        Open any project to see the problem, how I solved it, and what it
+        achieved.
+      </p>
+    </div>
+
+    <ul class:list={["grid", `cols-${columns}`]}>
+      {projects.map(({ entry: { data }, href }) => (
+        <li class:list={{ featured: data.featured }}>
+          <a class="card" href={href}>
+            <Window
+              rows={data.featured ? data.built : []}
+              bars={data.featured ? 2 : 3}
+              size={data.featured ? "lg" : "md"}
+            />
+            <div class="body">
+              <span class="label">{data.kicker}</span>
+              <h3 class="serif">{data.title}</h3>
+              <p>{data.summary}</p>
+              <ul class="tags" aria-label="Topics">
+                {data.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+              <span class="more">
+                Read the case study
+                <Icon name="arrow-right" size={15} class="arrow" />
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: 6.5rem;
+  }
+
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--space-5);
+  }
+
+  h2 {
+    margin-top: 14px;
+    font-size: var(--text-h2);
+    line-height: 1.05;
+  }
+
+  .section-head p {
+    max-width: 26em;
+    color: var(--ink-2);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid > li {
+    display: grid;
+  }
+
+  .featured {
+    grid-column: 1 / -1;
+  }
+
+  .card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      transform var(--dur-base) var(--ease),
+      box-shadow var(--dur-base) ease,
+      border-color var(--dur-base) ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  }
+
+  .card:focus-visible {
+    border-radius: var(--radius-lg);
+  }
+
+  .featured .card {
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-rows: none;
+  }
+
+  .body {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 1.625rem 1.75rem 1.75rem;
+  }
+
+  h3 {
+    margin-top: 4px;
+    font-size: 1.75rem;
+    line-height: 1.12;
+  }
+
+  .body p {
+    color: var(--ink-2);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tags li {
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--ground);
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    color: var(--accent);
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .more :global(.arrow) {
+    transition: transform 180ms ease;
+  }
+
+  .card:hover .more :global(.arrow) {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 900px) {
+    .section {
+      padding-block: var(--space-9);
+    }
+
+    .grid.grid,
+    .featured .card {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

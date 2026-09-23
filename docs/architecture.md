@@ -7,7 +7,7 @@ A fully static site: Astro renders every page to HTML at build time and GitHub P
 ```
 src/content (MD + YAML) ──┐
 src/config/site.ts ───────┼─▶ Astro build (CI) ─▶ dist/ (HTML, CSS, images) ─▶ GitHub Pages
-public/ (cv.pdf, icons) ──┘
+public/ (CV PDF, icons) ──┘
 ```
 
 ## Target structure
@@ -30,14 +30,13 @@ src/
   styles/global.css           reset, base type, shared utilities
   assets/portrait.jpg         hero photo (optimized at build)
   components/
-    ui/                       primitives: Button, Link, Tag, Card, Icon, Prose
+    ui/                       primitives: Button, Chip, Icon, Panel, Window
     site/                     global chrome: Header, Footer, ThemeToggle, SkipLink
     home/                     Hero, HowIWork, WorkGrid, Resume, Contact
-    case-study/               MetaRow, Toc, ResultTiles, NextProject
+    case-study/               CaseStudy (the fixed structure), MetaRow, Toc, ResultTiles, NextProject
                               (phase 2: writing/)
   layouts/
     BaseLayout.astro          <head>: SEO, CSP, theme; site chrome
-    CaseStudyLayout.astro     renders the fixed case-study structure from frontmatter
   pages/                      routes only: load data, compose feature components
     styleguide.astro          living style guide (noindex) for design and a11y review
 tests/

@@ -1,6 +1,6 @@
 ---
 name: design-review
-description: Visual review of changed pages and components against docs/design-system.md and the approved mockup, in a real browser, both themes, at phone, tablet, and desktop widths. Use on any PR that changes pages, components, or styles, or when the user says "design review", "does this match the design", "check the styling", or "how does it look".
+description: Visual review of changed pages and components against docs/design-system.md, in a real browser, both themes, at phone, tablet, and desktop widths. Use on any PR that changes pages, components, or styles, or when the user says "design review", "does this match the design", "check the styling", or "how does it look".
 ---
 
 # /design-review: does it look like the design?
@@ -10,7 +10,7 @@ Checks visual fidelity: tokens, type, spacing, hierarchy, components, and copy v
 ## Steps
 
 1. **Find what changed.** `git diff --stat origin/main...HEAD -- src/`. List the routes that render the changed files (a `ui/` change is always visible on `/styleguide`).
-2. **Read the reference.** `docs/design-system.md` (tokens, type, layout, shape, motion, components, voice), and the matching part of `docs/design/mockup.html` while it exists.
+2. **Read the reference.** `docs/design-system.md` (tokens, type, layout, shape, motion, components, voice). The approved mockup was retired in `feat/pages`; the built pages are now the reference, with the design system as the rule.
 3. **Static scan** of the changed `.astro` and `.css` files (Grep tool):
    - Hex, `rgb(`, or `hsl(` colors outside `src/styles/tokens.css`.
    - `font-size`, `border-radius`, `box-shadow`, or `transition` values not taken from a token or from the numbers in the design system.
@@ -26,7 +26,6 @@ Checks visual fidelity: tokens, type, spacing, hierarchy, components, and copy v
 
 ## Rules
 
-- The design system wins over the mockup where they differ; flag the difference so one of them gets fixed.
 - A deviation the user wants to keep is a design-system change: update `docs/design-system.md` in the same PR.
 - Stop the dev server if you started it.
 - Screenshots stay in `.playwright-mcp/` (gitignored); never commit them.

@@ -5,6 +5,7 @@ import {
   defaultStage,
   formatPeriod,
   nextProject,
+  projectPath,
   publishedProjects,
 } from "@/lib/content";
 
@@ -92,5 +93,11 @@ describe("formatPeriod", () => {
 
   it("collapses a single year", () => {
     expect(formatPeriod(2024, 2024)).toBe("2024");
+  });
+});
+
+describe("projectPath", () => {
+  it("builds the case study URL with a trailing slash", () => {
+    expect(projectPath("pitch-star")).toBe("/projects/pitch-star/");
   });
 });

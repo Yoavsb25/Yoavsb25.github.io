@@ -1,0 +1,52 @@
+---
+/** Case study pages, one per published project (docs/information-architecture.md → Case study). */
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+
+import CaseStudy from "@/components/case-study/CaseStudy.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { nextProject, projectPath, publishedProjects } from "@/lib/content";
+import { creativeWorkJsonLd } from "@/lib/seo";
+import { withBase } from "@/lib/url";
+
+export const getStaticPaths = (async () => {
+  const projects = publishedProjects(await getCollection("projects"));
+  return projects.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry, next: nextProject(projects, entry.id) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { entry, next } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const hasBody = Boolean(entry.body?.trim());
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  image={`projects/${entry.id}`}
+  type="article"
+  jsonLd={creativeWorkJsonLd({
+    title: data.title,
+    description: data.summary,
+    path: projectPath(entry.id),
+    keywords: data.tags,
+  })}
+>
+  <CaseStudy
+    data={data}
+    backHref={withBase("/#work")}
+    contactHref={withBase("/#contact")}
+    hasDeepDive={hasBody}
+    next={
+      next && {
+        title: next.data.title,
+        href: withBase(projectPath(next.id)),
+      }
+    }
+  >
+    <Content />
+  </CaseStudy>
+</BaseLayout>

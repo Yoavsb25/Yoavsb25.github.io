@@ -1,0 +1,134 @@
+---
+/**
+ * Contact (docs/information-architecture.md → Home 5; design-system → Copy button).
+ * The email is selectable text; the Copy button is an enhancement.
+ */
+import type { CollectionEntry } from "astro:content";
+
+import Emphasized from "@/components/home/Emphasized.astro";
+import Button from "@/components/ui/Button.astro";
+
+interface Props {
+  contact: CollectionEntry<"profile">["data"]["contact"];
+  email: string;
+  linkedin: string;
+  github: string;
+  cvHref: string;
+}
+
+const { contact, email, linkedin, github, cvHref } = Astro.props;
+---
+
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <span class="label">Contact</span>
+    <h2 id="contact-title" class="serif">
+      <Emphasized text={contact.headline} />
+    </h2>
+    <p class="line">{contact.line}</p>
+    <div class="links">
+      <Button href={`mailto:${email}`} trailingArrow>
+        Email me
+      </Button>
+      <Button href={linkedin} variant="ghost" icon="linkedin" external>
+        LinkedIn
+      </Button>
+      <Button href={github} variant="ghost" icon="github" external>
+        GitHub
+      </Button>
+      <Button href={cvHref} variant="ghost" icon="download" download>
+        Download CV
+      </Button>
+    </div>
+    <p class="email">
+      <span data-email>{email}</span>
+      <button type="button" class="copy" data-copy hidden>
+        Copy
+      </button>
+    </p>
+  </div>
+</section>
+
+<script>
+  // Client JS justified: the copy-email button is allowed interactivity
+  // (docs/architecture.md); the email stays selectable text without it.
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    "[data-copy]",
+  )) {
+    const email = button.parentElement?.querySelector("[data-email]");
+    if (!email || !navigator.clipboard) continue;
+    button.hidden = false;
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(email.textContent ?? "");
+        button.textContent = "Copied";
+        setTimeout(() => (button.textContent = "Copy"), 1600);
+      } catch {
+        getSelection()?.selectAllChildren(email);
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact {
+    padding-block: var(--space-10) 8rem;
+    background: linear-gradient(to bottom, var(--ground), var(--ground-2));
+    text-align: center;
+  }
+
+  h2 {
+    max-width: 14ch;
+    margin: var(--space-4) auto 0;
+    font-size: clamp(2.375rem, 5.6vw, 3.875rem);
+    line-height: 1.05;
+  }
+
+  .line {
+    max-width: 32em;
+    margin: 1.25rem auto 0;
+    color: var(--ink-2);
+    font-size: var(--text-lede);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: 2.25rem;
+  }
+
+  .email {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: var(--space-5);
+    color: var(--ink-2);
+    font-size: 0.96875rem;
+  }
+
+  .email span {
+    user-select: all;
+  }
+
+  .copy {
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--accent);
+    font: 500 var(--text-meta) / 1 var(--sans);
+    cursor: pointer;
+  }
+
+  .copy:hover {
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .contact {
+      padding-block: var(--space-9);
+    }
+  }
+</style>

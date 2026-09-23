@@ -4,11 +4,9 @@ import { site } from "@/config/site";
 import {
   absoluteUrl,
   creativeWorkJsonLd,
-  emphasisParts,
   ogImagePath,
   pageTitle,
   personJsonLd,
-  plainText,
   serializeJsonLd,
 } from "@/lib/seo";
 
@@ -39,34 +37,6 @@ describe("ogImagePath", () => {
   it("maps a key to a PNG under /og/", () => {
     expect(ogImagePath("projects/portfolio")).toBe(
       "/og/projects/portfolio.png",
-    );
-  });
-});
-
-describe("emphasisParts", () => {
-  it("splits out *emphasized* words", () => {
-    expect(emphasisParts("Then I *ship* them.")).toEqual([
-      { text: "Then I ", em: false },
-      { text: "ship", em: true },
-      { text: " them.", em: false },
-    ]);
-  });
-
-  it("returns plain text as one part", () => {
-    expect(emphasisParts("No emphasis")).toEqual([
-      { text: "No emphasis", em: false },
-    ]);
-  });
-
-  it("leaves a lone or empty marker alone", () => {
-    expect(plainText("5 * 3 and **")).toBe("5 * 3 and **");
-  });
-});
-
-describe("plainText", () => {
-  it("drops emphasis markers", () => {
-    expect(plainText("Need an AI engineer who *ships*?")).toBe(
-      "Need an AI engineer who ships?",
     );
   });
 });

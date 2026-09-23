@@ -1,0 +1,135 @@
+---
+/**
+ * Decorative window illustration on an accent-soft gradient (docs/design-system.md →
+ * Work card). Rows get a check mark; placeholder bars fill the rest. Hidden from
+ * assistive tech: the same text is always on the page nearby.
+ */
+interface Props {
+  rows?: readonly string[];
+  bars?: number;
+  size?: "md" | "lg";
+  class?: string;
+}
+
+const { rows = [], bars = 2, size = "md", class: className } = Astro.props;
+---
+
+<div class:list={["shot", `shot-${size}`, className]} aria-hidden="true">
+  <div class="window">
+    <div class="window-bar">
+      <i></i>
+      <i></i>
+      <i></i>
+    </div>
+    <div class="window-body">
+      {rows.map((row) => (
+        <div class="row">
+          <span class="tick">
+            <svg viewBox="0 0 10 10" fill="none">
+              <path
+                d="m2 5.2 2 2 4-4.4"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          {row}
+        </div>
+      ))}
+      {Array.from({ length: bars }, (_, i) => (
+        <div class:list={["bar", `bar-${i % 3}`]} />
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .shot {
+    display: grid;
+    place-items: center;
+    padding: 1.625rem;
+    background: linear-gradient(160deg, var(--accent-soft), var(--ground-2));
+  }
+
+  .shot-md {
+    min-height: 13.75rem;
+  }
+
+  .shot-lg {
+    min-height: 20rem;
+  }
+
+  .window {
+    width: 100%;
+    max-width: 28.75rem;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+  }
+
+  .window-bar {
+    display: flex;
+    gap: 6px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .window-bar i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  .window-body {
+    display: grid;
+    gap: 10px;
+    padding: 18px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--text-meta);
+    color: var(--ink-2);
+  }
+
+  .tick {
+    width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
+    flex: none;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .tick svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--line);
+  }
+
+  .bar-0 {
+    width: 82%;
+  }
+
+  .bar-1 {
+    width: 60%;
+  }
+
+  .bar-2 {
+    width: 72%;
+  }
+</style>
