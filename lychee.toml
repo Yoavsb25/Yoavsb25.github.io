@@ -1,0 +1,8 @@
+# Link checker config (ADR-0013). CI passes --root-dir and, on PRs, --offline.
+no_progress = true
+include_mail = false
+max_retries = 3
+timeout = 20
+
+# LinkedIn answers automated requests with HTTP 999; check it by hand before launch.
+exclude = ['^https://(www\.)?linkedin\.com/']
