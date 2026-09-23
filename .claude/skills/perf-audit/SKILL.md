@@ -21,16 +21,16 @@ Goal from `docs/product-brief.md`: Lighthouse performance ≥ 95 in both themes.
 
 ## Steps
 
-1. **Build.** `npm run build`. List what shipped: `find dist -type f -exec ls -l {} +` and note the size of each HTML, CSS, JS, font, and image file.
+1. **Build.** `npm run build`. List what shipped: `ls -lR dist` and note the size of each HTML, CSS, JS, font, and image file.
 2. **Per-page static checks** for each route in `dist/` (Read or Grep the HTML):
    - `<script` tags: each is on the allowed list and has a justification comment in source. Any external `src=` script, or an `/_astro/*.js` file, needs an explanation.
    - `client:` directives in `src/` (Grep): each has a comment saying why.
    - Preloads (`rel="preload"`): fonts only, at most 2.
    - `<img>`: `width`, `height`, and `loading="lazy"` below the fold; formats are webp or avif; nothing is served much larger than its displayed size.
    - Every `href` and `src` is same-origin (no CDN, font, or analytics hosts).
-3. **Browser pass.** Start `npm run preview` in the background (it serves `dist/` on http://localhost:4321; stop `npm run dev` first if it holds the port). With the Playwright MCP tools, for each route at 375 and 1280 px:
+3. **Browser pass.** Start `npm run preview` in the background and confirm its banner says port 4321 (the browser may only reach 4321, and Astro silently moves to another port if it is taken). If a dev server you started holds the port, stop that background task first; if anything else holds it, ask the user to free it. Never kill processes you did not start. With the Playwright MCP tools, for each route at 375 and 1280 px:
    - Navigate, then `browser_evaluate` to collect `performance.getEntriesByType("resource")` (name, `transferSize`, `initiatorType`) and the navigation entry, and read LCP and CLS with a buffered `PerformanceObserver` (`largest-contentful-paint`, `layout-shift`).
-   - Check `browser_console_messages` for errors.
+   - Check `browser_console_messages` for errors. A blocked request to another origin is a failure: the resource list may not include blocked requests, so the static `href`/`src` scan in step 2 is the real third-party check.
    - Repeat once in the other theme to catch theme-only assets or layout shift from the theme script.
 4. **Report** a table per route: each budget, the measured value, ✅ / ❌. Below it, the biggest files and the concrete fix for each failure (subset a font, drop a weight, resize an image, remove a script). Mark **blocker** (over budget) or **should fix**.
 5. **Fix** if the user agrees, then rebuild and rerun the affected checks and `npm run verify`.
@@ -39,4 +39,4 @@ Goal from `docs/product-brief.md`: Lighthouse performance ≥ 95 in both themes.
 
 - Never raise a budget to pass. Changing one is a decision: update this table and say why in the PR.
 - Local timings are a rough signal (fast machine, no throttling); byte budgets are the reliable part.
-- Stop the preview server when done.
+- Stop the preview server you started when done.

@@ -16,8 +16,8 @@ Checks visual fidelity: tokens, type, spacing, hierarchy, components, and copy v
    - `font-size`, `border-radius`, `box-shadow`, or `transition` values not taken from a token or from the numbers in the design system.
    - `font-family` anywhere but `tokens.css`.
    - Animations without a `prefers-reduced-motion` override.
-4. **Browser pass.** Start `npm run dev` in the background (skip if http://localhost:4321 already responds). With the Playwright MCP tools, for each route, at widths 375, 768, and 1280, in light and dark theme (set `data-theme` on `<html>` with `browser_evaluate`, or use the header toggle):
-   - Take a full-page screenshot into `.playwright-mcp/` named `<route>-<width>-<theme>.png`, and look at it.
+4. **Browser pass.** First `browser_navigate` to http://localhost:4321 (never `curl`). If it loads and the title ends with the site name from `src/config/site.ts`, reuse it; if nothing answers, start `npm run dev` in the background and confirm its banner says port 4321 (Astro silently moves to another port if 4321 is taken, and the browser may only reach 4321). If something else holds the port, ask the user to free it; never kill processes you did not start. Then, with the Playwright MCP tools, for each route, at widths 375, 768, and 1280, in light and dark theme (set `data-theme` on `<html>` with `browser_evaluate`, or use the header toggle):
+   - Take a full-page screenshot into `.playwright-mcp/` named `<slug>-<width>-<theme>.png`, where the slug is `home` for `/` and the path with `/` replaced by `-` otherwise (files stay flat in the folder), and look at it.
    - Compare with the spec: colors and contrast feel right in both themes, type scale and serif/sans use, spacing rhythm and section padding, radii, borders and shadows, component anatomy (for example, Button 48px pill, header 70px), alignment to the content width, and nothing clipped or overflowing.
    - Hover and focus a sample of interactive elements: hover states and the 2px accent focus ring match.
    - Read the visible copy against Voice: first person, plain, one number per sentence, buttons say what happens.
@@ -28,4 +28,5 @@ Checks visual fidelity: tokens, type, spacing, hierarchy, components, and copy v
 
 - The design system wins over the mockup where they differ; flag the difference so one of them gets fixed.
 - A deviation the user wants to keep is a design-system change: update `docs/design-system.md` in the same PR.
+- Stop the dev server if you started it.
 - Screenshots stay in `.playwright-mcp/` (gitignored); never commit them.

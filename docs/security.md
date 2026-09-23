@@ -27,7 +27,7 @@ Claude reads untrusted text (web pages, copy notes, diffs), so a prompt injectio
 | Malicious npm script                   | `package.json` is protected (edits ask first)                                                                                                                                                                              |
 | "Read-only" agents writing             | Global guard hooks key on `agent_type`: reviewers may run one plain read-only command (no metacharacters, whole-command allowlist); `a11y-reviewer` has no shell                                                           |
 | Content agent writing outside copy     | `content-editor` writes are limited to `src/content/**` and `docs/content-inventory.md`                                                                                                                                    |
-| Browser reaching files or the internet | Playwright MCP: headless, isolated profile, `--allowed-origins http://localhost:4321`; file upload and arbitrary code tools denied                                                                                         |
+| Browser reaching files or the internet | Playwright MCP: headless, isolated profile, `--allowed-origins http://localhost:4321`; `browser_evaluate` (page-side JS, same origin limit) allowed; file upload and Node-side `browser_run_code_unsafe` denied            |
 
 Guard hooks fail closed: an error in a guard denies the action.
 

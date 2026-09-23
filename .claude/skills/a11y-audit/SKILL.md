@@ -17,7 +17,7 @@ Target: WCAG 2.2 AA, and the rules in `docs/design-system.md` → Accessibility.
    - No `tabindex` greater than 0; no `outline: none` without a replacement focus style.
    - Form fields have labels; state is exposed (`aria-pressed`, `aria-expanded`, `aria-live` where the design system says so).
    - Content that scripts enhance is present in the server-rendered HTML.
-3. **Browser checks.** Start `npm run dev` in the background (skip if http://localhost:4321 already responds). Dispatch the `a11y-reviewer` agent with the list of routes and the changed components to focus on. It checks structure, keyboard, contrast, no-JS content, reduced motion, layout, and console at 375, 768, and 1280 px in both themes.
+3. **Browser checks.** First `browser_navigate` to http://localhost:4321 (never `curl`). If it loads and the title ends with the site name from `src/config/site.ts`, reuse it; if nothing answers, start `npm run dev` in the background and confirm its banner says port 4321 (Astro silently moves to another port if 4321 is taken, and the browser may only reach 4321). If something else holds the port, ask the user to free it; never kill processes you did not start. Then dispatch the `a11y-reviewer` agent with the list of routes and the changed components to focus on. It checks structure, keyboard, contrast, no-JS content, reduced motion, layout, and console at 375, 768, and 1280 px in both themes.
 4. **Triage** the combined findings. For each: confirm it against the source, then mark **blocker** (fails WCAG AA or a design-system accessibility rule), **should fix**, or **nit**. Drop anything that does not reproduce, and say why.
 5. **Fix** blockers and should-fixes if the user agrees, then rerun `npm run verify` and re-dispatch the agent for the affected routes only.
 6. **Report**: routes checked, what was fixed, what is left and why.
@@ -26,4 +26,5 @@ Target: WCAG 2.2 AA, and the rules in `docs/design-system.md` → Accessibility.
 
 - Never hide a problem to pass a check (no `aria-hidden` on real content, no removing focus styles).
 - Contrast fixes change tokens in `src/styles/tokens.css` and `docs/design-system.md` together, and must hold in both themes.
+- Stop the dev server if you started it.
 - Automated axe checks in CI arrive with roadmap row 9; until then this audit is the gate.
