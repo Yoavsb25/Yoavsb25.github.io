@@ -28,3 +28,6 @@ CI: `verify`, `audit`, `actionlint`, `codeql` on every PR. Later: e2e + axe, Lig
 ## AI tooling
 
 AI is a development tool, not a runtime feature. Claude Code is configured in-repo (`CLAUDE.md`, `.claude/`) so every contributor's agent follows the same rules. See ADR-0003.
+
+- `.claude/settings.json` — permission allow/deny lists and hook wiring.
+- `.claude/hooks/*.mjs` — thin entry scripts; all decisions live in `.claude/hooks/lib/rules.mjs` (pure, unit tested).
