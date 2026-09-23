@@ -3,11 +3,12 @@
 import ThemeToggle from "@/components/site/ThemeToggle.astro";
 import Button from "@/components/ui/Button.astro";
 import { nav, site } from "@/config/site";
+import { withBase } from "@/lib/url";
 ---
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="/" aria-label={`${site.name}, home`}>
+    <a class="brand" href={withBase("/")} aria-label={`${site.name}, home`}>
       <span class="mark" aria-hidden="true">
         {site.initials}
       </span>
@@ -17,12 +18,12 @@ import { nav, site } from "@/config/site";
       <ul class="links">
         {nav.map((item) => (
           <li>
-            <a href={item.href}>{item.label}</a>
+            <a href={withBase(item.href)}>{item.label}</a>
           </li>
         ))}
       </ul>
       <ThemeToggle />
-      <Button href="/#contact" size="sm">
+      <Button href={withBase("/#contact")} size="sm">
         Hire me
       </Button>
     </nav>

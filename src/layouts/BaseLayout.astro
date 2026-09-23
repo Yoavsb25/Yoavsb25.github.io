@@ -10,6 +10,7 @@ import Header from "@/components/site/Header.astro";
 import SkipLink from "@/components/site/SkipLink.astro";
 import { site } from "@/config/site";
 import { pageTitle } from "@/lib/seo";
+import { withBase } from "@/lib/url";
 import "@/styles/tokens.css";
 import "@/styles/global.css";
 
@@ -33,7 +34,7 @@ const { title, description = site.description, noindex = false } = Astro.props;
     <title>{pageTitle(title)}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
     <meta name="color-scheme" content="light dark" />
     <Font
       cssVariable="--font-serif"
