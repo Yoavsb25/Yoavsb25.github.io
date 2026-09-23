@@ -35,6 +35,7 @@ const columns = workGridColumns(projects.map((p) => p.entry));
       {projects.map(({ entry: { data }, href }) => (
         <li class:list={{ featured: data.featured }}>
           <a class="card" href={href}>
+            {/* Decorative here: the link is already named by the card text; the case study uses cover.alt. */}
             {data.cover ? (
               <Image
                 class="cover"
@@ -80,7 +81,7 @@ const columns = workGridColumns(projects.map((p) => p.entry));
 
 <style>
   .section {
-    padding-block: 6.5rem;
+    padding-block: var(--section-y);
   }
 
   .section-head {
@@ -138,8 +139,8 @@ const columns = workGridColumns(projects.map((p) => p.entry));
     text-decoration: none;
     transition:
       transform var(--dur-base) var(--ease),
-      box-shadow var(--dur-base) ease,
-      border-color var(--dur-base) ease;
+      box-shadow var(--dur-base) var(--ease),
+      border-color var(--dur-base) var(--ease);
   }
 
   .card:hover {
@@ -225,10 +226,6 @@ const columns = workGridColumns(projects.map((p) => p.entry));
   }
 
   @media (max-width: 900px) {
-    .section {
-      padding-block: var(--space-9);
-    }
-
     .grid.grid,
     .featured .card {
       grid-template-columns: 1fr;

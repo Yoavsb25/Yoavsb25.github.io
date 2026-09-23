@@ -66,7 +66,7 @@ Headings use `text-wrap: balance`. Numbers in timelines use `tabular-nums`.
 ## Layout and spacing
 
 - Container: max 1120px, 24px side gutter (16px minimum on small phones).
-- Section rhythm: 104–120px vertical padding on desktop, 80px on mobile.
+- Section rhythm: `--section-y`, 120px vertical padding on desktop, 80px below 900px. The hero is tighter because it sits under the header.
 - Spacing scale (px): 4, 8, 12, 16, 24, 32, 48, 64, 96, 120. Use `gap` on flex/grid, not margins between siblings.
 - Grids: work cards in 3 columns (featured spans all), resume 1.6fr / 1fr, case study 220px TOC / content. All collapse to one column below 900px.
 

@@ -70,7 +70,7 @@ const { entries, skillGroups, cvHref } = Astro.props;
 
 <style>
   .section {
-    padding-block: var(--space-5) 6.5rem;
+    padding-block: var(--space-5) var(--section-y);
   }
 
   h2 {
@@ -176,10 +176,6 @@ const { entries, skillGroups, cvHref } = Astro.props;
   }
 
   @media (max-width: 900px) {
-    .section {
-      padding-block: var(--space-5) var(--space-9);
-    }
-
     .resume {
       grid-template-columns: 1fr;
       gap: 1.75rem;

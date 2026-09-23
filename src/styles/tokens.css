@@ -52,6 +52,8 @@
   --container: 70rem;
   --gutter: 1.5rem;
   --header-height: 4.375rem;
+  /* Section rhythm: 120px desktop, 80px below 900px (docs/design-system.md). */
+  --section-y: 7.5rem;
 
   /* Shape */
   --radius-sm: 0.75rem;
@@ -68,6 +70,12 @@
   --dur-swap: 340ms;
   --dur-track: 520ms;
   --dur-hero: 700ms;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --section-y: 5rem;
+  }
 }
 
 @media (max-width: 400px) {

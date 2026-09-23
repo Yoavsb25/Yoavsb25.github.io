@@ -109,7 +109,7 @@ const { stages, selected } = Astro.props;
 
 <style>
   .band {
-    padding-block: var(--space-10);
+    padding-block: var(--section-y);
     background: linear-gradient(
       to bottom,
       var(--ground) 0,
@@ -319,10 +319,6 @@ const { stages, selected } = Astro.props;
   }
 
   @media (max-width: 900px) {
-    .band {
-      padding-block: var(--space-9);
-    }
-
     .track {
       grid-template-columns: 1fr;
       gap: 4px;

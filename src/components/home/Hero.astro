@@ -18,7 +18,7 @@ interface Props {
 const { profile, name, workHref } = Astro.props;
 ---
 
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" id="top" aria-labelledby="hero-title">
   <div class="wrap grid">
     <div class="copy">
       <p class="status">
@@ -66,6 +66,7 @@ const { profile, name, workHref } = Astro.props;
 </section>
 
 <style>
+  /* Tighter than --section-y: the hero sits right under the header. */
   .hero {
     padding-block: 5rem 5.5rem;
     background: radial-gradient(
@@ -96,6 +97,7 @@ const { profile, name, workHref } = Astro.props;
     height: 8px;
     border-radius: 50%;
     background: var(--accent);
+    /* Looping ambient pulse: its own timing, outside the motion tokens. */
     animation: pulse 2.4s ease-out infinite;
   }
 
