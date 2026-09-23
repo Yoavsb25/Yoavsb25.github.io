@@ -10,7 +10,7 @@ ADR-0005 stores case studies as MDX. Every required section lives in frontmatter
 ## Decision
 
 - Case studies are plain Markdown: `src/content/projects/<slug>/index.md`, rendered by Astro's built-in Markdown support. Everything else in ADR-0005 stands.
-- `cover` is optional (`{ src, alt }`, validated by `image()` when present): the approved design has text-only work cards.
+- `cover` is optional (`{ src, alt }`, validated by `image()` when present): shown on the case study page and on the home work card (Window illustration when absent).
 - Unconfirmed facts are omitted where the schema allows it and marked with a `# TODO(confirm)` YAML comment, resolved in `content/launch-content`.
 
 ## Consequences

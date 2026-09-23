@@ -1,7 +1,7 @@
 ---
 /**
  * Contact (docs/information-architecture.md → Home 5; design-system → Copy button).
- * The email is selectable text; the Copy button is an enhancement.
+ * The email address is not shown as text; the Copy button is an enhancement.
  */
 import type { CollectionEntry } from "astro:content";
 
@@ -41,9 +41,8 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
       </Button>
     </div>
     <p class="email">
-      <span data-email>{email}</span>
-      <button type="button" class="copy" data-copy hidden>
-        Copy
+      <button type="button" class="copy" data-copy={email} hidden>
+        Copy email
       </button>
     </p>
   </div>
@@ -51,20 +50,20 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
 
 <script>
   // Client JS justified: the copy-email button is allowed interactivity
-  // (docs/architecture.md); the email stays selectable text without it.
+  // (docs/architecture.md); without it the "Email me" link still works.
   for (const button of document.querySelectorAll<HTMLButtonElement>(
     "[data-copy]",
   )) {
-    const email = button.parentElement?.querySelector("[data-email]");
+    const email = button.dataset["copy"];
     if (!email || !navigator.clipboard) continue;
     button.hidden = false;
     button.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(email.textContent ?? "");
+        await navigator.clipboard.writeText(email);
         button.textContent = "Copied";
-        setTimeout(() => (button.textContent = "Copy"), 1600);
+        setTimeout(() => (button.textContent = "Copy email"), 1600);
       } catch {
-        getSelection()?.selectAllChildren(email);
+        location.href = `mailto:${email}`;
       }
     });
   }
@@ -106,10 +105,6 @@ const { contact, email, linkedin, github, cvHref } = Astro.props;
     margin-top: var(--space-5);
     color: var(--ink-2);
     font-size: 0.96875rem;
-  }
-
-  .email span {
-    user-select: all;
   }
 
   .copy {
