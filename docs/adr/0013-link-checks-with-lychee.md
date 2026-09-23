@@ -18,5 +18,5 @@ Broken links on a portfolio cost trust, and the base path (ADR-0010) makes inter
 ## Consequences
 
 - Internal breakage fails the PR; external rot shows up as a failed scheduled run.
-- The action downloads the lychee release binary at run time (version pinned by the action).
+- The action downloads the lychee release binary at run time without a checksum check; the SHA pin fixes the version, not the bytes. Its token is disabled on PRs (`--offline` makes no GitHub API calls).
 - Rejected: an npm link checker such as `linkinator` (another dependency tree under audit); link checks inside the Playwright suite (reimplements a crawler).

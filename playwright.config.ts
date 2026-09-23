@@ -5,6 +5,7 @@ import { site } from "./src/config/site.ts";
 /** End-to-end tests against the production build (ADR-0011). Run with `npm run test:e2e`. */
 const port = 4322; // 4321 is the dev server, which the Playwright MCP reviews use.
 const origin = `http://127.0.0.1:${port}`;
+const baseURL = `${origin}${site.base.replace(/\/$/, "")}/`;
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -14,7 +15,7 @@ export default defineConfig({
     ? [["github"], ["html", { open: "never" }]]
     : "list",
   use: {
-    baseURL: `${origin}${site.base.replace(/\/$/, "")}/`,
+    baseURL,
     trace: "retain-on-failure",
   },
   projects: [
@@ -29,7 +30,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `npm run preview -- --port ${port} --host 127.0.0.1`,
-    url: `${origin}${site.base}/`,
+    url: baseURL,
     reuseExistingServer: !process.env["CI"],
   },
 });

@@ -1,7 +1,8 @@
 /**
  * Installs Chromium for both Playwright copies: the e2e runner (@playwright/test) and
  * the Playwright MCP server, which pins its own alpha build (ADR-0009, ADR-0011).
- * Installing only one lets Playwright garbage-collect the other's browser.
+ * Each Playwright version deletes browser builds it does not recognise, so installing
+ * for only one of them can remove the other's Chromium.
  */
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
