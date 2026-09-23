@@ -52,6 +52,8 @@
   --container: 70rem;
   --gutter: 1.5rem;
   --header-height: 4.375rem;
+  /* Section rhythm: 120px desktop, 80px below 900px (docs/design-system.md). */
+  --section-y: 7.5rem;
 
   /* Shape */
   --radius-sm: 0.75rem;
@@ -70,13 +72,19 @@
   --dur-hero: 700ms;
 }
 
+@media (max-width: 900px) {
+  :root {
+    --section-y: 5rem;
+  }
+}
+
 @media (max-width: 400px) {
   :root {
     --gutter: 1rem;
   }
 }
 
-/* Dark: soft charcoal-green, never pure black. Kept in one mixin-like block, used twice. */
+/* Dark: soft charcoal-green, never pure black. Declared twice (chosen, system); tests/unit/tokens.test.ts keeps the two identical. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --ground: #121715;

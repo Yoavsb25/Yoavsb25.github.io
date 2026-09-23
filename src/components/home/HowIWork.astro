@@ -6,14 +6,16 @@
  */
 import type { CollectionEntry } from "astro:content";
 
+import Emphasized from "@/components/home/Emphasized.astro";
 import Icon from "@/components/ui/Icon.astro";
 
 interface Props {
+  section: CollectionEntry<"profile">["data"]["sections"]["how"];
   stages: CollectionEntry<"stages">[];
   selected: number;
 }
 
-const { stages, selected } = Astro.props;
+const { section, stages, selected } = Astro.props;
 // Length and exactly-one selected are enforced by assertStages on the page.
 ---
 
@@ -21,12 +23,9 @@ const { stages, selected } = Astro.props;
   <div class="wrap">
     <span class="label">How I work</span>
     <h2 id="how-title" class="serif">
-      From idea to production, <em>every step</em> covered.
+      <Emphasized text={section.headline} />
     </h2>
-    <p class="intro">
-      Most AI projects stall between the demo and the real product. I own the
-      whole path, so nothing gets lost along the way.
-    </p>
+    <p class="intro">{section.intro}</p>
 
     <div class="track-wrap" data-active={selected}>
       <span class="fill" aria-hidden="true"></span>
@@ -109,7 +108,7 @@ const { stages, selected } = Astro.props;
 
 <style>
   .band {
-    padding-block: var(--space-10);
+    padding-block: var(--section-y);
     background: linear-gradient(
       to bottom,
       var(--ground) 0,
@@ -319,10 +318,6 @@ const { stages, selected } = Astro.props;
   }
 
   @media (max-width: 900px) {
-    .band {
-      padding-block: var(--space-9);
-    }
-
     .track {
       grid-template-columns: 1fr;
       gap: 4px;

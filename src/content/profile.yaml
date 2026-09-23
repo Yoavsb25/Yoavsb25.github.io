@@ -21,6 +21,14 @@ skillGroups:
     items: [Docker, AWS, GitHub Actions, Kubernetes (GitOps)]
   - group: Testing
     items: [Pytest, Playwright, Vitest]
+sections:
+  how:
+    headline: From idea to production, *every step* covered.
+    intro: Most AI projects stall between the demo and the real product. I own the whole path, so nothing gets lost along the way.
+  work:
+    headline: Real projects, *shipped*.
+  resume:
+    headline: Experience
 contact:
   headline: Need an AI engineer who *ships*?
   line: I'm looking for AI engineering roles in London or remote.

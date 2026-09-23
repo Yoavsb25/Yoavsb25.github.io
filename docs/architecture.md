@@ -21,7 +21,7 @@ src/
   content/
     projects/<slug>/index.md  case study: structured frontmatter + optional deep-dive body (ADR-0014)
     projects/<slug>/cover.png optional colocated image, validated by the schema's image() helper
-    experience/<id>.yaml      roles and education (kind: role | education)
+    experience/<id>.yaml      roles and education
     stages.yaml               How I work stages (one file, array)
     profile.yaml              prose only: status line, headline, lede, skills, contact copy
   lib/                        pure helpers: seo, og, crawlers, url, content ordering — unit tested
@@ -56,7 +56,7 @@ Dependencies point one way (ADR-0006). Features are `home/`, `case-study/`, and 
 | `layouts/`        | site, ui, lib, config                          | Page shell and `<head>`                                                 |
 | features          | ui, lib; `import type` from `astro:content`    | Data arrives as props; never load content; never import another feature |
 | `components/site` | ui, lib, config                                | Global chrome                                                           |
-| `components/ui`   | styles only                                    | No data, no business logic; fully reusable                              |
+| `components/ui`   | styles, other `ui/`                            | No data, no business logic; fully reusable                              |
 | `lib/`            | config; `import type` from `astro:content`     | Pure TypeScript, no runtime Astro imports, unit tested                  |
 | `content/`        | —                                              | Data only; validated at build time                                      |
 

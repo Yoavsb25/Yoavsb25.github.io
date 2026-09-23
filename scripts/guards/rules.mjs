@@ -189,6 +189,21 @@ export function currentRoadmapItem(markdown) {
 /** Agents whose Bash is limited to READ_ONLY_COMMANDS. */
 export const READ_ONLY_AGENTS = ["code-reviewer", "security-reviewer"];
 
+/** Agents with no shell at all (ADR-0009); their tool lists already omit Bash. */
+export const NO_SHELL_AGENTS = ["a11y-reviewer"];
+
+/** @returns {string | null} why this agent may not run this command, or null if allowed. */
+export function checkAgentCommand(agent, command) {
+  if (NO_SHELL_AGENTS.includes(agent)) {
+    return `${agent} has no shell access (ADR-0009).`;
+  }
+  if (READ_ONLY_AGENTS.includes(agent)) {
+    const reason = checkReadOnlyCommand(command);
+    return reason && `${agent}: ${reason}`;
+  }
+  return null;
+}
+
 /** Agents whose writes are limited to site copy. */
 export const CONTENT_AGENTS = ["content-editor"];
 

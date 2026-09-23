@@ -7,19 +7,19 @@
 import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 
+import Emphasized from "@/components/home/Emphasized.astro";
+import Chip from "@/components/ui/Chip.astro";
 import Icon from "@/components/ui/Icon.astro";
 import Window from "@/components/ui/Window.astro";
+import { workGridColumns } from "@/lib/content";
 
 interface Props {
+  section: CollectionEntry<"profile">["data"]["sections"]["work"];
   projects: { entry: CollectionEntry<"projects">; href: string }[];
 }
 
-const { projects } = Astro.props;
-// Columns match the non-featured cards (up to three), so none leaves a hole.
-const columns = Math.min(
-  3,
-  Math.max(1, projects.filter((p) => !p.entry.data.featured).length),
-);
+const { section, projects } = Astro.props;
+const columns = workGridColumns(projects.map((p) => p.entry));
 ---
 
 <section class="section" id="projects" aria-labelledby="work-title">
@@ -28,7 +28,7 @@ const columns = Math.min(
       <div>
         <span class="label">Selected work</span>
         <h2 id="work-title" class="serif">
-          Real projects, <em>shipped</em>.
+          <Emphasized text={section.headline} />
         </h2>
       </div>
     </div>
@@ -37,6 +37,7 @@ const columns = Math.min(
       {projects.map(({ entry: { data }, href }) => (
         <li class:list={{ featured: data.featured }}>
           <a class="card" href={href}>
+            {/* Decorative here: the link is already named by the card text; the case study uses cover.alt. */}
             {data.cover ? (
               <Image
                 class="cover"
@@ -63,7 +64,9 @@ const columns = Math.min(
               <p>{data.summary}</p>
               <ul class="tags" aria-label="Topics">
                 {data.tags.map((tag) => (
-                  <li>{tag}</li>
+                  <li>
+                    <Chip size="sm">{tag}</Chip>
+                  </li>
                 ))}
               </ul>
               <span class="more">
@@ -80,7 +83,7 @@ const columns = Math.min(
 
 <style>
   .section {
-    padding-block: 6.5rem;
+    padding-block: var(--section-y);
   }
 
   .section-head {
@@ -138,8 +141,8 @@ const columns = Math.min(
     text-decoration: none;
     transition:
       transform var(--dur-base) var(--ease),
-      box-shadow var(--dur-base) ease,
-      border-color var(--dur-base) ease;
+      box-shadow var(--dur-base) var(--ease),
+      border-color var(--dur-base) var(--ease);
   }
 
   .card:hover {
@@ -206,15 +209,6 @@ const columns = Math.min(
     list-style: none;
   }
 
-  .tags li {
-    padding: 4px 10px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-pill);
-    background: var(--ground);
-    color: var(--ink-2);
-    font-size: 0.8125rem;
-  }
-
   .more {
     display: inline-flex;
     align-items: center;
@@ -234,10 +228,6 @@ const columns = Math.min(
   }
 
   @media (max-width: 900px) {
-    .section {
-      padding-block: var(--space-9);
-    }
-
     .grid.grid,
     .featured .card {
       grid-template-columns: 1fr;

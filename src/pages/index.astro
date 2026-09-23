@@ -39,11 +39,13 @@ const cvHref = withBase(site.cvPath);
     workHref={withBase("/#projects")}
   />
   <HowIWork
+    section={profile.data.sections.how}
     stages={stages}
     selected={selected ? stages.indexOf(selected) : 0}
   />
-  <WorkGrid projects={projects} />
+  <WorkGrid section={profile.data.sections.work} projects={projects} />
   <Resume
+    section={profile.data.sections.resume}
     entries={experience}
     skillGroups={profile.data.skillGroups}
     cvHref={cvHref}

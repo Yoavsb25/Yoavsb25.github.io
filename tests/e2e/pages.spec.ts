@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+import { nextTheme, type Theme } from "@/lib/theme";
+
 import {
   budgets,
   builtRoutes,
@@ -30,7 +32,17 @@ test("robots.txt and llms.txt are served", async ({ request }) => {
 
 for (const route of routes) {
   test.describe(`/${route}`, () => {
-    test("has no axe violations and no console errors", async ({ page }) => {
+    test("has no axe violations, console errors, or CSP violations", async ({
+      page,
+    }) => {
+      // Registered before any page script, so violations during load are caught too.
+      await page.addInitScript(() => {
+        const store = window as unknown as { cspViolations: string[] };
+        store.cspViolations = [];
+        document.addEventListener("securitypolicyviolation", (e) =>
+          store.cspViolations.push(`${e.violatedDirective} ${e.blockedURI}`),
+        );
+      });
       const errors: string[] = [];
       page.on("console", (msg) => {
         if (msg.type() === "error") errors.push(msg.text());
@@ -44,6 +56,10 @@ for (const route of routes) {
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
         .analyze();
       expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
+      const csp = await page.evaluate(
+        () => (window as unknown as { cspViolations: string[] }).cspViolations,
+      );
+      expect(csp).toEqual([]);
       expect(errors).toEqual([]);
     });
 
@@ -137,10 +153,48 @@ test("the theme toggle switches and remembers the theme", async ({ page }) => {
   const root = page.locator("html");
   const toggle = page.locator("[data-theme-toggle]").first();
 
+  const before = await page.evaluate(
+    (): Theme =>
+      (document.documentElement.dataset["theme"] as Theme | undefined) ??
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
+  );
+
   await toggle.click();
-  const chosen = await root.getAttribute("data-theme");
-  expect(chosen).toMatch(/^(light|dark)$/);
+  await expect(root).toHaveAttribute("data-theme", nextTheme(before));
 
   await page.reload();
-  await expect(root).toHaveAttribute("data-theme", chosen ?? "");
+  await expect(root).toHaveAttribute("data-theme", nextTheme(before));
+});
+
+test("the How I work track switches stages", async ({ page }) => {
+  await page.goto("");
+  const buttons = page.locator("[data-stage]");
+  const last = buttons.last();
+  const panel = page.locator(
+    `#${(await last.getAttribute("aria-controls")) ?? ""}`,
+  );
+
+  await last.click();
+  await expect(last).toHaveAttribute("aria-pressed", "true");
+  await expect(buttons.first()).toHaveAttribute("aria-pressed", "false");
+  await expect(panel).toBeVisible();
+  await expect(page.locator("[data-stage-panel]:visible")).toHaveCount(1);
+});
+
+test("the skip link moves focus to the main content", async ({ page }) => {
+  await page.goto("");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".skip-link")).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main$/);
+  await expect(page.locator("#main")).toBeFocused();
+});
+
+test("external links open safely", async ({ page }) => {
+  await page.goto("");
+  const external = page.locator('a[target="_blank"]');
+  expect(await external.count()).toBeGreaterThan(0);
+  for (const link of await external.all()) {
+    await expect(link).toHaveAttribute("rel", /\bnoopener\b/);
+  }
 });

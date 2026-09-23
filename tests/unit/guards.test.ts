@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  checkAgentCommand,
   checkBranch,
   checkCommand,
   checkContentPath,
@@ -256,6 +257,25 @@ describe("checkReadOnlyCommand", () => {
     "node .claude/skills/ship/preflight.mjs",
   ])("denies %j", (cmd) => {
     expect(checkReadOnlyCommand(cmd)).not.toBeNull();
+  });
+});
+
+describe("checkAgentCommand", () => {
+  it("denies every command for a11y-reviewer", () => {
+    expect(checkAgentCommand("a11y-reviewer", "ls")).toMatch(/no shell/);
+    expect(checkAgentCommand("a11y-reviewer", "")).not.toBeNull();
+  });
+
+  it("limits read-only agents to read-only commands", () => {
+    expect(checkAgentCommand("code-reviewer", "git status")).toBeNull();
+    expect(checkAgentCommand("security-reviewer", "rm file")).toMatch(
+      /^security-reviewer: /,
+    );
+  });
+
+  it("leaves the main agent and other agents alone", () => {
+    expect(checkAgentCommand(undefined, "rm file")).toBeNull();
+    expect(checkAgentCommand("content-editor", "rm file")).toBeNull();
   });
 });
 

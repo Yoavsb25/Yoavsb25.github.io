@@ -43,14 +43,13 @@ const projects = defineCollection({
 const experience = defineCollection({
   loader: glob({ pattern: "*.yaml", base: "./src/content/experience" }),
   schema: z.object({
-    kind: z.enum(["role", "education"]),
     title: text,
     org: text,
     location: text.optional(),
     start: z.number().int(),
     /** Omit while ongoing ("Present"). */
     end: z.number().int().optional(),
-    bullets: z.array(text).min(1),
+    bullets: z.array(text).min(1).max(4),
     order: z.number().int().nonnegative(),
   }),
 });
@@ -86,6 +85,12 @@ const profile = defineCollection({
     skillGroups: z
       .array(z.object({ group: text, items: z.array(text).min(1) }))
       .min(1),
+    /** Home section headings; the short labels above them match the nav and stay in code. */
+    sections: z.object({
+      how: z.object({ headline: text, intro: text }),
+      work: z.object({ headline: text }),
+      resume: z.object({ headline: text }),
+    }),
     contact: z.object({ headline: text, line: text }),
   }),
 });
