@@ -70,7 +70,10 @@ Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake s
 
 ## Docs
 
-- `docs/architecture.md` — structure and data flow
+- `docs/product-brief.md` — goal, audiences, "Hire me" funnel, non-goals (read before any UI or content work)
+- `docs/information-architecture.md` — site map and page contents
+- `docs/content-inventory.md` — what content exists and what is missing
+- `docs/architecture.md` — target structure, layers, data flow
 - `docs/security.md` — threat model and rules
 - `docs/roadmap.md` — PR-by-PR plan and current status
 - `docs/adr/` — decision records

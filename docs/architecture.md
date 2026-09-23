@@ -2,32 +2,78 @@
 
 ## Overview
 
-A fully static site: Astro renders every page to HTML at build time and GitHub Pages serves the `dist/` output. There is no server, database, or runtime API.
+A fully static site: Astro renders every page to HTML at build time and GitHub Pages serves the `dist/` output. There is no server, database, or runtime API (ADR-0001, ADR-0002).
 
 ```
-content & config ──▶ Astro build ──▶ static HTML/CSS ──▶ GitHub Pages
- (src/config, src/content)   (CI)          (dist/)
+src/content (MDX + YAML) ─┐
+src/config/site.ts ───────┼─▶ Astro build (CI) ─▶ dist/ (HTML, CSS, images) ─▶ GitHub Pages
+public/ (cv.pdf, icons) ──┘
 ```
 
-## Layers
+## Target structure
 
-| Layer        | Location                                                                       | Rule                                            |
-| ------------ | ------------------------------------------------------------------------------ | ----------------------------------------------- |
-| Config       | `src/config/`                                                                  | Single source of truth for site identity        |
-| Content      | `src/content/` _(planned)_                                                     | Typed collections; schema errors fail the build |
-| Logic        | `src/lib/`                                                                     | Pure functions, no Astro imports, unit tested   |
-| Presentation | `src/components/`, `src/layouts/`, `src/pages/` _(components/layouts planned)_ | Render data, no business logic                  |
+```
+src/
+  config/site.ts            site identity: URL, name, title, links (single source of truth)
+  content.config.ts         collection schemas (zod) — ADR-0005
+  content/
+    projects/<slug>.mdx     case studies
+    experience/<id>.yaml    roles
+    profile.yaml            bio, skills, availability
+  lib/                      pure helpers: seo, dates, sorting, formatting — unit tested
+  styles/tokens.css         design tokens (from the design PR)
+  components/
+    ui/                     primitives: Button, Link, Tag, Card, Icon, Prose
+    sections/               page sections: Hero, FeaturedProjects, ExperienceTimeline, CtaBlock
+    layout/                 Header, Footer, ThemeToggle, SkipLink
+  layouts/
+    BaseLayout.astro        <head>: SEO, CSP, theme; header/footer shell
+    CaseStudyLayout.astro   fixed case-study structure
+  pages/                    routes only: fetch data, compose sections
+tests/
+  unit/                     src/lib and scripts/guards
+  e2e/                      Playwright + axe per page (deploy PR)
+```
 
-Data flows one way: config/content → pages → components.
+## Layers and rules
+
+Dependencies point downward only (ADR-0006):
+
+| Layer                  | May import                      | Rule                                                    |
+| ---------------------- | ------------------------------- | ------------------------------------------------------- |
+| `pages/`               | layouts, sections, lib, content | Routing and data loading only; no styling beyond layout |
+| `layouts/`             | layout, ui, lib, config         | Page shell and `<head>`                                 |
+| `components/sections/` | ui, lib                         | Receive data as props; never call `getCollection`       |
+| `components/ui/`       | tokens only                     | No data, no business logic; fully reusable              |
+| `lib/`                 | config                          | Pure TypeScript, no Astro imports, 100% unit tested     |
+| `content/`             | —                               | Data only; validated at build time                      |
+
+Data flows one way: content/config → pages → sections → ui.
+
+## Rendering and interactivity
+
+- Everything is prerendered HTML; zero client JS by default.
+- Allowed islands: theme toggle and mobile nav. Each `client:*` use needs a justification comment.
+- Images use Astro's `<Image>` (build-time optimization, width/height set, lazy by default).
+
+## SEO and machine-readability
+
+One `seo` helper in `src/lib` builds title, description, canonical, Open Graph, and JSON-LD (`Person` on home, `CreativeWork` on case studies). Build-time OG images, `sitemap`, `robots.txt`, `llms.txt`.
+
+## Security
+
+See `docs/security.md`. Key points: CSP via `<meta>`, no third-party scripts, self-hosted fonts.
 
 ## Quality gates
 
-Local: lefthook (format, lint, commit message) → `npm run verify`.
-CI: `verify`, `audit`, `actionlint`, `codeql` on every PR. Later: e2e + axe, Lighthouse budgets, link checks.
+- **Local**: Claude hooks (as the agent acts) → lefthook (each commit and push) → `npm run verify`.
+- **CI**: `verify`, `audit`, `actionlint`, `codeql` on every PR. Deploy PR adds e2e + axe, Lighthouse budgets, link checks.
 
 ## AI tooling
 
-AI is a development tool, not a runtime feature. Claude Code is configured in-repo (`CLAUDE.md`, `.claude/`) so every contributor's agent follows the same rules. See ADR-0003.
+AI is a development tool, not a runtime feature (ADR-0003). Claude Code is configured in-repo so every contributor's agent follows the same rules:
 
-- `.claude/settings.json` — permission allow/deny lists and hook wiring.
-- `.claude/hooks/*.mjs` — thin entry scripts; all decisions live in `scripts/guards/rules.mjs` (pure, unit tested).
+- `CLAUDE.md` (+ nested ones per area as folders appear) — rules and context.
+- `.claude/settings.json` — permissions and hook wiring.
+- `.claude/hooks/*.mjs` — thin entry scripts; decisions live in `scripts/guards/rules.mjs` (shared with git hooks, unit tested).
+- `.claude/skills/` and `.claude/agents/` — repeatable workflows (later PRs).
