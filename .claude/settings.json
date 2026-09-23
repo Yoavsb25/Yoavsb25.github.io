@@ -25,6 +25,8 @@
       "Bash(gh issue list*)",
       "Bash(gh run view*)",
       "Bash(gh run list*)",
+      "Bash(gh repo list Yoavsb25*)",
+      "Bash(gh repo view Yoavsb25/*)",
       "Bash(node .claude/skills/ship/preflight.mjs)"
     ],
     "deny": [
