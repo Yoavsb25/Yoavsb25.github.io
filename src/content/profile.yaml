@@ -1,6 +1,6 @@
 # Home and resume prose. Name, email, and socials live in src/config/site.ts.
-# TODO(confirm): portrait (GitHub avatar → src/assets/portrait.jpg) and the
-# phone-free public/cv.pdf land with launch content (roadmap PR 13).
+# Portrait: src/assets/portrait.jpg (GitHub avatar). CV: public/yoav-sborovsky-cv.pdf
+# (site.cvPath), which must never contain the phone number.
 status: Open to AI engineering roles · London
 headline: I plan AI systems. Then I *ship* them.
 lede: I'm Yoav, an AI engineer who takes products from idea to production. I plan them, build them, test them, and keep improving them, with the care that makes AI dependable.

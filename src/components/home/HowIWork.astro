@@ -1,0 +1,355 @@
+---
+/**
+ * How I work (docs/information-architecture.md → Home 2; design-system → Stage track).
+ * Every stage's detail is rendered; without JS they all show, stacked. The script turns
+ * the track into a selector that shows one stage at a time.
+ */
+import type { CollectionEntry } from "astro:content";
+
+import Icon from "@/components/ui/Icon.astro";
+
+interface Props {
+  stages: CollectionEntry<"stages">[];
+  selected: number;
+}
+
+const { stages, selected } = Astro.props;
+// The track, its fill positions, and the grid are designed for seven stages.
+if (stages.length !== 7) {
+  throw new Error(`How I work expects 7 stages, got ${stages.length}.`);
+}
+---
+
+<section class="band" id="how" aria-labelledby="how-title" data-how>
+  <div class="wrap">
+    <span class="label">How I work</span>
+    <h2 id="how-title" class="serif">
+      From idea to production, <em>every step</em> covered.
+    </h2>
+    <p class="intro">
+      Most AI projects stall between the demo and the real product. I own the
+      whole path, so nothing gets lost along the way.
+    </p>
+
+    <div class="track-wrap" data-active={selected}>
+      <span class="fill" aria-hidden="true"></span>
+      <ol class="track">
+        {stages.map((stage, i) => (
+          <li
+            class:list={[
+              "stage",
+              { done: i < selected, active: i === selected },
+            ]}
+          >
+            <button
+              type="button"
+              aria-pressed={i === selected ? "true" : "false"}
+              aria-controls={`stage-${stage.id}`}
+              data-stage={i}
+            >
+              <span class="dot">
+                <Icon name="check" size={14} />
+              </span>
+              <span class="stage-name">{stage.data.label}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="details" aria-live="polite">
+      {stages.map((stage, i) => (
+        <div
+          class:list={["detail", { current: i === selected }]}
+          id={`stage-${stage.id}`}
+          data-stage-panel={i}
+        >
+          <div>
+            <span class="label">
+              Step {i + 1} of {stages.length}: {stage.data.label}
+            </span>
+            <h3 class="serif">{stage.data.title}</h3>
+            <p class="what">{stage.data.explanation}</p>
+          </div>
+          <div class="proof">
+            <span class="label">In practice</span>
+            <p>{stage.data.practice}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Client JS justified: the stage selector is allowed interactivity (docs/architecture.md);
+  // without it every stage is already visible.
+  for (const section of document.querySelectorAll<HTMLElement>("[data-how]")) {
+    const wrap = section.querySelector<HTMLElement>(".track-wrap");
+    const buttons = section.querySelectorAll<HTMLButtonElement>("[data-stage]");
+    const panels = section.querySelectorAll<HTMLElement>("[data-stage-panel]");
+    if (!wrap) continue;
+    section.dataset["enhanced"] = "";
+
+    const select = (index: number) => {
+      buttons.forEach((button, i) => {
+        button.parentElement?.classList.toggle("done", i < index);
+        button.parentElement?.classList.toggle("active", i === index);
+        button.setAttribute("aria-pressed", String(i === index));
+      });
+      panels.forEach((panel, i) =>
+        panel.classList.toggle("current", i === index),
+      );
+      wrap.dataset["active"] = String(index);
+      section.dataset["switched"] = "";
+    };
+
+    buttons.forEach((button, i) =>
+      button.addEventListener("click", () => select(i)),
+    );
+  }
+</script>
+
+<style>
+  .band {
+    padding-block: var(--space-10);
+    background: linear-gradient(
+      to bottom,
+      var(--ground) 0,
+      var(--ground-2) 110px,
+      var(--ground-2) calc(100% - 110px),
+      var(--ground) 100%
+    );
+  }
+
+  h2 {
+    max-width: 15ch;
+    margin-top: var(--space-4);
+    font-size: var(--text-h2);
+    line-height: 1.05;
+  }
+
+  .intro {
+    max-width: 34em;
+    margin-top: 1.125rem;
+    color: var(--ink-2);
+    font-size: var(--text-lede);
+  }
+
+  .track-wrap {
+    position: relative;
+    margin-top: 3.75rem;
+  }
+
+  .track-wrap::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: calc(100% / 7 - 15px);
+    height: 2px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  .fill {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 520ms var(--ease);
+  }
+
+  /* Fill up to the active stage (seven columns). */
+  [data-active="1"] .fill {
+    width: calc(100% / 7);
+  }
+
+  [data-active="2"] .fill {
+    width: calc(100% / 7 * 2);
+  }
+
+  [data-active="3"] .fill {
+    width: calc(100% / 7 * 3);
+  }
+
+  [data-active="4"] .fill {
+    width: calc(100% / 7 * 4);
+  }
+
+  [data-active="5"] .fill {
+    width: calc(100% / 7 * 5);
+  }
+
+  [data-active="6"] .fill {
+    width: calc(100% / 7 * 6);
+  }
+
+  .track {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stage button {
+    display: grid;
+    gap: 14px;
+    width: 100%;
+    padding: 0 10px 0 0;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .stage button:focus-visible {
+    outline-offset: 6px;
+  }
+
+  .dot {
+    position: relative;
+    z-index: 1;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    background: var(--ground-2);
+    color: transparent;
+    transition:
+      border-color 260ms ease,
+      background-color 260ms ease,
+      color 260ms ease,
+      transform 260ms var(--ease);
+  }
+
+  .done .dot {
+    border-color: var(--accent);
+    background: var(--surface);
+    color: var(--accent);
+  }
+
+  .active .dot {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+    transform: scale(1.1);
+  }
+
+  .stage-name {
+    color: var(--ink-3);
+    font: 500 1.03125rem / 1.2 var(--sans);
+    transition: color 200ms ease;
+  }
+
+  .done .stage-name,
+  .active .stage-name,
+  .stage button:hover .stage-name {
+    color: var(--ink);
+  }
+
+  .details {
+    display: grid;
+    gap: var(--space-7);
+    margin-top: 2.75rem;
+  }
+
+  .detail {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  [data-enhanced] .detail:not(.current) {
+    display: none;
+  }
+
+  /* Fade only on a switch, never on first paint. */
+  [data-switched] .detail {
+    animation: fade 340ms ease both;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0.35;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  h3 {
+    margin-top: 14px;
+    font-size: var(--text-h3);
+    line-height: 1.1;
+  }
+
+  .what {
+    max-width: 30em;
+    margin-top: 14px;
+    color: var(--ink-2);
+    font-size: var(--text-lede);
+  }
+
+  .proof {
+    padding: var(--space-5) 1.625rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+  }
+
+  .proof .label {
+    color: var(--accent);
+  }
+
+  .proof p {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 900px) {
+    .band {
+      padding-block: var(--space-9);
+    }
+
+    .track {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+
+    .track-wrap::before {
+      top: 15px;
+      bottom: 15px;
+      right: auto;
+      width: 2px;
+      height: auto;
+    }
+
+    .fill {
+      display: none;
+    }
+
+    .stage button {
+      grid-template-columns: 32px 1fr;
+      align-items: center;
+      padding-block: 6px;
+    }
+
+    .detail {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

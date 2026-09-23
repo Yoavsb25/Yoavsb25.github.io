@@ -1,0 +1,198 @@
+---
+/**
+ * Resume (docs/information-architecture.md → Home 4; design-system → Timeline role, Panel):
+ * experience timeline with a sticky aside for the CV download and grouped skills.
+ */
+import type { CollectionEntry } from "astro:content";
+
+import Button from "@/components/ui/Button.astro";
+import Panel from "@/components/ui/Panel.astro";
+import { formatPeriod } from "@/lib/content";
+
+interface Props {
+  entries: CollectionEntry<"experience">[];
+  skillGroups: CollectionEntry<"profile">["data"]["skillGroups"];
+  cvHref: string;
+}
+
+const { entries, skillGroups, cvHref } = Astro.props;
+---
+
+<section class="section" id="resume" aria-labelledby="resume-title">
+  <div class="wrap">
+    <span class="label">Resume</span>
+    <h2 id="resume-title" class="serif">
+      Experience
+    </h2>
+
+    <div class="resume">
+      <ol class="timeline">
+        {entries.map(({ data }) => (
+          <li class="role">
+            <p class="when">{formatPeriod(data.start, data.end)}</p>
+            <div>
+              <h3>{data.title}</h3>
+              <p class="where">
+                {[data.org, data.location].filter(Boolean).join(" · ")}
+              </p>
+              <ul>
+                {data.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="aside">
+        <Panel>
+          <h3 class="panel-title">Download my CV</h3>
+          <p>The full one-page version, ready to share with your team.</p>
+          <Button href={cvHref} icon="download" download class="full">
+            Download CV (PDF)
+          </Button>
+        </Panel>
+        <Panel>
+          <h3 class="panel-title">Skills</h3>
+          <dl>
+            {skillGroups.map(({ group, items }) => (
+              <div>
+                <dt>{group}</dt>
+                <dd>{items.join(", ")}</dd>
+              </div>
+            ))}
+          </dl>
+        </Panel>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--space-5) 6.5rem;
+  }
+
+  h2 {
+    margin-top: 14px;
+    font-size: var(--text-h2);
+    line-height: 1.05;
+  }
+
+  .resume {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 3.5rem;
+    align-items: start;
+    margin-top: var(--space-7);
+  }
+
+  .timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .role {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: var(--space-5);
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .role:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .when {
+    padding-top: 4px;
+    color: var(--ink-3);
+    font-size: var(--text-small);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .role h3 {
+    font: 500 var(--text-role) / 1.25 var(--sans);
+    letter-spacing: -0.01em;
+  }
+
+  .where {
+    margin-top: 4px;
+    color: var(--ink-2);
+    font-size: 0.96875rem;
+  }
+
+  .role ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 14px 0 0;
+    padding-left: 18px;
+    color: var(--ink-2);
+  }
+
+  .role li::marker {
+    color: var(--accent);
+  }
+
+  .aside {
+    position: sticky;
+    top: calc(
+      var(--header-height) + var(--space-5) + env(safe-area-inset-top, 0px)
+    );
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .panel-title {
+    font: 600 1rem / 1.3 var(--sans);
+  }
+
+  .aside p {
+    margin-top: var(--space-2);
+    color: var(--ink-2);
+    font-size: 0.96875rem;
+  }
+
+  .aside :global(.full) {
+    width: 100%;
+    margin-top: 1.125rem;
+  }
+
+  dl {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: 14px;
+  }
+
+  dt {
+    color: var(--ink-3);
+    font-size: var(--text-meta);
+  }
+
+  dd {
+    margin-top: 2px;
+    font-size: 0.96875rem;
+  }
+
+  @media (max-width: 900px) {
+    .section {
+      padding-block: var(--space-5) var(--space-9);
+    }
+
+    .resume {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .role {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .aside {
+      position: static;
+    }
+  }
+</style>
