@@ -38,18 +38,19 @@ check(
     : "git fetch failed",
 );
 
-const subjects = git("log", "--format=%s", "origin/main..HEAD")
-  .out.split("\n")
-  .filter(Boolean);
+const log = git("log", "--format=%s", "origin/main..HEAD");
+const subjects = log.out.split("\n").filter(Boolean);
 const bad = subjects.filter((s) => !CONVENTIONAL.test(s));
 check(
-  subjects.length > 0 && bad.length === 0,
+  log.ok && subjects.length > 0 && bad.length === 0,
   `${subjects.length} commit(s), all conventional`,
-  bad.length
-    ? `not conventional: ${bad.join(" | ")}`
-    : subjects.length
-      ? ""
-      : "no commits ahead of main",
+  !log.ok
+    ? "cannot read origin/main; check the origin remote"
+    : bad.length
+      ? `not conventional: ${bad.join(" | ")}`
+      : subjects.length
+        ? ""
+        : "no commits ahead of main",
 );
 
 const upstream = git("rev-parse", "--abbrev-ref", "@{u}");
@@ -57,7 +58,9 @@ if (!upstream.ok) {
   check(
     false,
     "pushed",
-    `no upstream yet; user runs: git push -u origin ${branch}`,
+    branch
+      ? `no upstream yet; user runs: git push -u origin ${branch}`
+      : "no upstream (detached HEAD); switch to a branch first",
   );
 } else {
   const ahead = Number(git("rev-list", "--count", "@{u}..HEAD").out);

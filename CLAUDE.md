@@ -59,7 +59,7 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 
 Standard PR flow: plan in scope → build → `npm run verify` → review agents → `/ship` → the user pushes, opens the PR, merges when green.
 
-The Playwright MCP server (`.mcp.json`) drives a headless browser for the a11y and design reviews; artifacts go to `.playwright-mcp/` (gitignored).
+The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless, isolated browser limited to `http://localhost:4321` for the a11y and design reviews; artifacts go to `.playwright-mcp/` (gitignored). First-time setup: `npm ci && npx playwright install chromium`.
 
 ## Guardrail layers
 
@@ -81,7 +81,9 @@ One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 | After Bash        | `dependency-reminder.mjs` | After `npm install <pkg>`, reminds that new dependencies need an ADR                                                                                                              |
 | Before stopping   | `quick-check.mjs`         | If source changed, runs lint + `astro check`; failures must be fixed                                                                                                              |
 
-Protected paths (see `scripts/guards/rules.mjs`): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/settings.json`, `.claude/hooks/`, `scripts/guards/`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+Protected paths (see `scripts/guards/rules.mjs`): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/settings.json`, `.claude/hooks/`, `.claude/agents/`, `.claude/skills/`, `.mcp.json`, `scripts/guards/`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+
+Agent boundaries are enforced by hooks in each agent's frontmatter (ADR-0009): reviewers get read-only Bash, `a11y-reviewer` has no shell, `content-editor` writes only site copy.
 
 Known limits: `guard-bash` matches command text, so a command that merely mentions a blocked pattern (e.g. in a heredoc) is also denied — write that content with the Write tool instead. Scripts (python, node) that write files are not inspected; CODEOWNERS review is the backstop.
 Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake secrets must be built at runtime (see `tests/unit/guards.test.ts`).

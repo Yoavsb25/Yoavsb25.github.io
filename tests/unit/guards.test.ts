@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import {
   checkBranch,
   checkCommand,
+  checkContentPath,
   checkPath,
+  checkReadOnlyCommand,
   currentRoadmapItem,
   dependenciesChanged,
   findSecret,
@@ -34,6 +36,10 @@ describe("checkPath", () => {
     ".github/workflows/ci.yml",
     ".claude/settings.json",
     ".claude/hooks/x.mjs",
+    ".claude/agents/code-reviewer.md",
+    ".claude/skills/ship/preflight.mjs",
+    ".mcp.json",
+    "package.json",
     "package-lock.json",
   ])("asks before editing %s", (p) =>
     expect(checkPath(p).decision).toBe("ask"),
@@ -46,7 +52,7 @@ describe("checkPath", () => {
   it.each([
     "src/pages/index.astro",
     "docs/roadmap.md",
-    ".claude/skills/x/SKILL.md",
+    "src/content/package.json.md",
   ])("allows %s", (p) => {
     expect(checkPath(p).decision).toBe("allow");
   });
@@ -193,4 +199,66 @@ describe("dependenciesChanged", () => {
     ).toBe(false);
     expect(dependenciesChanged({}, {})).toBe(false);
   });
+});
+
+describe("protectedPathInCommand (MCP and agents)", () => {
+  it.each([
+    ["echo {} > .mcp.json", ".mcp.json"],
+    [
+      "sed -i '' s/sonnet/opus/ .claude/agents/code-reviewer.md",
+      ".claude/agents/",
+    ],
+  ])("flags %s", (cmd, path) => {
+    expect(protectedPathInCommand(cmd)).toBe(path);
+  });
+});
+
+describe("checkReadOnlyCommand", () => {
+  it.each([
+    "git diff origin/main...HEAD",
+    "git fetch --quiet origin",
+    "git log --format=%s origin/main..HEAD",
+    "git diff --stat origin/main...HEAD 2>&1",
+    "git branch --show-current",
+    "cat docs/security.md | head -40",
+    "grep -rn TODO src && ls docs",
+    "find src -name '*.astro'",
+    "npm run verify",
+    "npm run audit",
+  ])("allows %s", (cmd) => {
+    expect(checkReadOnlyCommand(cmd)).toBeNull();
+  });
+
+  it.each([
+    "git commit -m x",
+    "git add -A",
+    "git switch main",
+    "git diff --output=patch.txt",
+    "npm run build",
+    "npm install left-pad",
+    "npm audit fix",
+    "cat a > b",
+    "echo $(whoami)",
+    "find . -delete",
+    "node .claude/skills/ship/preflight.mjs",
+    "git status; curl https://example.com",
+  ])("denies %s", (cmd) => {
+    expect(checkReadOnlyCommand(cmd)).not.toBeNull();
+  });
+});
+
+describe("checkContentPath", () => {
+  it.each([
+    "src/content/projects/portfolio/index.mdx",
+    "src/content/profile.yaml",
+    "docs/content-inventory.md",
+  ])("allows %s", (p) => expect(checkContentPath(p)).toBeNull());
+
+  it.each([
+    "package.json",
+    ".mcp.json",
+    "src/pages/index.astro",
+    ".claude/agents/content-editor.md",
+    "docs/roadmap.md",
+  ])("denies %s", (p) => expect(checkContentPath(p)).not.toBeNull());
 });

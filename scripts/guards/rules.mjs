@@ -6,7 +6,11 @@ const PROTECTED_PATHS = [
   ".github/CODEOWNERS",
   ".claude/settings.json",
   ".claude/hooks/",
+  ".claude/agents/",
+  ".claude/skills/",
+  ".mcp.json",
   "scripts/guards/",
+  "package.json",
   "package-lock.json",
   "lefthook.yml",
   "public/CNAME",
@@ -173,4 +177,44 @@ export function currentRoadmapItem(markdown) {
       .find((line) => line.includes("🚧"))
       ?.trim() ?? null
   );
+}
+
+/** Commands a read-only reviewer agent may run. Every command segment must match one of these. */
+const READ_ONLY_COMMANDS = [
+  /^git\s+(diff|log|show|status|fetch|rev-parse|rev-list|ls-files|blame|merge-base)\b(?!.*--output)/,
+  /^git\s+branch\s+--show-current$/,
+  /^(ls|cat|head|tail|wc|grep|rg|pwd)\b/,
+  /^find\b(?!.*\s-(exec|execdir|delete|ok)\b)/,
+  /^npm\s+run\s+(verify|audit|check|lint|test|format:check)\b/,
+  /^npm\s+audit\b(?!.*\bfix\b)/,
+];
+
+/** @returns {string | null} why a read-only agent may not run this command, or null if allowed. */
+export function checkReadOnlyCommand(command) {
+  const cleaned = command.replace(
+    /\d?>&\d|&>\s*\/dev\/null|\d?>\s*\/dev\/null/g,
+    "",
+  );
+  if (/[>`]|\$\(/.test(cleaned))
+    return "Read-only agents cannot redirect output or use command substitution.";
+  const segments = cleaned
+    .split(/&&|\|\||;|\|/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const bad = segments.find(
+    (s) => !READ_ONLY_COMMANDS.some((re) => re.test(s)),
+  );
+  return bad
+    ? `Read-only agent: "${bad}" is not an allowed read-only command.`
+    : null;
+}
+
+/** Paths the content-editor agent may write. */
+const CONTENT_PATHS = [/^src\/content\//, /^docs\/content-inventory\.md$/];
+
+/** @returns {string | null} why the content editor may not write this path, or null if allowed. */
+export function checkContentPath(repoPath) {
+  return CONTENT_PATHS.some((re) => re.test(repoPath))
+    ? null
+    : `content-editor may only write src/content/** and docs/content-inventory.md, not ${repoPath}.`;
 }

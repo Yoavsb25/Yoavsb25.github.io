@@ -4,11 +4,14 @@
       "type": "stdio",
       "command": "npx",
       "args": [
-        "-y",
-        "@playwright/mcp@0.0.82",
+        "--no-install",
+        "playwright-mcp",
         "--browser",
         "chromium",
         "--headless",
+        "--isolated",
+        "--allowed-origins",
+        "http://localhost:4321",
         "--output-dir",
         ".playwright-mcp"
       ]

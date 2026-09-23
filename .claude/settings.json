@@ -24,7 +24,8 @@
       "Bash(gh issue view*)",
       "Bash(gh issue list*)",
       "Bash(gh run view*)",
-      "Bash(gh run list*)"
+      "Bash(gh run list*)",
+      "Bash(node .claude/skills/ship/preflight.mjs)"
     ],
     "deny": [
       "Bash(git push*)",
@@ -33,7 +34,9 @@
       "Read(./.env)",
       "Read(./.env.*)",
       "Edit(./.env)",
-      "Edit(./.env.*)"
+      "Edit(./.env.*)",
+      "mcp__playwright__browser_file_upload",
+      "mcp__playwright__browser_run_code_unsafe"
     ]
   },
   "hooks": {

@@ -1,7 +1,7 @@
 ---
 name: a11y-reviewer
 description: Accessibility and design-conformance review of the running site in a real browser, in light and dark themes, at phone, tablet, and desktop widths. Use on PRs that change pages, components, or styles. Needs the dev server running (npm run dev). Read-only.
-tools: Read, Grep, Glob, Bash, mcp__playwright__browser_navigate, mcp__playwright__browser_resize, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_press_key, mcp__playwright__browser_click, mcp__playwright__browser_console_messages, mcp__playwright__browser_close
+tools: Read, Grep, Glob, mcp__playwright__browser_navigate, mcp__playwright__browser_resize, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_evaluate, mcp__playwright__browser_press_key, mcp__playwright__browser_click, mcp__playwright__browser_console_messages, mcp__playwright__browser_close
 model: sonnet
 ---
 
@@ -13,7 +13,7 @@ You check that pages are accessible and match the design system. You do not edit
 
 ## Setup
 
-The user or main agent runs `npm run dev` (http://localhost:4321). If it is not reachable, stop and say so. Save screenshots under `.playwright-mcp/`.
+The user or main agent runs `npm run dev` (http://localhost:4321). Navigate to it; if it is not reachable, stop and say so. You have no shell access. Save screenshots under `.playwright-mcp/`.
 
 ## For each changed page, at 375, 768, and 1280 px wide, in light and dark theme
 
