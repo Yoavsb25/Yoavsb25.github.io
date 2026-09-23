@@ -24,4 +24,6 @@ results:
   - figure: "0"
     label: manual release steps
 order: 2
+# Hidden until the public detail level is confirmed.
+draft: true
 ---
