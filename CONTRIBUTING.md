@@ -18,8 +18,9 @@ npm run dev
 
 ## Git hooks (lefthook)
 
-- **pre-commit** — Prettier and ESLint `--fix` on staged files.
+- **pre-commit** — secret scan, `.env` block, 500 KB file limit, lockfile-in-sync check, Prettier and ESLint `--fix` on staged files.
 - **commit-msg** — commitlint (conventional commits).
+- **pre-push** — `npm run verify`.
 
 Do not bypass hooks with `--no-verify`.
 

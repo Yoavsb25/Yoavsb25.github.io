@@ -1,13 +1,18 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  checkBranch,
   checkCommand,
   checkPath,
   currentRoadmapItem,
+  dependenciesChanged,
   findSecret,
+  installedPackages,
+  isGitCommit,
+  protectedPathInCommand,
   toRepoPath,
   writtenText,
-} from "../../.claude/hooks/lib/rules.mjs";
+} from "../../scripts/guards/rules.mjs";
 
 // Fake secrets are assembled at runtime so this file never trips the secret scanner itself.
 const fake = (prefix: string, length: number) =>
@@ -104,5 +109,88 @@ describe("currentRoadmapItem", () => {
 
   it("returns null when nothing is in progress", () => {
     expect(currentRoadmapItem("| 1 | a | ✅ |")).toBeNull();
+  });
+});
+
+describe("checkBranch", () => {
+  it.each(["main", "master"])("blocks work on %s", (b) => {
+    expect(checkBranch(b)).not.toBeNull();
+  });
+
+  it("allows feature branches", () => {
+    expect(checkBranch("feat/pages")).toBeNull();
+  });
+});
+
+describe("protectedPathInCommand", () => {
+  it.each([
+    ["sed -i '' 's/a/b/' .github/workflows/ci.yml", ".github/workflows/"],
+    ["echo x > lefthook.yml", "lefthook.yml"],
+    ["cat a >> .claude/settings.json", ".claude/settings.json"],
+    ["mv tmp scripts/guards/rules.mjs", "scripts/guards/"],
+    ["rm package-lock.json", "package-lock.json"],
+    ["git checkout -- .claude/hooks/guard-bash.mjs", ".claude/hooks/"],
+  ])("flags %s", (cmd, path) => {
+    expect(protectedPathInCommand(cmd)).toBe(path);
+  });
+
+  it.each([
+    "cat .github/workflows/ci.yml",
+    "cat .github/workflows/ci.yml 2>&1",
+    "grep x lefthook.yml > /dev/null",
+    "sed -n 1,5p scripts/guards/rules.mjs",
+    "echo hi > notes.txt",
+    "npm install",
+  ])("allows %s", (cmd) => {
+    expect(protectedPathInCommand(cmd)).toBeNull();
+  });
+});
+
+describe("isGitCommit", () => {
+  it("detects commits", () => {
+    expect(isGitCommit("git add -A && git commit -m x")).toBe(true);
+    expect(isGitCommit("git status")).toBe(false);
+  });
+});
+
+describe("installedPackages", () => {
+  it.each([
+    ["npm install zod", ["zod"]],
+    ["npm i -D vitest @types/node", ["vitest", "@types/node"]],
+    ["npm add astro && npm run build", ["astro"]],
+    ["npm install", []],
+    ["npm ci", []],
+    ["npm run build", []],
+    ["python3 - <<'X'\nnpm install\", ])(\"allows\nX", []],
+    ["echo 'use npm install zod'", []],
+  ])("%s -> %j", (cmd, pkgs) => {
+    expect(installedPackages(cmd)).toEqual(pkgs);
+  });
+});
+
+describe("dependenciesChanged", () => {
+  const base = {
+    name: "x",
+    dependencies: { a: "1" },
+    devDependencies: { b: "1" },
+  };
+
+  it("detects added or bumped dependencies", () => {
+    expect(
+      dependenciesChanged(base, { ...base, dependencies: { a: "2" } }),
+    ).toBe(true);
+    expect(
+      dependenciesChanged(base, {
+        ...base,
+        devDependencies: { b: "1", c: "1" },
+      }),
+    ).toBe(true);
+  });
+
+  it("ignores non-dependency changes", () => {
+    expect(
+      dependenciesChanged(base, { ...base, scripts: { dev: "astro dev" } }),
+    ).toBe(false);
+    expect(dependenciesChanged({}, {})).toBe(false);
   });
 });

@@ -80,6 +80,15 @@
             "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format-file.mjs"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dependency-reminder.mjs"
+          }
+        ]
       }
     ],
     "Stop": [
