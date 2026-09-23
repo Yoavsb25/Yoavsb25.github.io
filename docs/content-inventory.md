@@ -1,6 +1,6 @@
 # Content inventory
 
-The approved copy and data for launch, taken from the design mockup (v2) and Yoav's CV. This is the source for the content collections (ADR-0005); the build PR moves it into `src/content/`.
+The approved copy and data for launch, taken from the design mockup (v2) and Yoav's CV. This is the source for the content collections (ADR-0005); `feat/content-model` moves it into `src/content/` and deletes this file, so there is one source of truth.
 
 Status: ✅ approved · 🟡 needs confirmation · ❓ missing
 
@@ -46,7 +46,7 @@ Default selected stage: **Build**.
 
 ## Case studies
 
-Order on the home page: featured first, then as listed.
+Order on the home page: featured first, then as listed (becomes the `order` and `featured` fields).
 
 ### 1. This website, built with AI · `portfolio` ✅ (featured)
 

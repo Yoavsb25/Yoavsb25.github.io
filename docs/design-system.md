@@ -14,7 +14,7 @@ Inspiration: igaltal.github.io/portfolio (editorial type, restraint, "proof over
 
 ## Color tokens
 
-Defined once as CSS custom properties in `src/styles/tokens.css`. Components use tokens only (no hex values in components).
+Defined once as CSS custom properties in `src/styles/tokens.css`. Components use tokens only (no hex values in components). Once `feat/design-system` lands, `tokens.css` is the source of truth and the tables below are replaced with a link to it.
 
 | Token           | Light                  | Dark                    | Use                                         |
 | --------------- | ---------------------- | ----------------------- | ------------------------------------------- |

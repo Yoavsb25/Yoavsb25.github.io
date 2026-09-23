@@ -32,9 +32,9 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 
 ## Case study `/projects/<slug>`
 
-Fixed structure, enforced by the content schema (ADR-0005):
+Fixed structure: each section is a required frontmatter field, enforced by the content schema (ADR-0005):
 
-1. "← All projects" back link (→ /#work).
+1. "← Back to work" back link (→ /#work).
 2. Header: kicker ("Case study · SysAid · 2025"), title, one-sentence outcome.
 3. Meta row: Role, Timeline, Stack, Links.
 4. Visual: screenshot or window illustration.
@@ -48,6 +48,6 @@ Fixed structure, enforced by the content schema (ADR-0005):
 ## Navigation rules
 
 - Every page is at most 1 click from Hire me and the CV.
-- Every case study links to the next project and to contact.
+- Every case study links to the next project (by `order`, wrapping to the first) and to contact.
 - URLs are lowercase, kebab-case, stable (a slug never changes once published).
 - In-page anchors are plain words (`#work`, `#resume`) so links can be shared.

@@ -12,45 +12,61 @@ public/ (cv.pdf, icons) ──┘
 
 ## Target structure
 
+Primitives are grouped by type; everything page-specific is grouped by feature, so a new area of the site is a new folder rather than more files in a shared bucket.
+
 ```
 src/
-  config/site.ts            site identity: URL, name, title, links (single source of truth)
-  content.config.ts         collection schemas (zod) — ADR-0005
+  config/site.ts              facts: url, name, title, email, socials, location (only place)
+  content.config.ts           collection schemas (zod) — ADR-0005
   content/
-    projects/<slug>.mdx     case studies
-    experience/<id>.yaml    roles
-    profile.yaml            bio, skills, availability
-  lib/                      pure helpers: seo, dates, sorting, formatting — unit tested
-  styles/tokens.css         design tokens, light + dark (ADR-0007)
-  styles/global.css         reset, base type, shared utilities
-  assets/portrait.jpg       hero photo (optimized at build)
+    projects/<slug>/index.mdx case study: structured frontmatter + optional deep-dive body
+    projects/<slug>/cover.png colocated image, validated by the schema's image() helper
+    experience/<id>.yaml      roles and education (kind: role | education)
+    stages.yaml               How I work stages (one file, array)
+    profile.yaml              prose only: status line, headline, lede, badge, skills, contact copy
+  lib/                        pure helpers: seo, dates, project ordering — unit tested
+  styles/tokens.css           design tokens, light + dark (ADR-0007)
+  styles/global.css           reset, base type, shared utilities
+  assets/portrait.jpg         hero photo (optimized at build)
   components/
-    ui/                     primitives: Button, Link, Tag, Card, Icon, Prose
-    sections/               page sections: Hero, FeaturedProjects, ExperienceTimeline, CtaBlock
-    layout/                 Header, Footer, ThemeToggle, SkipLink
+    ui/                       primitives: Button, Link, Tag, Card, Icon, Prose
+    site/                     global chrome: Header, Footer, ThemeToggle, SkipLink
+    home/                     Hero, HowIWork, WorkGrid, Resume, Contact
+    case-study/               MetaRow, Toc, ResultTiles, NextProject
+                              (phase 2: writing/)
   layouts/
-    BaseLayout.astro        <head>: SEO, CSP, theme; header/footer shell
-    CaseStudyLayout.astro   fixed case-study structure
-  pages/                    routes only: fetch data, compose sections
+    BaseLayout.astro          <head>: SEO, CSP, theme; site chrome
+    CaseStudyLayout.astro     renders the fixed case-study structure from frontmatter
+  pages/                      routes only: load data, compose feature components
 tests/
-  unit/                     src/lib and scripts/guards
-  e2e/                      Playwright + axe per page (deploy PR)
+  unit/                       src/lib and scripts/guards
+  e2e/                        Playwright + axe per page (deploy PR)
 ```
+
+`site.ts` owns facts that code depends on (URLs, email, JSON-LD). Content files own prose. Nothing appears in both.
 
 ## Layers and rules
 
-Dependencies point downward only (ADR-0006):
+Dependencies point one way (ADR-0006). Features are `home/`, `case-study/`, and later `writing/`.
 
-| Layer                  | May import                      | Rule                                                    |
-| ---------------------- | ------------------------------- | ------------------------------------------------------- |
-| `pages/`               | layouts, sections, lib, content | Routing and data loading only; no styling beyond layout |
-| `layouts/`             | layout, ui, lib, config         | Page shell and `<head>`                                 |
-| `components/sections/` | ui, lib                         | Receive data as props; never call `getCollection`       |
-| `components/ui/`       | tokens only                     | No data, no business logic; fully reusable              |
-| `lib/`                 | config                          | Pure TypeScript, no Astro imports, 100% unit tested     |
-| `content/`             | —                               | Data only; validated at build time                      |
+| Layer             | May import                                     | Rule                                                                    |
+| ----------------- | ---------------------------------------------- | ----------------------------------------------------------------------- |
+| `pages/`          | layouts, features, site, ui, lib, config, data | Routing and data loading only                                           |
+| `layouts/`        | site, ui, lib, config                          | Page shell and `<head>`                                                 |
+| features          | ui, lib                                        | Data arrives as props; never load content; never import another feature |
+| `components/site` | ui, lib, config                                | Global chrome                                                           |
+| `components/ui`   | styles only                                    | No data, no business logic; fully reusable                              |
+| `lib/`            | config; `import type` from `astro:content`     | Pure TypeScript, no runtime Astro imports, unit tested                  |
+| `content/`        | —                                              | Data only; validated at build time                                      |
 
-Data flows one way: content/config → pages → sections → ui.
+Data flows one way: content/config → pages → features → ui. When a second feature needs a component, it moves to `ui/`.
+
+**Enforcement** (lands with the first PR that creates `src/components/`): a `@/*` path alias in `tsconfig.json`, a ban on parent-relative imports (`../*`) in `src/`, and per-folder `@typescript-eslint/no-restricted-imports` blocks in `eslint.config.js` that encode the table above. `eslint.config.js` is the source of truth; `npm run verify` fails on a violation.
+
+## Adding a case study
+
+1. Create `src/content/projects/<slug>/index.mdx` with the frontmatter fields (title, kicker, outcome, meta, problem, built ×3, approach, results ×3, order, featured, draft, cover) and put `cover.png` beside it.
+2. Run `npm run verify`. The schema fails the build on a missing field or a wrong count. The home grid, `/projects/<slug>` route, next-project link, sitemap, and JSON-LD update without code changes.
 
 ## Rendering and interactivity
 
@@ -64,7 +80,7 @@ One `seo` helper in `src/lib` builds title, description, canonical, Open Graph, 
 
 ## Security
 
-See `docs/security.md`. Key points: CSP via `<meta>`, no third-party scripts, self-hosted fonts.
+See `docs/security.md`. Key points: CSP via `<meta>`, generated by Astro's built-in `security.csp` (script and style hashes computed at build, ADR-0008), no third-party scripts, self-hosted fonts.
 
 ## Quality gates
 

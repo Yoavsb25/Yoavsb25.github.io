@@ -3,5 +3,5 @@ dist/
 node_modules/
 package-lock.json
 
-# design reference (hand-authored HTML mockup)
-docs/design/
+# design reference (hand-authored HTML mockup, removed in feat/pages)
+docs/design/mockup.html
