@@ -35,7 +35,15 @@ function restrict(patterns, message, { contentTypesOk = false } = {}) {
 }
 
 export default defineConfig(
-  globalIgnores(["dist/", ".astro/", "node_modules/"]),
+  globalIgnores([
+    "dist/",
+    ".astro/",
+    "node_modules/",
+    "_site/",
+    "test-results/",
+    "playwright-report/",
+    ".lighthouseci/",
+  ]),
   js.configs.recommended,
   tseslint.configs.strict,
   astro.configs.recommended,

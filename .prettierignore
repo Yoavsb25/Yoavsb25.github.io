@@ -5,3 +5,7 @@ package-lock.json
 
 # design reference (hand-authored HTML mockup, removed in feat/pages)
 docs/design/mockup.html
+_site/
+test-results/
+playwright-report/
+.lighthouseci/
