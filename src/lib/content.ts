@@ -16,6 +16,28 @@ interface Stage extends Ordered {
   data: { order: number; selected: boolean };
 }
 
+/** Fixed length of the How I work track (design + IA). */
+export const STAGE_COUNT = 7;
+
+/**
+ * Fails closed when stages are the wrong length or not exactly one is
+ * `selected`. Call from pages that render the track; per-entry zod cannot
+ * enforce collection-level rules (see content.config.ts).
+ */
+export function assertStages(stages: readonly Stage[]): void {
+  if (stages.length !== STAGE_COUNT) {
+    throw new Error(
+      `How I work expects ${STAGE_COUNT} stages, got ${stages.length}.`,
+    );
+  }
+  const selected = stages.filter((s) => s.data.selected).length;
+  if (selected !== 1) {
+    throw new Error(
+      `How I work expects exactly one selected stage, got ${selected}.`,
+    );
+  }
+}
+
 export function byOrder<T extends Ordered>(entries: readonly T[]): T[] {
   return [...entries].sort((a, b) => a.data.order - b.data.order);
 }

@@ -7,6 +7,7 @@
 import type { CollectionEntry } from "astro:content";
 
 import Icon from "@/components/ui/Icon.astro";
+import { STAGE_COUNT } from "@/lib/content";
 
 interface Props {
   stages: CollectionEntry<"stages">[];
@@ -14,10 +15,7 @@ interface Props {
 }
 
 const { stages, selected } = Astro.props;
-// The track, its fill positions, and the grid are designed for seven stages.
-if (stages.length !== 7) {
-  throw new Error(`How I work expects 7 stages, got ${stages.length}.`);
-}
+// Length and exactly-one selected are enforced by assertStages on the page.
 ---
 
 <section class="band" id="how" aria-labelledby="how-title" data-how>
@@ -31,7 +29,11 @@ if (stages.length !== 7) {
       whole path, so nothing gets lost along the way.
     </p>
 
-    <div class="track-wrap" data-active={selected}>
+    <div
+      class="track-wrap"
+      data-active={selected}
+      style={`--stage-count: ${STAGE_COUNT}`}
+    >
       <span class="fill" aria-hidden="true"></span>
       <ol class="track">
         {stages.map((stage, i) => (
@@ -146,7 +148,7 @@ if (stages.length !== 7) {
     position: absolute;
     top: 15px;
     left: 15px;
-    right: calc(100% / 7 - 15px);
+    right: calc(100% / var(--stage-count) - 15px);
     height: 2px;
     border-radius: 2px;
     background: var(--line);
@@ -160,38 +162,38 @@ if (stages.length !== 7) {
     height: 2px;
     border-radius: 2px;
     background: var(--accent);
-    transition: width 520ms var(--ease);
+    transition: width var(--dur-track) var(--ease);
   }
 
-  /* Fill up to the active stage (seven columns). */
+  /* Fill up to the active stage (STAGE_COUNT columns). */
   [data-active="1"] .fill {
-    width: calc(100% / 7);
+    width: calc(100% / var(--stage-count));
   }
 
   [data-active="2"] .fill {
-    width: calc(100% / 7 * 2);
+    width: calc(100% / var(--stage-count) * 2);
   }
 
   [data-active="3"] .fill {
-    width: calc(100% / 7 * 3);
+    width: calc(100% / var(--stage-count) * 3);
   }
 
   [data-active="4"] .fill {
-    width: calc(100% / 7 * 4);
+    width: calc(100% / var(--stage-count) * 4);
   }
 
   [data-active="5"] .fill {
-    width: calc(100% / 7 * 5);
+    width: calc(100% / var(--stage-count) * 5);
   }
 
   [data-active="6"] .fill {
-    width: calc(100% / 7 * 6);
+    width: calc(100% / var(--stage-count) * 6);
   }
 
   .track {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--stage-count), minmax(0, 1fr));
     margin: 0;
     padding: 0;
     list-style: none;
@@ -225,10 +227,10 @@ if (stages.length !== 7) {
     background: var(--ground-2);
     color: transparent;
     transition:
-      border-color 260ms ease,
-      background-color 260ms ease,
-      color 260ms ease,
-      transform 260ms var(--ease);
+      border-color var(--dur-base) var(--ease),
+      background-color var(--dur-base) var(--ease),
+      color var(--dur-base) var(--ease),
+      transform var(--dur-base) var(--ease);
   }
 
   .done .dot {
@@ -247,7 +249,7 @@ if (stages.length !== 7) {
   .stage-name {
     color: var(--ink-3);
     font: 500 1.03125rem / 1.2 var(--sans);
-    transition: color 200ms ease;
+    transition: color var(--dur-base) var(--ease);
   }
 
   .done .stage-name,
@@ -275,7 +277,7 @@ if (stages.length !== 7) {
 
   /* Fade only on a switch, never on first paint. */
   [data-switched] .detail {
-    animation: fade 340ms ease both;
+    animation: fade var(--dur-swap) var(--ease) both;
   }
 
   @keyframes fade {
@@ -304,7 +306,7 @@ if (stages.length !== 7) {
   }
 
   .proof {
-    padding: var(--space-5) 1.625rem;
+    padding: var(--space-5);
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-md);

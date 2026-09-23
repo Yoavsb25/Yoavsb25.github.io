@@ -55,7 +55,11 @@ const experience = defineCollection({
   }),
 });
 
-/** How I work stages, one file. Exactly one stage should be `selected`. */
+/**
+ * How I work stages, one file. Collection-level rules (exactly STAGE_COUNT
+ * entries, exactly one `selected`) are enforced by assertStages in
+ * src/lib/content.ts — per-entry zod cannot check them.
+ */
 const stages = defineCollection({
   loader: file("src/content/stages.yaml"),
   schema: z.object({

@@ -10,6 +10,7 @@ import WorkGrid from "@/components/home/WorkGrid.astro";
 import { site } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
+  assertStages,
   byOrder,
   defaultStage,
   projectPath,
@@ -22,6 +23,7 @@ const profile = await getEntry("profile", "profile");
 if (!profile) throw new Error("src/content/profile.yaml is missing");
 
 const stages = byOrder(await getCollection("stages"));
+assertStages(stages);
 const selected = defaultStage(stages);
 const projects = publishedProjects(await getCollection("projects")).map(
   (entry) => ({ entry, href: withBase(projectPath(entry.id)) }),

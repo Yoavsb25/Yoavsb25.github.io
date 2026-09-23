@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  STAGE_COUNT,
+  assertStages,
   byOrder,
   defaultStage,
   formatPeriod,
@@ -79,6 +81,46 @@ describe("defaultStage", () => {
 
   it("is undefined when empty", () => {
     expect(defaultStage([])).toBeUndefined();
+  });
+});
+
+describe("assertStages", () => {
+  const seven = (selectedIndex: number) =>
+    Array.from({ length: STAGE_COUNT }, (_, i) =>
+      stage(String(i), i + 1, i === selectedIndex),
+    );
+
+  it("accepts STAGE_COUNT stages with exactly one selected", () => {
+    expect(() => assertStages(seven(3))).not.toThrow();
+  });
+
+  it("rejects the wrong count", () => {
+    expect(() => assertStages(seven(0).slice(0, 6))).toThrow(
+      /expects 7 stages, got 6/,
+    );
+  });
+
+  it("rejects zero selected", () => {
+    const none = seven(0).map((s) => ({
+      ...s,
+      data: { ...s.data, selected: false },
+    }));
+    expect(() => assertStages(none)).toThrow(
+      /exactly one selected stage, got 0/,
+    );
+  });
+
+  it("rejects two selected", () => {
+    const two = seven(0);
+    const second = two[1];
+    if (!second) throw new Error("expected second stage");
+    two[1] = {
+      ...second,
+      data: { ...second.data, selected: true },
+    };
+    expect(() => assertStages(two)).toThrow(
+      /exactly one selected stage, got 2/,
+    );
   });
 });
 
