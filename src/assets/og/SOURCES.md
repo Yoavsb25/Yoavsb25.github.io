@@ -2,6 +2,8 @@
 
 Latin WOFF files from Fontsource (SIL OFL 1.1, licenses beside them), used only at build to render `/og/*.png` (ADR-0015). Verify with `shasum -a 256 src/assets/og/*.woff`.
 
+These duplicate the site fonts on purpose: satori cannot read WOFF2, and the site fonts come from Astro's font provider at build. When a site font family or version changes in `astro.config.mjs`, update these files and hashes too. The OG colors are checked against `tokens.css` by `tests/unit/tokens.test.ts`.
+
 | File                       | Source                                                                                                       | sha256                                                             |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
 | `source-serif-4-400.woff`  | `https://cdn.jsdelivr.net/npm/@fontsource/source-serif-4@5.3.0/files/source-serif-4-latin-400-normal.woff`   | `777f0f04bfdacfb14959c0be7cb6329b257659017ebbfb8c9e36f27be06b7662` |

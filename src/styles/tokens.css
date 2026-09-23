@@ -84,7 +84,7 @@
   }
 }
 
-/* Dark: soft charcoal-green, never pure black. Kept in one mixin-like block, used twice. */
+/* Dark: soft charcoal-green, never pure black. Declared twice (chosen, system); tests/unit/tokens.test.ts keeps the two identical. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --ground: #121715;
