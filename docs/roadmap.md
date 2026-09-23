@@ -8,8 +8,8 @@ One PR at a time; the next starts only after the previous is merged.
 | 2   | `ci/pr-checks`                 | CI (verify, audit, actionlint, CodeQL), Dependabot, templates                                                    | ✅ merged      |
 | 3   | `chore/guardrails`             | lefthook, commitlint, CONTRIBUTING, CLAUDE.md, docs, ADRs                                                        | ✅ merged      |
 | 4   | `chore/claude-settings-hooks`  | Claude permissions + hooks, shared guard rules, CODEOWNERS                                                       | ✅ merged      |
-| 5   | `docs/product-plan`            | Product brief, IA, content inventory (real copy and data), architecture, design system, ADR-0005 to 0008, mockup | 🚧 in progress |
-| 6   | `chore/claude-skills-agents`   | `/adr`, `/ship` skills, subagents, Playwright MCP                                                                | ⏳             |
+| 5   | `docs/product-plan`            | Product brief, IA, content inventory (real copy and data), architecture, design system, ADR-0005 to 0008, mockup | ✅ merged      |
+| 6   | `chore/claude-skills-agents`   | `/adr`, `/ship` skills, 4 review/content subagents, Playwright MCP                                               | 🚧 in progress |
 | 7   | `feat/design-system`           | Tokens, fonts, `ui/` + `site/` components, BaseLayout, import-boundary lint rules (ADR-0006)                     | ⏳             |
 | 8   | `chore/claude-skills-scaffold` | `/new-component`, `/new-page`, `/design-review`, `/a11y-audit`, `/perf-audit`                                    | ⏳             |
 | 9   | `ci/deploy`                    | Deploy to Pages, e2e + axe, Lighthouse budgets, link check                                                       | ⏳             |

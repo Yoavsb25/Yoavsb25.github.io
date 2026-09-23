@@ -101,5 +101,6 @@
         ]
       }
     ]
-  }
+  },
+  "enabledMcpjsonServers": ["playwright"]
 }

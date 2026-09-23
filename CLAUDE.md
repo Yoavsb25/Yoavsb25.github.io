@@ -26,6 +26,9 @@ tests/unit/          Vitest tests, mirror src/lib
 docs/                architecture, security, roadmap, ADRs
 .claude/settings.json  shared permissions + hook wiring (protected)
 .claude/hooks/       Claude Code hook entry scripts (thin wrappers)
+.claude/skills/      project skills (/adr, /ship)
+.claude/agents/      review and content subagents
+.mcp.json            project MCP servers (Playwright, pinned)
 scripts/guards/      shared guard rules for Claude + git hooks (protected, tested in tests/unit/guards.test.ts)
 .github/workflows/   CI (protected — change only when asked)
 ```
@@ -42,6 +45,21 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 - No third-party scripts, trackers, or CDNs (see `docs/security.md`).
 - Pin GitHub Actions to full commit SHAs with a version comment.
 - A significant decision (new dependency, pattern, or service) needs an ADR in `docs/adr/`.
+
+## Workflow: skills and agents
+
+| Use                       | When                                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------------- |
+| `/adr`                    | A significant decision is made or reversed                                                |
+| `/ship`                   | Before calling a PR ready: preflight checks, scope check, PR title and body. Never pushes |
+| `code-reviewer` agent     | Before `/ship` on any PR that changes code                                                |
+| `security-reviewer` agent | PRs touching `.github/`, `.claude/`, `scripts/guards/`, dependencies, or `<head>`         |
+| `a11y-reviewer` agent     | PRs that change pages, components, or styles (needs `npm run dev`)                        |
+| `content-editor` agent    | Writing or editing site copy in `src/content/` or `docs/content-inventory.md`             |
+
+Standard PR flow: plan in scope → build → `npm run verify` → review agents → `/ship` → the user pushes, opens the PR, merges when green.
+
+The Playwright MCP server (`.mcp.json`) drives a headless browser for the a11y and design reviews; artifacts go to `.playwright-mcp/` (gitignored).
 
 ## Guardrail layers
 
