@@ -22,6 +22,7 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 ```
 src/config/site.ts   single source of truth: site URL, name, socials
+src/content/         site copy: case studies (MD) and YAML, validated by src/content.config.ts
 src/lib/             pure, unit-tested helpers (no Astro imports)
 src/pages/           routes
 tests/unit/          Vitest tests, mirror src/lib
@@ -29,7 +30,7 @@ tests/e2e/           Playwright + axe per built page, byte budgets
 docs/                architecture, security, roadmap, ADRs
 .claude/settings.json  shared permissions + hook wiring (protected)
 .claude/hooks/       Claude Code hook entry scripts (thin wrappers)
-.claude/skills/      project skills (/adr, /ship, /new-*, audits)
+.claude/skills/      project skills (/adr, /ship, /new-*, /sync-projects, audits)
 .claude/agents/      review and content subagents
 .mcp.json            project MCP servers (Playwright, pinned)
 scripts/guards/      shared guard rules for Claude + git hooks (protected, tested in tests/unit/guards.test.ts)
@@ -63,7 +64,9 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 | `code-reviewer` agent     | Before `/ship` on any PR that changes code                                                |
 | `security-reviewer` agent | PRs touching `.github/`, `.claude/`, `scripts/guards/`, dependencies, or `<head>`         |
 | `a11y-reviewer` agent     | PRs that change pages, components, or styles (needs `npm run dev`)                        |
-| `content-editor` agent    | Writing or editing site copy in `src/content/` or `docs/content-inventory.md`             |
+| `content-editor` agent    | Writing or editing site copy in `src/content/`                                            |
+| `/new-case-study`         | Adding a project: the fixed case-study structure the schema enforces                      |
+| `/sync-projects`          | Proposing case studies from public GitHub repos; the user approves each one               |
 
 Standard PR flow: plan in scope → build → `npm run verify` → review agents and audits → `/ship` → the user pushes, opens the PR, merges when green.
 
@@ -100,7 +103,6 @@ Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake s
 
 - `docs/product-brief.md` — goal, audiences, "Hire me" funnel, non-goals (read before any UI or content work)
 - `docs/information-architecture.md` — site map and page contents
-- `docs/content-inventory.md` — approved copy and data for every section and case study
 - `docs/design-system.md` — tokens, type, spacing, motion, components, voice (read before any UI work)
 - `docs/design/mockup.html` — approved visual reference (frozen; removed in `feat/pages`; its Google Fonts links are not a pattern to copy)
 - `docs/architecture.md` — target structure, layers, data flow

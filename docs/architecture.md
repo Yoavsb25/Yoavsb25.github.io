@@ -5,7 +5,7 @@
 A fully static site: Astro renders every page to HTML at build time and GitHub Pages serves the `dist/` output. There is no server, database, or runtime API (ADR-0001, ADR-0002).
 
 ```
-src/content (MDX + YAML) ─┐
+src/content (MD + YAML) ──┐
 src/config/site.ts ───────┼─▶ Astro build (CI) ─▶ dist/ (HTML, CSS, images) ─▶ GitHub Pages
 public/ (cv.pdf, icons) ──┘
 ```
@@ -19,12 +19,12 @@ src/
   config/site.ts              facts: url, name, title, email, socials, location (only place)
   content.config.ts           collection schemas (zod) — ADR-0005
   content/
-    projects/<slug>/index.mdx case study: structured frontmatter + optional deep-dive body
-    projects/<slug>/cover.png colocated image, validated by the schema's image() helper
+    projects/<slug>/index.md  case study: structured frontmatter + optional deep-dive body (ADR-0014)
+    projects/<slug>/cover.png optional colocated image, validated by the schema's image() helper
     experience/<id>.yaml      roles and education (kind: role | education)
     stages.yaml               How I work stages (one file, array)
     profile.yaml              prose only: status line, headline, lede, badge, skills, contact copy
-  lib/                        pure helpers: seo, dates, project ordering — unit tested
+  lib/                        pure helpers: seo, url, content ordering and periods — unit tested
   styles/tokens.css           design tokens, light + dark (ADR-0007)
   styles/global.css           reset, base type, shared utilities
   assets/portrait.jpg         hero photo (optimized at build)
@@ -66,7 +66,7 @@ Data flows one way: content/config → pages → features → ui. When a second 
 
 ## Adding a case study
 
-1. Create `src/content/projects/<slug>/index.mdx` with the frontmatter fields (title, kicker, outcome, meta, problem, built ×3, approach, results ×3, order, featured, draft, cover) and put `cover.png` beside it.
+1. Run `/new-case-study`, or create `src/content/projects/<slug>/index.md` with the frontmatter fields (title, kicker, summary, tags, outcome, meta, problem, built ×3, approach, results ×3, order, featured, draft, optional cover). `/sync-projects` proposes candidates from GitHub.
 2. Run `npm run verify`. The schema fails the build on a missing field or a wrong count. The home grid, `/projects/<slug>` route, next-project link, sitemap, and JSON-LD update without code changes.
 
 ## Rendering and interactivity

@@ -63,6 +63,16 @@ export default defineConfig(
     },
   },
   {
+    // Defines the collections, so it needs astro:content at runtime (ADR-0005).
+    files: ["src/content.config.ts"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        { patterns: [noRelativeParent] },
+      ],
+    },
+  },
+  {
     files: ["src/layouts/**"],
     rules: restrict(
       ["@/pages/*", ...features],

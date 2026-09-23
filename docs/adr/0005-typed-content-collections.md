@@ -1,6 +1,6 @@
 # 0005. Content in typed collections, in the repo
 
-- Status: accepted
+- Status: accepted (case study format amended by 0014: Markdown, not MDX)
 - Date: 2026-09-23
 
 ## Context
