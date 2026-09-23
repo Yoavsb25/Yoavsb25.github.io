@@ -54,7 +54,7 @@ Dependencies point one way (ADR-0006). Features are `home/`, `case-study/`, and 
 | ----------------- | ---------------------------------------------- | ----------------------------------------------------------------------- |
 | `pages/`          | layouts, features, site, ui, lib, config, data | Routing and data loading only                                           |
 | `layouts/`        | site, ui, lib, config                          | Page shell and `<head>`                                                 |
-| features          | ui, lib                                        | Data arrives as props; never load content; never import another feature |
+| features          | ui, lib; `import type` from `astro:content`    | Data arrives as props; never load content; never import another feature |
 | `components/site` | ui, lib, config                                | Global chrome                                                           |
 | `components/ui`   | styles only                                    | No data, no business logic; fully reusable                              |
 | `lib/`            | config; `import type` from `astro:content`     | Pure TypeScript, no runtime Astro imports, unit tested                  |

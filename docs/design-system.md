@@ -75,7 +75,8 @@ Headings use `text-wrap: balance`. Numbers in timelines use `tabular-nums`.
 | Token           | Value                                                               | Use                              |
 | --------------- | ------------------------------------------------------------------- | -------------------------------- |
 | `--radius-pill` | 999px                                                               | Buttons, chips, tags             |
-| `--radius-lg`   | 20px                                                                | Cards, panels                    |
+| `--radius-lg`   | 20px                                                                | Cards                            |
+| `--radius-md`   | 18px                                                                | Panels                           |
 | `--radius-xl`   | 24–28px                                                             | Portrait, case-study visuals     |
 | `--radius-sm`   | 12px                                                                | Window illustrations             |
 | `--shadow`      | light: `0 1px 2px rgb(22 25 29/.04), 0 10px 30px rgb(22 25 29/.07)` | Hover and floating elements only |
