@@ -7,16 +7,18 @@
 import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 
+import Emphasized from "@/components/home/Emphasized.astro";
 import Chip from "@/components/ui/Chip.astro";
 import Icon from "@/components/ui/Icon.astro";
 import Window from "@/components/ui/Window.astro";
 import { workGridColumns } from "@/lib/content";
 
 interface Props {
+  section: CollectionEntry<"profile">["data"]["sections"]["work"];
   projects: { entry: CollectionEntry<"projects">; href: string }[];
 }
 
-const { projects } = Astro.props;
+const { section, projects } = Astro.props;
 const columns = workGridColumns(projects.map((p) => p.entry));
 ---
 
@@ -26,7 +28,7 @@ const columns = workGridColumns(projects.map((p) => p.entry));
       <div>
         <span class="label">Selected work</span>
         <h2 id="work-title" class="serif">
-          Real projects, <em>shipped</em>.
+          <Emphasized text={section.headline} />
         </h2>
       </div>
     </div>

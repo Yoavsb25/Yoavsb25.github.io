@@ -5,24 +5,26 @@
  */
 import type { CollectionEntry } from "astro:content";
 
+import Emphasized from "@/components/home/Emphasized.astro";
 import Button from "@/components/ui/Button.astro";
 import Panel from "@/components/ui/Panel.astro";
 import { formatPeriod } from "@/lib/content";
 
 interface Props {
+  section: CollectionEntry<"profile">["data"]["sections"]["resume"];
   entries: CollectionEntry<"experience">[];
   skillGroups: CollectionEntry<"profile">["data"]["skillGroups"];
   cvHref: string;
 }
 
-const { entries, skillGroups, cvHref } = Astro.props;
+const { section, entries, skillGroups, cvHref } = Astro.props;
 ---
 
 <section class="section" id="resume" aria-labelledby="resume-title">
   <div class="wrap">
     <span class="label">Resume</span>
     <h2 id="resume-title" class="serif">
-      Experience
+      <Emphasized text={section.headline} />
     </h2>
 
     <div class="resume">
