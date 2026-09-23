@@ -51,6 +51,16 @@ export function publishedProjects<T extends Project>(
   );
 }
 
+/** Home work grid columns: one per non-featured card (1–3), so no row leaves a hole. */
+export function workGridColumns(
+  projects: readonly { data: { featured: boolean } }[],
+): number {
+  return Math.min(
+    3,
+    Math.max(1, projects.filter((p) => !p.data.featured).length),
+  );
+}
+
 /** The project after `id` in site order, wrapping to the first; undefined if `id` is absent or alone. */
 export function nextProject<T extends Project>(
   projects: readonly T[],
