@@ -17,4 +17,5 @@ Search engines need a sitemap and robots.txt; `llms.txt` (llmstxt.org) gives lan
 
 - No dependency; each file is a few lines and fully tested.
 - Adding a route means adding it to the sitemap list (the e2e test enforces it).
+- Crawlers read `robots.txt` only at the origin root, so while the site is served under `/portfolio/` (ADR-0010) it is ignored; `noindex` metas still keep internal pages out. It takes effect with the custom domain (`chore/launch`).
 - Rejected: `@astrojs/sitemap`, which is built for large sites and needs configuration to exclude what we exclude by listing.

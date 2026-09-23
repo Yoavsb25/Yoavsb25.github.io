@@ -11,7 +11,7 @@ Links to the site are shared on LinkedIn, Slack, and email, where the preview im
 
 - `src/lib/og.ts` builds a 1200×630 card as an element tree and renders it with `satori` (layout and text to SVG, with our fonts) and `sharp` (SVG to PNG).
 - `src/pages/og/[...key].png.ts` emits `/og/home.png` and `/og/projects/<slug>.png` for every published project. `BaseLayout` points `og:image` at them (`image` prop, default `home`).
-- Fonts: WOFF copies of Source Serif 4 400 and Instrument Sans 400/600 (latin, from Fontsource, OFL licenses beside them) in `src/assets/og/`. satori cannot read WOFF2 or CSS variables, so colors are copied from the light theme in `tokens.css`.
+- Fonts: WOFF copies of Source Serif 4 400 and Instrument Sans 400/600 (latin, Fontsource 5.3.0, OFL licenses beside them) in `src/assets/og/`, with source URLs and sha256 in `SOURCES.md`. satori cannot read WOFF2 or CSS variables, so colors are copied from the light theme in `tokens.css`.
 - Both are devDependencies: they run at build only and ship nothing to visitors. `satori` is pinned exactly; `sharp` matches the version Astro already installs.
 
 ## Consequences
