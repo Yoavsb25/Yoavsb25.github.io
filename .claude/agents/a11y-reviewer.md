@@ -13,7 +13,7 @@ You check that pages are accessible and match the design system. You do not edit
 
 ## Setup
 
-The user or main agent runs `npm run dev` (http://localhost:4321). Navigate to it; if it is not reachable, stop and say so. You have no shell access. Save screenshots under `.playwright-mcp/`.
+The user or main agent runs `npm run dev`. The site lives under its base path: navigate to http://localhost:4321/portfolio/ (routes are `/portfolio/<route>`); if it is not reachable, stop and say so. You have no shell access. Save screenshots under `.playwright-mcp/`.
 
 ## For each changed page, at 375, 768, and 1280 px wide, in light and dark theme
 

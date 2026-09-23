@@ -5,6 +5,7 @@ import { site } from "./src/config/site.ts";
 
 export default defineConfig({
   site: site.url,
+  base: site.base,
   // Self-hosted fonts: downloaded at build time, served from the site (ADR-0008).
   fonts: [
     {

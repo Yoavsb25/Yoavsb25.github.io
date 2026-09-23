@@ -8,3 +8,9 @@
 /package-lock.json @Yoavsb25
 /CLAUDE.md       @Yoavsb25
 /.mcp.json       @Yoavsb25
+# Code that npm scripts and CI gates execute, and the thresholds they enforce.
+/scripts/        @Yoavsb25
+/playwright.config.ts @Yoavsb25
+/lighthouserc.json @Yoavsb25
+/lychee.toml     @Yoavsb25
+/tests/e2e/support.ts @Yoavsb25
