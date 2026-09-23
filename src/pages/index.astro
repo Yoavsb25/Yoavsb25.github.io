@@ -3,10 +3,11 @@
 import Button from "@/components/ui/Button.astro";
 import { site } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { personJsonLd } from "@/lib/seo";
 import { withBase } from "@/lib/url";
 ---
 
-<BaseLayout>
+<BaseLayout jsonLd={personJsonLd()}>
   <section class="wrap intro">
     <span class="label">{site.location}</span>
     <h1 class="serif">{site.name}</h1>
