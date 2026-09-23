@@ -85,7 +85,7 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 
 ## Motion
 
-- One curve: `--ease: cubic-bezier(.2, .7, .2, 1)`. Durations: 160ms (press, hover), 240–340ms (cards, content swaps), 400ms (theme change), 520ms (track fill), 700ms (hero load).
+- One curve: `--ease: cubic-bezier(.2, .7, .2, 1)`. Durations: `--dur-fast` 160ms (press, hover), `--dur-base` 240ms / `--dur-swap` 340ms (cards, content swaps), `--dur-slow` 400ms (theme change), `--dur-track` 520ms (track fill), `--dur-hero` 700ms (hero load).
 - Hero lines rise 12px on load, staggered 90ms, starting visible (opacity .4 → 1), never hidden.
 - Cards lift 4px on hover; arrows nudge 3px right.
 - Status dot pulses (2.4s).

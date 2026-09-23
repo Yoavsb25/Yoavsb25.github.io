@@ -49,7 +49,7 @@ const { rows = [], bars = 2, size = "md", class: className } = Astro.props;
   .shot {
     display: grid;
     place-items: center;
-    padding: 1.625rem;
+    padding: var(--space-5);
     background: linear-gradient(160deg, var(--accent-soft), var(--ground-2));
   }
 
@@ -87,14 +87,14 @@ const { rows = [], bars = 2, size = "md", class: className } = Astro.props;
 
   .window-body {
     display: grid;
-    gap: 10px;
+    gap: var(--space-3);
     padding: 18px;
   }
 
   .row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
     font-size: var(--text-meta);
     color: var(--ink-2);
   }
