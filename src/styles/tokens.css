@@ -1,0 +1,109 @@
+/*
+ * Design tokens: the single source of truth for color, type, space, shape, and motion
+ * (docs/design-system.md, ADR-0007). Components use these variables only.
+ *
+ * Themes: light is the default on :root. Dark applies when the visitor chose it
+ * ([data-theme="dark"]) or, with no choice saved, when the system prefers dark.
+ * --font-serif and --font-sans are defined by Astro's <Font> component (ADR-0008).
+ */
+
+:root {
+  /* Color: light */
+  --ground: #f5f6f3;
+  --ground-2: #ebf0ec;
+  --surface: #ffffff;
+  --ink: #16191d;
+  --ink-2: #4b535b;
+  --ink-3: #626b74;
+  --line: #dfe4de;
+  --accent: #0e7a5a;
+  --accent-ink: #ffffff;
+  --accent-soft: #dcede4;
+  --glow: rgb(14 122 90 / 0.1);
+  --shadow: 0 1px 2px rgb(22 25 29 / 0.04), 0 10px 30px rgb(22 25 29 / 0.07);
+
+  /* Type */
+  --serif: var(--font-serif), "Iowan Old Style", Georgia, serif;
+  --sans: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  --text-hero: clamp(2.875rem, 7.4vw, 6rem);
+  --text-case: clamp(2.625rem, 6.4vw, 4.75rem);
+  --text-h2: clamp(2.25rem, 5vw, 3.625rem);
+  --text-h3: clamp(1.75rem, 3.4vw, 2.375rem);
+  --text-role: 1.375rem;
+  --text-lede: clamp(1.125rem, 2vw, 1.25rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.9375rem;
+  --text-meta: 0.84375rem;
+  --text-label: 0.78125rem;
+
+  /* Space (4, 8, 12, 16, 24, 32, 48, 64, 96, 120 px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 7.5rem;
+
+  /* Layout */
+  --container: 70rem;
+  --gutter: 1.5rem;
+  --header-height: 4.375rem;
+
+  /* Shape */
+  --radius-sm: 0.75rem;
+  --radius-md: 1.125rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 160ms;
+  --dur-base: 240ms;
+  --dur-slow: 400ms;
+}
+
+@media (max-width: 400px) {
+  :root {
+    --gutter: 1rem;
+  }
+}
+
+/* Dark: soft charcoal-green, never pure black. Kept in one mixin-like block, used twice. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #121715;
+  --ground-2: #18201c;
+  --surface: #1b2320;
+  --ink: #e9eeeb;
+  --ink-2: #aeb9b3;
+  --ink-3: #8f9b95;
+  --line: #2a3531;
+  --accent: #5ccf9f;
+  --accent-ink: #0b1511;
+  --accent-soft: #1e3129;
+  --glow: rgb(92 207 159 / 0.08);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.25), 0 10px 30px rgb(0 0 0 / 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #121715;
+    --ground-2: #18201c;
+    --surface: #1b2320;
+    --ink: #e9eeeb;
+    --ink-2: #aeb9b3;
+    --ink-3: #8f9b95;
+    --line: #2a3531;
+    --accent: #5ccf9f;
+    --accent-ink: #0b1511;
+    --accent-soft: #1e3129;
+    --glow: rgb(92 207 159 / 0.08);
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.25), 0 10px 30px rgb(0 0 0 / 0.25);
+  }
+}

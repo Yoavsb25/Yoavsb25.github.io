@@ -1,0 +1,22 @@
+---
+/** Bordered surface for grouped content (docs/design-system.md → Panel). */
+interface Props {
+  as?: "div" | "section" | "aside";
+  class?: string;
+}
+
+const { as: Tag = "div", class: className } = Astro.props;
+---
+
+<Tag class:list={["panel", className]}>
+  <slot />
+</Tag>
+
+<style>
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) 1.625rem;
+  }
+</style>

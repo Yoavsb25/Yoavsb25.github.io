@@ -14,21 +14,23 @@ Inspiration: igaltal.github.io/portfolio (editorial type, restraint, "proof over
 
 ## Color tokens
 
-Defined once as CSS custom properties in `src/styles/tokens.css`. Components use tokens only (no hex values in components). Once `feat/design-system` lands, `tokens.css` is the source of truth and the tables below are replaced with a link to it.
+**Source of truth: [`src/styles/tokens.css`](../src/styles/tokens.css)** (values for both themes). Components use tokens only: no hex values or ad-hoc sizes. See every token rendered in both themes at `/styleguide`.
 
-| Token           | Light                  | Dark                    | Use                                         |
-| --------------- | ---------------------- | ----------------------- | ------------------------------------------- |
-| `--ground`      | `#F5F6F3`              | `#121715`               | Page background                             |
-| `--ground-2`    | `#EBF0EC`              | `#18201C`               | Tonal band, footer, case-study "next" block |
-| `--surface`     | `#FFFFFF`              | `#1B2320`               | Cards, panels, buttons (ghost)              |
-| `--ink`         | `#16191D`              | `#E9EEEB`               | Headings, primary text, primary button      |
-| `--ink-2`       | `#4B535B`              | `#AEB9B3`               | Body text, secondary text                   |
-| `--ink-3`       | `#78818A`              | `#85918B`               | Labels, meta, captions                      |
-| `--line`        | `#DFE4DE`              | `#2A3531`               | Borders, dividers, inactive track           |
-| `--accent`      | `#0E7A5A`              | `#5CCF9F`               | Accent word, ticks, links, active stage     |
-| `--accent-ink`  | `#FFFFFF`              | `#0B1511`               | Text on accent                              |
-| `--accent-soft` | `#DCEDE4`              | `#1E3129`               | Card illustration backgrounds               |
-| `--glow`        | `rgb(14 122 90 / .10)` | `rgb(92 207 159 / .08)` | Faint radial glow behind the hero           |
+| Token           | Use                                         |
+| --------------- | ------------------------------------------- |
+| `--ground`      | Page background                             |
+| `--ground-2`    | Tonal band, footer, case-study "next" block |
+| `--surface`     | Cards, panels, ghost buttons                |
+| `--ink`         | Headings, primary text, primary button      |
+| `--ink-2`       | Body text, secondary text                   |
+| `--ink-3`       | Labels, meta, captions                      |
+| `--line`        | Borders, dividers, inactive track           |
+| `--accent`      | Accent word, ticks, links, active stage     |
+| `--accent-ink`  | Text on accent                              |
+| `--accent-soft` | Card illustration backgrounds               |
+| `--glow`        | Faint radial glow behind the hero           |
+
+`--ink-3` is darker than in the mockup (light `#626B74`, dark `#8F9B95`): the mockup values failed WCAG AA for small label text (3.65:1). Every text/background pair now measures at least 4.6:1 in both themes.
 
 Rules:
 

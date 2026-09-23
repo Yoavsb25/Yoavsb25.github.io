@@ -18,6 +18,6 @@ The design uses Source Serif 4 and Instrument Sans, plus light and dark themes w
 
 - No third-party requests; the CSP stays strict (`default-src 'self'`).
 - No theme flash on load.
-- Font files add ~60–90 KB (cached); preload only the two faces used above the fold.
+- Static weights, not variable fonts: the variable Source Serif 4 (optical-size axis) was ~250 KB for two files. Static files are ~20 KB each; only serif 400 and sans 400 are preloaded (~37 KB), the rest load on use (~135 KB total).
 - Editing the theme script needs no manual step; e2e still checks for CSP violations.
 - Alternatives considered: `@fontsource` packages (two extra dependencies for what the fonts API does); a hand-maintained script hash (breaks silently on edit).

@@ -1,0 +1,95 @@
+---
+/**
+ * Light/dark toggle (docs/design-system.md → Theme toggle, ADR-0008).
+ * The first theme is applied before paint by the inline bootstrap in BaseLayout;
+ * this script only handles clicks and keeps the label accurate.
+ */
+import Icon from "@/components/ui/Icon.astro";
+---
+
+<button
+  class="theme-toggle"
+  type="button"
+  aria-label="Toggle dark mode"
+  data-theme-toggle
+>
+  <Icon name="sun" size={18} class="sun" />
+  <Icon name="moon" size={18} class="moon" />
+</button>
+
+<script>
+  // Client JS justified: the theme choice must be interactive and remembered (ADR-0008).
+  import {
+    THEME_STORAGE_KEY,
+    nextTheme,
+    parseTheme,
+    resolveTheme,
+    toggleLabel,
+  } from "@/lib/theme";
+
+  const root = document.documentElement;
+  const prefersDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
+  const current = () =>
+    resolveTheme(parseTheme(root.dataset["theme"]), prefersDark());
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    "[data-theme-toggle]",
+  )) {
+    button.setAttribute("aria-label", toggleLabel(current()));
+    button.addEventListener("click", () => {
+      const next = nextTheme(current());
+      root.dataset["theme"] = next;
+      button.setAttribute("aria-label", toggleLabel(next));
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {
+        // Storage can be blocked (private mode); the choice still applies to this page.
+      }
+    });
+  }
+</script>
+
+<style>
+  .theme-toggle {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease;
+  }
+
+  .theme-toggle:hover {
+    color: var(--ink);
+    border-color: var(--ink-3);
+  }
+
+  /* Show the icon for the theme in effect, in all three states (light, dark, system). */
+  .theme-toggle :global(.moon) {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .theme-toggle :global(.sun) {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .theme-toggle :global(.moon) {
+    display: block;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .theme-toggle :global(.sun) {
+      display: none;
+    }
+
+    :global(:root:not([data-theme="light"])) .theme-toggle :global(.moon) {
+      display: block;
+    }
+  }
+</style>

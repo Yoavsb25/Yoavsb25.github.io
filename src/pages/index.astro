@@ -1,20 +1,37 @@
 ---
-import { site } from "../config/site.ts";
-import { pageTitle } from "../lib/seo.ts";
+/** Home. Temporary shell until the pages PR (roadmap row 12) builds the real sections. */
+import Button from "@/components/ui/Button.astro";
+import { site } from "@/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={site.description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{pageTitle()}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{site.name}</h1>
-      <p>{site.description}</p>
-    </main>
-  </body>
-</html>
+<BaseLayout>
+  <section class="wrap intro">
+    <span class="label">{site.location}</span>
+    <h1 class="serif">{site.name}</h1>
+    <p>{site.description}</p>
+    <Button href="/styleguide" variant="ghost" trailingArrow>
+      View the style guide
+    </Button>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+    padding-block: var(--space-9);
+  }
+
+  h1 {
+    font-size: var(--text-hero);
+    line-height: 1;
+  }
+
+  p {
+    max-width: 34em;
+    color: var(--ink-2);
+    font-size: var(--text-lede);
+  }
+</style>
