@@ -1,4 +1,4 @@
-import { site } from "../config/site.ts";
+import { site } from "@/config/site";
 
 /** Builds a page title in the form "Page | Site", or the site title for the home page. */
 export function pageTitle(page?: string): string {

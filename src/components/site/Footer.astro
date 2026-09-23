@@ -1,0 +1,32 @@
+---
+/** Site footer (docs/information-architecture.md → Global elements). */
+import { site } from "@/config/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap row">
+    <span>
+      © {year} {site.name}
+    </span>
+    <span>Planned, built, and tested with care.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ground-2);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: 0.875rem;
+  }
+</style>

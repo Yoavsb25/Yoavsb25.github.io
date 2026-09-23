@@ -1,0 +1,65 @@
+---
+/**
+ * Page shell: <head>, fonts, theme bootstrap, and site chrome.
+ * SEO metadata and the CSP are added in the SEO PR (roadmap row 11).
+ */
+import { Font } from "astro:assets";
+
+import Footer from "@/components/site/Footer.astro";
+import Header from "@/components/site/Header.astro";
+import SkipLink from "@/components/site/SkipLink.astro";
+import { site } from "@/config/site";
+import { pageTitle } from "@/lib/seo";
+import "@/styles/tokens.css";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description = site.description, noindex = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>{pageTitle(title)}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="color-scheme" content="light dark" />
+    <Font
+      cssVariable="--font-serif"
+      preload={[{ weight: "400", style: "normal" }]}
+    />
+    <Font
+      cssVariable="--font-sans"
+      preload={[{ weight: "400", style: "normal" }]}
+    />
+    <!-- Applies a saved theme before first paint; mirrors parseTheme in src/lib/theme.ts (ADR-0008). -->
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark")
+          document.documentElement.dataset.theme = saved;
+      } catch {
+        // Storage blocked: fall back to the system theme via CSS.
+      }
+    </script>
+  </head>
+  <body>
+    <SkipLink />
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

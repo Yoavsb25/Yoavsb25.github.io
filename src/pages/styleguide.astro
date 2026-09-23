@@ -1,0 +1,262 @@
+---
+/**
+ * Living style guide: every token and ui primitive in both themes, for /design-review
+ * and the a11y-reviewer agent. Not linked from navigation and not indexed.
+ */
+import Button from "@/components/ui/Button.astro";
+import Chip from "@/components/ui/Chip.astro";
+import Icon, { type IconName } from "@/components/ui/Icon.astro";
+import Panel from "@/components/ui/Panel.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const colors = [
+  ["--ground", "Page background"],
+  ["--ground-2", "Tonal band, footer"],
+  ["--surface", "Cards, panels"],
+  ["--ink", "Headings, primary button"],
+  ["--ink-2", "Body text"],
+  ["--ink-3", "Labels, meta"],
+  ["--line", "Borders"],
+  ["--accent", "Accent word, ticks, links"],
+  ["--accent-soft", "Illustration backgrounds"],
+] as const;
+
+const type = [
+  ["--text-hero", "serif", "I plan AI systems."],
+  ["--text-h2", "serif", "Real projects, shipped."],
+  ["--text-h3", "serif", "Ship in small steps"],
+  ["--text-lede", "sans", "I take products from idea to production."],
+  ["--text-body", "sans", "Working software in small, reviewable pieces."],
+  ["--text-meta", "sans", "SysAid Technologies · London"],
+] as const;
+
+const icons: IconName[] = [
+  "arrow-right",
+  "arrow-left",
+  "check",
+  "download",
+  "mail",
+  "sun",
+  "moon",
+  "github",
+  "linkedin",
+];
+---
+
+<BaseLayout title="Style guide" noindex>
+  <div class="wrap guide">
+    <header class="intro">
+      <span class="label">Design system</span>
+      <h1 class="serif">
+        Style <em>guide</em>
+      </h1>
+      <p>
+        Tokens and primitives from <code>src/styles/tokens.css</code> and{" "}
+        <code>src/components/ui</code>. Toggle the theme in the header to check
+        both.
+      </p>
+    </header>
+
+    <section aria-labelledby="colors">
+      <h2 id="colors" class="label">
+        Color
+      </h2>
+      <ul class="swatches">
+        {colors.map(([token, use]) => (
+          <li>
+            <span class="swatch" style={`background: var(${token})`} />
+            <code>{token}</code>
+            <span class="use">{use}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="type">
+      <h2 id="type" class="label">
+        Type
+      </h2>
+      <ul class="type">
+        {type.map(([token, face, sample]) => (
+          <li>
+            <code>{token}</code>
+            <span
+              class:list={[face === "serif" && "serif"]}
+              style={`font-size: var(${token}); line-height: 1.15`}
+            >
+              {sample}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="buttons">
+      <h2 id="buttons" class="label">
+        Buttons
+      </h2>
+      <div class="row">
+        <Button href="#buttons" trailingArrow>
+          Hire me
+        </Button>
+        <Button href="#buttons" variant="ghost">
+          See my work
+        </Button>
+        <Button href="#buttons" variant="ghost" icon="linkedin">
+          LinkedIn
+        </Button>
+        <Button variant="ghost" icon="download">
+          Download CV
+        </Button>
+        <Button size="sm">Hire me</Button>
+      </div>
+    </section>
+
+    <section aria-labelledby="chips">
+      <h2 id="chips" class="label">
+        Chips
+      </h2>
+      <div class="row">
+        <Chip>AI agents &amp; tools</Chip>
+        <Chip>Python</Chip>
+        <Chip size="sm">Automation</Chip>
+        <Chip size="sm">TypeScript</Chip>
+      </div>
+    </section>
+
+    <section aria-labelledby="panels">
+      <h2 id="panels" class="label">
+        Panel
+      </h2>
+      <Panel class="demo-panel">
+        <h3>Download my CV</h3>
+        <p>The full one-page version, ready to share with your team.</p>
+      </Panel>
+    </section>
+
+    <section aria-labelledby="icons">
+      <h2 id="icons" class="label">
+        Icons
+      </h2>
+      <ul class="row icons">
+        {icons.map((name) => (
+          <li>
+            <Icon name={name} size={20} />
+            <code>{name}</code>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .guide {
+    display: grid;
+    gap: var(--space-8);
+    padding-block: var(--space-8) var(--space-9);
+  }
+
+  .intro {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .intro h1 {
+    font-size: var(--text-h2);
+    line-height: 1.05;
+  }
+
+  .intro p {
+    max-width: 38em;
+    color: var(--ink-2);
+  }
+
+  section {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  code {
+    font-size: var(--text-meta);
+    color: var(--ink-3);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .swatches li {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .swatch {
+    height: 4.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-2);
+  }
+
+  .use {
+    font-size: var(--text-meta);
+    color: var(--ink-2);
+  }
+
+  .type {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .type li {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: baseline;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .icons li {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    width: 6rem;
+    color: var(--ink-2);
+  }
+
+  :global(.demo-panel) {
+    max-width: 24rem;
+  }
+
+  .demo-panel h3 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .demo-panel p {
+    margin-top: var(--space-2);
+    color: var(--ink-2);
+    font-size: var(--text-small);
+  }
+
+  @media (max-width: 600px) {
+    .type li {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { site } from "../../src/config/site.ts";
-import { pageTitle } from "../../src/lib/seo.ts";
+import { site } from "@/config/site";
+import { pageTitle } from "@/lib/seo";
 
 describe("pageTitle", () => {
   it("returns the site title when no page is given", () => {

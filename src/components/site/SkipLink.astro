@@ -1,0 +1,27 @@
+---
+/** First focusable element on every page; jumps past the header to <main id="main">. */
+---
+
+<a class="skip-link" href="#main">
+  Skip to content
+</a>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: var(--gutter);
+    top: calc(-1 * var(--space-9));
+    z-index: 100;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--ink);
+    color: var(--ground);
+    font-weight: 500;
+    text-decoration: none;
+    transition: top var(--dur-fast) ease;
+  }
+
+  .skip-link:focus {
+    top: calc(env(safe-area-inset-top, 0px) + var(--space-3));
+  }
+</style>

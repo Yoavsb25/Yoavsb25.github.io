@@ -38,6 +38,7 @@ src/
     BaseLayout.astro          <head>: SEO, CSP, theme; site chrome
     CaseStudyLayout.astro     renders the fixed case-study structure from frontmatter
   pages/                      routes only: load data, compose feature components
+    styleguide.astro          living style guide (noindex) for design and a11y review
 tests/
   unit/                       src/lib and scripts/guards
   e2e/                        Playwright + axe per page (deploy PR)
