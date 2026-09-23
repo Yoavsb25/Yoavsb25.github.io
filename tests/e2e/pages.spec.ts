@@ -1,12 +1,31 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-import { budgets, builtRoutes } from "./support";
+import {
+  budgets,
+  builtRoutes,
+  indexableRoutes,
+  publicRoot,
+  sitemapRoutes,
+} from "./support";
 
 const routes = builtRoutes();
 
 test("the build has pages", () => {
   expect(routes).toContain("");
+});
+
+test("the sitemap lists exactly the indexable pages", () => {
+  expect(sitemapRoutes()).toEqual(indexableRoutes());
+});
+
+test("robots.txt and llms.txt are served", async ({ request }) => {
+  const robots = await request.get("robots.txt");
+  expect(robots.status()).toBe(200);
+  expect(await robots.text()).toContain(`Sitemap: ${publicRoot}sitemap.xml`);
+  const llms = await request.get("llms.txt");
+  expect(llms.status()).toBe(200);
+  expect(await llms.text()).toMatch(/^# /);
 });
 
 for (const route of routes) {
@@ -26,6 +45,38 @@ for (const route of routes) {
         .analyze();
       expect(violations.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
       expect(errors).toEqual([]);
+    });
+
+    test("has a CSP, canonical URL, and Open Graph image", async ({
+      page,
+      request,
+    }, testInfo) => {
+      test.skip(
+        testInfo.project.name !== "light",
+        "head matches in both themes",
+      );
+      await page.goto(route);
+      const head = page.locator("head");
+
+      await expect(
+        head.locator('meta[http-equiv="content-security-policy"]'),
+      ).toHaveAttribute("content", /default-src 'self'/);
+      await expect(head.locator('link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        publicRoot + route,
+      );
+      await expect(head.locator('meta[name="description"]')).toHaveAttribute(
+        "content",
+        /\S/,
+      );
+
+      const image = await head
+        .locator('meta[property="og:image"]')
+        .getAttribute("content");
+      expect(image?.startsWith(publicRoot)).toBe(true);
+      const png = await request.get((image ?? "").replace(publicRoot, ""));
+      expect(png.status()).toBe(200);
+      expect(png.headers()["content-type"]).toContain("image/png");
     });
 
     test("stays within the byte budgets", async ({ page }, testInfo) => {
