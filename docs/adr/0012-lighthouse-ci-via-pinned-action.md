@@ -10,7 +10,7 @@ The product brief targets Lighthouse ≥ 95 performance and 100 accessibility. `
 ## Decision
 
 - Run Lighthouse CI in the `lighthouse` CI job with `treosh/lighthouse-ci-action`, pinned to a commit SHA. The action commits its `node_modules`, so the pin fixes the whole Lighthouse tree and nothing is fetched from npm at run time.
-- `lighthouserc.json` holds the assertions: performance ≥ 0.95, accessibility 1, best practices ≥ 0.95, CLS ≤ 0.05 (errors); SEO 1 and LCP ≤ 2.5 s (warnings until the SEO PR). Three runs per page, every page in `_site/` (`npm run stage`).
+- `lighthouserc.json` holds the assertions: performance ≥ 0.95, accessibility 1, best practices ≥ 0.95, CLS ≤ 0.05 (errors); SEO 1 (error since the SEO PR); LCP ≤ 2.5 s stays a warning until the launch performance work. Three runs per page, every page in `_site/` (`npm run stage`).
 - Reports are written to the runner's filesystem and uploaded as a workflow artifact on failure only. Temporary public storage is never used.
 
 ## Consequences
