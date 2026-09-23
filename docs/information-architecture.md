@@ -18,15 +18,15 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 
 ## Global elements
 
-- **Header** (sticky, translucent): YS mark + name (→ home), Work, How I work, Resume, theme toggle (sun/moon), and a primary **Hire me** button (→ #contact). Links collapse on mobile; theme toggle and Hire me stay visible.
+- **Header** (sticky, translucent): YS mark + name (→ home), How I work, Projects, Resume, theme toggle (sun/moon), and a primary **Contact me** button (→ #contact). Links collapse on mobile; theme toggle and Contact me stay visible. This is the one persistent contact button: other sections don't repeat it.
 - **Footer**: copyright and a one-line sign-off ("Planned, built, and tested with care.").
 - Skip link; visible focus states everywhere.
 
 ## Home `/`
 
-1. **Hero** (`#top`): status line with a pulsing dot ("Open to AI engineering roles · London"), serif headline with one italic accent word, one-paragraph lede, _Hire me_ (primary) and _See my work_ (secondary). Portrait on the right with a badge ("Automation Engineer · at SysAid · London"). Plain-language skill chips under a hairline.
+1. **Hero** (`#top`): status line with a pulsing dot ("Open to AI engineering roles · London"), serif headline with one italic accent word, one-paragraph lede, _See my work_ (primary; contact is already in the header). Portrait on the right. Plain-language skill chips under a hairline.
 2. **How I work** (`#how`): tonal band. Headline, one-line intro, a 7-stage track (Plan → Foundations → Architect → Build → Test → Deploy → Iterate). Selecting a stage shows its plain explanation and an "In practice" example from real work. Default selection: Build.
-3. **Selected work** (`#work`): one featured card (full width) + three cards. The whole card is a link to the case study.
+3. **Selected work** (`#projects`): one featured card (full width) + three cards. The whole card is a link to the case study.
 4. **Resume** (`#resume`): experience timeline (roles and education, 1–4 plain bullets each) + sticky aside with "Download CV" and grouped skills.
 5. **Contact** (`#contact`): headline, availability line, buttons (Email me, LinkedIn, GitHub, Download CV), email as selectable text with a Copy button.
 
@@ -34,7 +34,7 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 
 Fixed structure: each section is a required frontmatter field, enforced by the content schema (ADR-0005):
 
-1. "← Back to work" back link (→ /#work).
+1. "← Back to work" back link (→ /#projects).
 2. Header: kicker ("Case study · SysAid · 2025"), title, one-sentence outcome.
 3. Meta row: Role, Timeline, Stack, Links.
 4. Visual: screenshot or window illustration.
@@ -43,11 +43,11 @@ Fixed structure: each section is a required frontmatter field, enforced by the c
    - **What I built**: 3 bullets
    - **How I approached it**: one paragraph, framed by the lifecycle
    - **Results**: 3 result tiles (big serif figure + label)
-6. Next project + Hire me.
+6. Next project (Contact me only when there is no next project).
 
 ## Navigation rules
 
-- Every page is at most 1 click from Hire me and the CV.
-- Every case study links to the next project (by `order`, wrapping to the first) and to contact.
+- Every page is at most 1 click from contact (header Contact me) and the CV.
+- Every case study links to the next project (by `order`, wrapping to the first).
 - URLs are lowercase, kebab-case, stable (a slug never changes once published).
-- In-page anchors are plain words (`#work`, `#resume`) so links can be shared.
+- In-page anchors are plain words (`#projects`, `#resume`) so links can be shared.

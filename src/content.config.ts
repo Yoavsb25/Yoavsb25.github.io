@@ -78,7 +78,6 @@ const profile = defineCollection({
     status: text,
     headline: text,
     lede: text,
-    badge: text,
     skills: z.array(text).min(1),
     skillGroups: z
       .array(z.object({ group: text, items: z.array(text).min(1) }))

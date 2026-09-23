@@ -99,7 +99,7 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 | **Header**        | Sticky, 70px, translucent ground + blur, hairline bottom border. Brand mark: 34px ink square (9px radius) with serif "YS"                                                                                                                        |
 | **Theme toggle**  | 40px circle, sun/moon icon. Follows the system theme until chosen, then remembered. No flash on load (ADR-0008)                                                                                                                                  |
 | **Status line**   | Pulsing 8px accent dot + 15px medium text                                                                                                                                                                                                        |
-| **Portrait**      | 4:5, radius 28px, border + shadow, with a floating badge (role + company) overlapping the bottom-left                                                                                                                                            |
+| **Portrait**      | 4:5, radius 28px, border + shadow                                                                                                                                                                                                                |
 | **Skill chip**    | Pill, surface + line border, 14.5px `--ink-2`                                                                                                                                                                                                    |
 | **Stage track**   | 7 stages on one line (vertical list on mobile). 32px dots: inactive = line border; done = accent border + tick; active = filled accent, scale 1.1. Accent fill line animates to the active stage. Detail area: explanation + "In practice" panel |
 | **Work card**     | Whole card is a link. Illustration area (accent-soft gradient) + body: label, serif title, summary, tags, "Read the case study →". Featured card spans all columns in two halves                                                                 |
@@ -113,7 +113,7 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 - First person, active, plain English. "I built", not "Leveraged synergies".
 - Say what it does for people before how it works ("releases 29 components automatically", not "GitOps pipeline with Kargo").
 - At most one number per sentence; only real, verifiable numbers.
-- Buttons say exactly what happens: "Hire me", "Download CV", "Read the case study".
+- Buttons say exactly what happens: "Contact me", "Download CV", "Read the case study".
 
 ## Accessibility
 

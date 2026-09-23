@@ -28,15 +28,13 @@ const projects = publishedProjects(await getCollection("projects")).map(
 );
 const experience = byOrder(await getCollection("experience"));
 const cvHref = withBase(site.cvPath);
-const contactHref = withBase("/#contact");
 ---
 
 <BaseLayout jsonLd={personJsonLd()}>
   <Hero
     profile={profile.data}
     name={site.name}
-    contactHref={contactHref}
-    workHref={withBase("/#work")}
+    workHref={withBase("/#projects")}
   />
   <HowIWork
     stages={stages}
