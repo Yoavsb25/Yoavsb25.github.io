@@ -14,7 +14,7 @@ A component's folder decides what it may import (`docs/architecture.md` → Laye
    - `ui/`: a primitive with no data or business logic, reusable anywhere (Button, Chip, Panel). May import styles only.
    - `site/`: global chrome on every page (Header, Footer, ThemeToggle).
    - `home/` or `case-study/`: a feature section used by one area. Data arrives as props; never load content; never import another feature. When a second feature needs it, it moves to `ui/`.
-3. **Read the spec.** Find the component in `docs/design-system.md` → Components (and `docs/design/mockup.html` while it exists). If it is not specified, ask the user how it should look before writing it; do not invent a design.
+3. **Read the spec.** Find the component in `docs/design-system.md` → Components, and look at the built pages for how it sits in context. If it is not specified, ask the user how it should look before writing it; do not invent a design.
 4. **Write `src/components/<layer>/<PascalName>.astro`**, following `src/components/ui/Chip.astro`:
    - A one-line `/** */` comment: what it is, and the design-system section it implements.
    - `interface Props` with explicit types and defaults in the destructure. Content-shaped props use `import type` from `astro:content` (features only).

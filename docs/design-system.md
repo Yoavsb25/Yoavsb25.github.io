@@ -1,6 +1,6 @@
 # Design system
 
-Direction **A · The Pipeline, recruiter-first**, approved from the mockup (`docs/design/mockup.html`, v2).
+Direction **A · The Pipeline, recruiter-first**, approved from a design mockup (v2, retired in `feat/pages` once the pages were built from it).
 
 ## Principles
 

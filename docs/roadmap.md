@@ -14,9 +14,10 @@ One PR at a time; the next starts only after the previous is merged.
 | 8   | `chore/claude-skills-scaffold` | `/new-component`, `/new-page`, `/design-review`, `/a11y-audit`, `/perf-audit`                                                        | ✅ merged      |
 | 9   | `ci/deploy`                    | Deploy to Pages, e2e + axe, Lighthouse budgets, link check                                                                           | ✅ merged      |
 | 10  | `feat/content-model`           | Content collections + schemas, `/new-case-study`, `/sync-projects`; delete `content-inventory.md`                                    | ✅ merged      |
-| 11  | `feat/seo`                     | SEO/JSON-LD, CSP, OG images, sitemap, robots, `llms.txt`                                                                             | 🚧 in progress |
-| 12  | `feat/pages`                   | Home (hero, how I work, work, resume, contact), case study pages, 404; enable link fragment checks; delete `docs/design/mockup.html` | ⏳             |
+| 11  | `feat/seo`                     | SEO/JSON-LD, CSP, OG images, sitemap, robots, `llms.txt`                                                                             | ✅ merged      |
+| 12  | `feat/pages`                   | Home (hero, how I work, work, resume, contact), case study pages, 404; enable link fragment checks; delete `docs/design/mockup.html` | 🚧 in progress |
 | 13  | `content/launch-content`       | Real case studies, experience, CV, portrait; resolve every `TODO(confirm)`                                                           | ⏳             |
 | 14  | `chore/launch`                 | Custom domain (`site.base` → `/`), final audits, `v1.0.0`                                                                            | ⏳             |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
+`
