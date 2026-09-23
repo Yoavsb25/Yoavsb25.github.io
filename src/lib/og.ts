@@ -11,8 +11,11 @@ import sharp from "sharp";
 import { ogSize } from "@/lib/seo";
 import { emphasisParts } from "@/lib/text";
 
-/** Light-theme values from src/styles/tokens.css (satori cannot read CSS variables). */
-const color = {
+/**
+ * Light-theme values from src/styles/tokens.css (satori cannot read CSS variables).
+ * tests/unit/tokens.test.ts fails if they drift from the tokens.
+ */
+export const ogColor = {
   ground: "#f5f6f3",
   ink: "#16191d",
   ink2: "#4b535b",
@@ -55,8 +58,8 @@ export function ogElement(card: OgCard): Node {
       flexDirection: "column",
       justifyContent: "space-between",
       padding: "72px 80px",
-      background: color.ground,
-      color: color.ink,
+      background: ogColor.ground,
+      color: ogColor.ink,
       fontFamily: "Instrument Sans",
     },
     [
@@ -70,8 +73,8 @@ export function ogElement(card: OgCard): Node {
             width: 64,
             height: 64,
             borderRadius: 999,
-            background: color.accent,
-            color: color.accentInk,
+            background: ogColor.accent,
+            color: ogColor.accentInk,
             fontSize: 26,
             fontWeight: 600,
           },
@@ -84,7 +87,7 @@ export function ogElement(card: OgCard): Node {
             fontWeight: 600,
             letterSpacing: "0.08em",
             textTransform: "uppercase",
-            color: color.accent,
+            color: ogColor.accent,
           },
           card.label,
         ),
@@ -102,7 +105,10 @@ export function ogElement(card: OgCard): Node {
         emphasisParts(card.title).map((part) =>
           el(
             "span",
-            { color: part.em ? color.accent : color.ink, whiteSpace: "pre" },
+            {
+              color: part.em ? ogColor.accent : ogColor.ink,
+              whiteSpace: "pre",
+            },
             part.text,
           ),
         ),
@@ -112,9 +118,9 @@ export function ogElement(card: OgCard): Node {
         {
           display: "flex",
           paddingTop: 28,
-          borderTop: `2px solid ${color.line}`,
+          borderTop: `2px solid ${ogColor.line}`,
           fontSize: 28,
-          color: color.ink2,
+          color: ogColor.ink2,
         },
         card.footer,
       ),
