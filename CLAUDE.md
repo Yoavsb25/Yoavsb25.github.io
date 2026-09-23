@@ -24,6 +24,8 @@ src/lib/             pure, unit-tested helpers (no Astro imports)
 src/pages/           routes
 tests/unit/          Vitest tests, mirror src/lib
 docs/                architecture, security, roadmap, ADRs
+.claude/settings.json  shared permissions + hook wiring (protected)
+.claude/hooks/       hook scripts; logic in lib/rules.mjs, tested in tests/unit/hooks.test.ts
 .github/workflows/   CI (protected — change only when asked)
 ```
 
@@ -39,6 +41,20 @@ docs/                architecture, security, roadmap, ADRs
 - No third-party scripts, trackers, or CDNs (see `docs/security.md`).
 - Pin GitHub Actions to full commit SHAs with a version comment.
 - A significant decision (new dependency, pattern, or service) needs an ADR in `docs/adr/`.
+
+## Claude Code hooks (enforced automatically)
+
+| When              | Hook                  | Effect                                                                                                           |
+| ----------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Session start     | `session-context.mjs` | Injects branch, uncommitted changes, current roadmap PR                                                          |
+| Before Edit/Write | `guard-protected.mjs` | Asks before editing workflows, `.claude/settings.json`, hooks, lockfile, `lefthook.yml`, `CNAME`; denies `.env*` |
+| Before Edit/Write | `scan-secrets.mjs`    | Denies content that looks like an API key, token, or private key                                                 |
+| Before Bash       | `guard-bash.mjs`      | Denies push, `--no-verify`, hard reset, recursive force delete, global installs, piping downloads to a shell     |
+| After Edit/Write  | `format-file.mjs`     | Prettier + ESLint `--fix` on the file; reports remaining lint errors                                             |
+| Before stopping   | `quick-check.mjs`     | If source changed, runs lint + `astro check`; failures must be fixed                                             |
+
+`guard-bash` matches the whole command text, so a command that merely mentions a blocked pattern (e.g. in a heredoc) is also denied — write the content with the Write tool instead.
+Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake secrets must be built at runtime (see `tests/unit/hooks.test.ts`).
 
 ## Docs
 
