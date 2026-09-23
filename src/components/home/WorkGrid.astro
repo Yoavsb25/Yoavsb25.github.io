@@ -2,8 +2,10 @@
 /**
  * Selected work (docs/information-architecture.md → Home 3; design-system → Work card).
  * Each card is one link to its case study; the featured card spans the grid.
+ * Cover image when present; otherwise the Window illustration (same as case study).
  */
 import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
 
 import Icon from "@/components/ui/Icon.astro";
 import Window from "@/components/ui/Window.astro";
@@ -29,21 +31,32 @@ const columns = Math.min(
           Real projects, <em>shipped</em>.
         </h2>
       </div>
-      <p>
-        Open any project to see the problem, how I solved it, and what it
-        achieved.
-      </p>
     </div>
 
     <ul class:list={["grid", `cols-${columns}`]}>
       {projects.map(({ entry: { data }, href }) => (
         <li class:list={{ featured: data.featured }}>
           <a class="card" href={href}>
-            <Window
-              rows={data.featured ? data.built : []}
-              bars={data.featured ? 2 : 3}
-              size={data.featured ? "lg" : "md"}
-            />
+            {data.cover ? (
+              <Image
+                class="cover"
+                src={data.cover.src}
+                alt=""
+                widths={data.featured ? [640, 1120] : [400, 720]}
+                sizes={
+                  data.featured
+                    ? "(max-width: 900px) 100vw, 600px"
+                    : "(max-width: 900px) 100vw, 360px"
+                }
+                loading="lazy"
+              />
+            ) : (
+              <Window
+                rows={data.featured ? data.built : []}
+                bars={data.featured ? 2 : 3}
+                size={data.featured ? "lg" : "md"}
+              />
+            )}
             <div class="body">
               <span class="label">{data.kicker}</span>
               <h3 class="serif">{data.title}</h3>
@@ -144,6 +157,29 @@ const columns = Math.min(
     grid-template-rows: none;
   }
 
+  .cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 13.75rem;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-bottom: 1px solid var(--line);
+    transition: transform var(--dur-base) var(--ease);
+  }
+
+  .featured .cover {
+    height: 100%;
+    min-height: 20rem;
+    aspect-ratio: auto;
+    border-bottom: none;
+    border-inline-end: 1px solid var(--line);
+  }
+
+  .card:hover .cover {
+    transform: scale(1.02);
+  }
+
   .body {
     display: grid;
     align-content: start;
@@ -205,6 +241,14 @@ const columns = Math.min(
     .grid.grid,
     .featured .card {
       grid-template-columns: 1fr;
+    }
+
+    .featured .cover {
+      height: auto;
+      min-height: 13.75rem;
+      aspect-ratio: 16 / 10;
+      border-inline-end: none;
+      border-bottom: 1px solid var(--line);
     }
   }
 </style>
