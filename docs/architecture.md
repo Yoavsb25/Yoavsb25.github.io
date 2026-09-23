@@ -21,7 +21,7 @@ src/
   content/
     projects/<slug>/index.md  case study: structured frontmatter + optional deep-dive body (ADR-0014)
     projects/<slug>/cover.png optional colocated image, validated by the schema's image() helper
-    experience/<id>.yaml      roles and education (kind: role | education)
+    experience/<id>.yaml      roles and education
     stages.yaml               How I work stages (one file, array)
     profile.yaml              prose only: status line, headline, lede, skills, contact copy
   lib/                        pure helpers: seo, og, crawlers, url, content ordering — unit tested

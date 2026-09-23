@@ -9,6 +9,7 @@ import {
   nextProject,
   projectPath,
   publishedProjects,
+  workGridColumns,
 } from "@/lib/content";
 
 const project = (
@@ -141,5 +142,26 @@ describe("formatPeriod", () => {
 describe("projectPath", () => {
   it("builds the case study URL with a trailing slash", () => {
     expect(projectPath("pitch-star")).toBe("/projects/pitch-star/");
+  });
+});
+
+describe("workGridColumns", () => {
+  const cards = (featured: number, regular: number) => [
+    ...Array.from({ length: featured }, () => ({ data: { featured: true } })),
+    ...Array.from({ length: regular }, () => ({ data: { featured: false } })),
+  ];
+
+  it("uses one column per non-featured card", () => {
+    expect(workGridColumns(cards(1, 2))).toBe(2);
+    expect(workGridColumns(cards(0, 3))).toBe(3);
+  });
+
+  it("caps at three columns", () => {
+    expect(workGridColumns(cards(1, 5))).toBe(3);
+  });
+
+  it("never drops below one column", () => {
+    expect(workGridColumns(cards(1, 0))).toBe(1);
+    expect(workGridColumns([])).toBe(1);
   });
 });

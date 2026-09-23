@@ -43,14 +43,13 @@ const projects = defineCollection({
 const experience = defineCollection({
   loader: glob({ pattern: "*.yaml", base: "./src/content/experience" }),
   schema: z.object({
-    kind: z.enum(["role", "education"]),
     title: text,
     org: text,
     location: text.optional(),
     start: z.number().int(),
     /** Omit while ongoing ("Present"). */
     end: z.number().int().optional(),
-    bullets: z.array(text).min(1),
+    bullets: z.array(text).min(1).max(4),
     order: z.number().int().nonnegative(),
   }),
 });
