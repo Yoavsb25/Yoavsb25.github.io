@@ -19,28 +19,6 @@ export function ogImagePath(key: string): string {
 /** Social preview size (Open Graph and X summary_large_image). */
 export const ogSize = { width: 1200, height: 630 } as const;
 
-/** `*word*` as in Markdown: the emphasized text cannot start or end with a space. */
-const EMPHASIS = /(\*[^*\s](?:[^*]*[^*\s])?\*)/;
-
-/** Splits "Then I *ship* them." into plain and emphasized parts. */
-export function emphasisParts(text: string): { text: string; em: boolean }[] {
-  return text
-    .split(EMPHASIS)
-    .filter(Boolean)
-    .map((part) =>
-      EMPHASIS.test(part)
-        ? { text: part.slice(1, -1), em: true }
-        : { text: part, em: false },
-    );
-}
-
-/** Removes emphasis markers: "Then I *ship* them." → "Then I ship them.". */
-export function plainText(text: string): string {
-  return emphasisParts(text)
-    .map((p) => p.text)
-    .join("");
-}
-
 type JsonLd = Record<string, unknown>;
 
 const person = (): JsonLd => ({

@@ -53,3 +53,8 @@ export function formatPeriod(start: number, end?: number): string {
   if (end === start) return String(start);
   return `${start} – ${end ?? "Present"}`;
 }
+
+/** Root-relative URL of a case study (before withBase). */
+export function projectPath(id: string): string {
+  return `/projects/${id}/`;
+}

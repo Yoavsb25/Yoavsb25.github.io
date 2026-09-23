@@ -8,7 +8,8 @@ import { join } from "node:path";
 import satori from "satori";
 import sharp from "sharp";
 
-import { emphasisParts, ogSize } from "@/lib/seo";
+import { ogSize } from "@/lib/seo";
+import { emphasisParts } from "@/lib/text";
 
 /** Light-theme values from src/styles/tokens.css (satori cannot read CSS variables). */
 const color = {
