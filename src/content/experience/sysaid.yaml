@@ -4,7 +4,7 @@ location: London
 start: 2025
 bullets:
   - Built the platform the company uses to release its 29 software components, with no manual steps.
-  - Created an AI-powered translation tool that supports multiple languages and made the workflow 75% faster.
+  - Created an AI-powered translation tool that supports 7 different languages and made the workflow 75% faster.
   - Built AI assistants (Claude Code) that help engineers investigate incidents and failed tests faster.
   - Automated release coordination across 14 repositories.
 order: 1
