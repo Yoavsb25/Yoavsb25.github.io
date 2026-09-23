@@ -70,7 +70,12 @@ Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake s
 
 ## Docs
 
-- `docs/architecture.md` — structure and data flow
+- `docs/product-brief.md` — goal, audiences, "Hire me" funnel, non-goals (read before any UI or content work)
+- `docs/information-architecture.md` — site map and page contents
+- `docs/content-inventory.md` — approved copy and data for every section and case study
+- `docs/design-system.md` — tokens, type, spacing, motion, components, voice (read before any UI work)
+- `docs/design/mockup.html` — approved visual reference (frozen; removed in `feat/pages`; its Google Fonts links are not a pattern to copy)
+- `docs/architecture.md` — target structure, layers, data flow
 - `docs/security.md` — threat model and rules
 - `docs/roadmap.md` — PR-by-PR plan and current status
 - `docs/adr/` — decision records
