@@ -8,13 +8,15 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 ## Commands
 
-| Command          | Purpose                                                               |
-| ---------------- | --------------------------------------------------------------------- |
-| `npm run dev`    | Local dev server at http://localhost:4321                             |
-| `npm run verify` | **Definition of Done** — format:check, lint, astro check, test, build |
-| `npm run format` | Auto-format everything                                                |
-| `npm run test`   | Unit tests (Vitest)                                                   |
-| `npm run audit`  | Fail on high/critical dependency vulnerabilities                      |
+| Command            | Purpose                                                                 |
+| ------------------ | ----------------------------------------------------------------------- |
+| `npm run dev`      | Local dev server at http://localhost:4321/portfolio/ (`site.base`)      |
+| `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build   |
+| `npm run format`   | Auto-format everything                                                  |
+| `npm run test`     | Unit tests (Vitest)                                                     |
+| `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes) |
+| `npm run browsers` | Install Chromium for the e2e runner and the Playwright MCP              |
+| `npm run audit`    | Fail on high/critical dependency vulnerabilities                        |
 
 ## Layout
 
@@ -23,6 +25,7 @@ src/config/site.ts   single source of truth: site URL, name, socials
 src/lib/             pure, unit-tested helpers (no Astro imports)
 src/pages/           routes
 tests/unit/          Vitest tests, mirror src/lib
+tests/e2e/           Playwright + axe per built page, byte budgets
 docs/                architecture, security, roadmap, ADRs
 .claude/settings.json  shared permissions + hook wiring (protected)
 .claude/hooks/       Claude Code hook entry scripts (thin wrappers)
@@ -39,7 +42,7 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 - `npm run verify` must pass before saying work is done.
 - Conventional commits (`feat:`, `fix:`, `chore:`, `ci:`, `docs:`…), enforced by commitlint.
 - Never push, force-push, or skip hooks (`--no-verify`).
-- Site-wide values come from `src/config/site.ts` — never hard-code the URL or name.
+- Site-wide values come from `src/config/site.ts` — never hard-code the URL or name. Internal links go through `withBase()` (`src/lib/url.ts`, ADR-0010).
 - Logic goes in `src/lib/` with a test; `.astro` files stay presentational.
 - Ship zero client JS by default. Any `client:*` directive needs a comment justifying it.
 - No third-party scripts, trackers, or CDNs (see `docs/security.md`).
@@ -64,7 +67,7 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 
 Standard PR flow: plan in scope → build → `npm run verify` → review agents and audits → `/ship` → the user pushes, opens the PR, merges when green.
 
-The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless, isolated browser limited to `http://localhost:4321` for the a11y, design, and perf reviews; artifacts go to `.playwright-mcp/` (gitignored). First-time setup: `npm ci && npx playwright install chromium`.
+The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless, isolated browser limited to `http://localhost:4321` for the a11y, design, and perf reviews; artifacts go to `.playwright-mcp/` (gitignored). First-time setup: `npm ci && npm run browsers`.
 
 ## Guardrail layers
 

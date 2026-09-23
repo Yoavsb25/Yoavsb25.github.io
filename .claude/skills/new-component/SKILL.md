@@ -30,5 +30,6 @@ A component's folder decides what it may import (`docs/architecture.md` → Laye
 ## Rules
 
 - One component per file; PascalCase file name matches its use.
+- Internal links: callers pass `withBase("/path")` from `@/lib/url` (ADR-0010). `ui/` primitives cannot import `lib/`, so they take the href as given.
 - No new dependency for a component without an ADR (`/adr`).
 - Keep props minimal: add a variant when a real use needs it, not in advance.

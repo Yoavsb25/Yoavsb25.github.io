@@ -5,9 +5,11 @@ description: Performance audit of the production build: bytes shipped per page a
 
 # /perf-audit: is it fast?
 
-Goal from `docs/product-brief.md`: Lighthouse performance ≥ 95 in both themes. Until Lighthouse CI lands (roadmap row 9), these budgets are the local proxy. Audit the production build, never the dev server.
+Goal from `docs/product-brief.md`: Lighthouse performance ≥ 95 in both themes. CI enforces the byte budgets (`e2e` job) and Lighthouse scores (`lighthouse` job, ADR-0012); this audit is the local check and explains failures. Audit the production build, never the dev server.
 
 ## Budgets (per page, before gzip)
+
+The byte budgets live in `tests/e2e/support.ts` (source of truth, checked in CI); the table mirrors them.
 
 | What                         | Budget                                                                            |
 | ---------------------------- | --------------------------------------------------------------------------------- |
@@ -28,7 +30,7 @@ Goal from `docs/product-brief.md`: Lighthouse performance ≥ 95 in both themes.
    - Preloads (`rel="preload"`): fonts only, at most 2.
    - `<img>`: `width`, `height`, and `loading="lazy"` below the fold; formats are webp or avif; nothing is served much larger than its displayed size.
    - Every `href` and `src` is same-origin (no CDN, font, or analytics hosts).
-3. **Browser pass.** Start `npm run preview` in the background and confirm its banner says port 4321 (the browser may only reach 4321, and Astro silently moves to another port if it is taken). If a dev server you started holds the port, stop that background task first; if anything else holds it, ask the user to free it. Never kill processes you did not start. With the Playwright MCP tools, for each route at 375 and 1280 px:
+3. **Browser pass.** Start `npm run preview` in the background and confirm its banner says port 4321 (the browser may only reach 4321, and Astro silently moves to another port if it is taken). If a dev server you started holds the port, stop that background task first; if anything else holds it, ask the user to free it. Never kill processes you did not start. With the Playwright MCP tools, for each route under http://localhost:4321/portfolio/ (port plus `site.base`) at 375 and 1280 px:
    - Navigate, then `browser_evaluate` to collect `performance.getEntriesByType("resource")` (name, `transferSize`, `initiatorType`) and the navigation entry, and read LCP and CLS with a buffered `PerformanceObserver` (`largest-contentful-paint`, `layout-shift`).
    - Check `browser_console_messages` for errors. A blocked request to another origin is a failure: the resource list may not include blocked requests, so the static `href`/`src` scan in step 2 is the real third-party check.
    - Repeat once in the other theme to catch theme-only assets or layout shift from the theme script.
@@ -37,6 +39,6 @@ Goal from `docs/product-brief.md`: Lighthouse performance ≥ 95 in both themes.
 
 ## Rules
 
-- Never raise a budget to pass. Changing one is a decision: update this table and say why in the PR.
+- Never raise a budget to pass. Changing one is a decision: update `tests/e2e/support.ts` and this table together, and say why in the PR.
 - Local timings are a rough signal (fast machine, no throttling); byte budgets are the reliable part.
 - Stop the preview server you started when done.

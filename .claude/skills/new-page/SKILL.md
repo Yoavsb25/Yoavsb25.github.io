@@ -20,10 +20,11 @@ Pages route and load data; they compose feature components and hold no logic of 
    - Every page is at most one click from Hire me and the CV (header covers this; do not remove it).
 4. **Logic goes to `src/lib/`** with a unit test (ordering, next-project lookup, date formatting), never inline in the frontmatter.
 5. **Verify.** `npm run verify`, then open the route with `npm run dev` and check it renders with JavaScript disabled.
-6. **Review.** Run `/design-review`, `/a11y-audit`, and `/perf-audit` on the new route. Once e2e tests exist (roadmap row 9), add the route to them.
+6. **Review.** Run `/design-review`, `/a11y-audit`, and `/perf-audit` on the new route. The e2e suite picks up every built page automatically; run `npm run test:e2e`.
 
 ## Rules
 
+- Internal links go through `withBase()` from `@/lib/url` (`withBase("/#work")`), never a bare root-relative string (ADR-0010).
 - No client JS unless it is on the allowed list in `docs/architecture.md` → Rendering and interactivity, with a justification comment.
 - No third-party embeds, scripts, or fonts (`docs/security.md`).
 - Titles and descriptions follow the voice rules in `docs/design-system.md`.

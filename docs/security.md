@@ -6,9 +6,9 @@ There is no backend, auth, or user data. The main risks are:
 
 | Risk                                | Mitigation                                                                                                                                                          |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Compromised dependency              | Dependabot, `npm run audit` gate in CI, lockfile committed, `npm ci` only, lockfile-sync pre-commit check                                                           |
+| Compromised dependency              | Dependabot, `npm run audit` gate in CI, lockfile committed, `npm ci` only, lockfile-sync pre-commit check; Lighthouse runs from a SHA-pinned action (ADR-0012)      |
 | Compromised / mutable GitHub Action | Actions pinned to commit SHAs, Dependabot for actions, actionlint                                                                                                   |
-| Over-privileged workflows           | `permissions: contents: read` by default; extra scopes per job only                                                                                                 |
+| Over-privileged workflows           | `permissions: contents: read` by default; extra scopes per job only (`pages: write` + `id-token: write` on the deploy job alone)                                    |
 | Leaked secrets                      | No secrets needed; `.env*` gitignored and denied to Claude; secret scan in Claude hooks and pre-commit (`scripts/guards`); GitHub secret scanning + push protection |
 | XSS / injected third-party code     | No third-party scripts; Content-Security-Policy via Astro `security.csp` (ADR-0008)                                                                                 |
 | Unreviewed changes to `main`        | Branch protection: PR + required checks; CODEOWNERS on guardrails, agents, MCP config, and dependency files                                                         |
@@ -39,4 +39,5 @@ Known limits: the Bash guard reads command text, so scripts that write files are
 - No third-party scripts, analytics, or CDNs without an ADR.
 - External links use `rel="noopener noreferrer"`.
 - Never use `pull_request_target` in workflows.
+- CI reports (Lighthouse, Playwright) stay on the runner or in workflow artifacts; never upload them to public storage.
 - New MCP servers, agents, or skills that run code need an ADR and security review.
