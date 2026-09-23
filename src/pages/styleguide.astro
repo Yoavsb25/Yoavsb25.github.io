@@ -64,7 +64,7 @@ const icons: IconName[] = [
       <ul class="swatches">
         {colors.map(([token, use]) => (
           <li>
-            <span class="swatch" style={`background: var(${token})`} />
+            <span class="swatch" data-token={token} />
             <code>{token}</code>
             <span class="use">{use}</span>
           </li>
@@ -81,8 +81,8 @@ const icons: IconName[] = [
           <li>
             <code>{token}</code>
             <span
-              class:list={[face === "serif" && "serif"]}
-              style={`font-size: var(${token}); line-height: 1.15`}
+              class:list={["sample", face === "serif" && "serif"]}
+              data-token={token}
             >
               {sample}
             </span>
@@ -205,6 +205,57 @@ const icons: IconName[] = [
     border: 1px solid var(--line);
     border-radius: var(--radius-sm);
     margin-bottom: var(--space-2);
+  }
+
+  /* One rule per token: the CSP blocks inline style attributes (ADR-0008). */
+  .swatch[data-token="--ground"] {
+    background: var(--ground);
+  }
+  .swatch[data-token="--ground-2"] {
+    background: var(--ground-2);
+  }
+  .swatch[data-token="--surface"] {
+    background: var(--surface);
+  }
+  .swatch[data-token="--ink"] {
+    background: var(--ink);
+  }
+  .swatch[data-token="--ink-2"] {
+    background: var(--ink-2);
+  }
+  .swatch[data-token="--ink-3"] {
+    background: var(--ink-3);
+  }
+  .swatch[data-token="--line"] {
+    background: var(--line);
+  }
+  .swatch[data-token="--accent"] {
+    background: var(--accent);
+  }
+  .swatch[data-token="--accent-soft"] {
+    background: var(--accent-soft);
+  }
+
+  .sample {
+    line-height: 1.15;
+  }
+  .sample[data-token="--text-hero"] {
+    font-size: var(--text-hero);
+  }
+  .sample[data-token="--text-h2"] {
+    font-size: var(--text-h2);
+  }
+  .sample[data-token="--text-h3"] {
+    font-size: var(--text-h3);
+  }
+  .sample[data-token="--text-lede"] {
+    font-size: var(--text-lede);
+  }
+  .sample[data-token="--text-body"] {
+    font-size: var(--text-body);
+  }
+  .sample[data-token="--text-meta"] {
+    font-size: var(--text-meta);
   }
 
   .use {

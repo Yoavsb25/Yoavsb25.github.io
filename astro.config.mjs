@@ -6,6 +6,20 @@ import { site } from "./src/config/site.ts";
 export default defineConfig({
   site: site.url,
   base: site.base,
+  // CSP <meta> on every page; script and style hashes are computed at build (ADR-0008).
+  security: {
+    csp: {
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data:",
+        "font-src 'self'",
+        "connect-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'none'",
+      ],
+    },
+  },
   // Self-hosted fonts: downloaded at build time, served from the site (ADR-0008).
   fonts: [
     {
