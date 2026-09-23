@@ -7,7 +7,6 @@
 import type { CollectionEntry } from "astro:content";
 
 import Icon from "@/components/ui/Icon.astro";
-import { STAGE_COUNT } from "@/lib/content";
 
 interface Props {
   stages: CollectionEntry<"stages">[];
@@ -29,11 +28,7 @@ const { stages, selected } = Astro.props;
       whole path, so nothing gets lost along the way.
     </p>
 
-    <div
-      class="track-wrap"
-      data-active={selected}
-      style={`--stage-count: ${STAGE_COUNT}`}
-    >
+    <div class="track-wrap" data-active={selected}>
       <span class="fill" aria-hidden="true"></span>
       <ol class="track">
         {stages.map((stage, i) => (
@@ -139,6 +134,8 @@ const { stages, selected } = Astro.props;
   }
 
   .track-wrap {
+    /* Must match STAGE_COUNT in src/lib/content.ts (no style= attrs — CSP). */
+    --stage-count: 7;
     position: relative;
     margin-top: 3.75rem;
   }
