@@ -6,7 +6,7 @@ tags: [SwiftUI, Firebase, Product]
 outcome: A complete iPhone app with daily challenges and a subscription model.
 meta:
   role: Solo, end to end
-  # TODO(confirm): timeline.
+  timeline: "2026"
   stack: [Swift, SwiftUI, Firebase]
   links:
     - label: GitHub

@@ -6,7 +6,7 @@ tags: [Automation, Python, Desktop app]
 outcome: Built and sold to Goldfarb Gross Seligman, now used internally for document workflows.
 meta:
   role: Solo, sold to client
-  # TODO(confirm): timeline.
+  timeline: "2026"
   stack: [Python, GitHub Actions]
   links:
     - label: GitHub

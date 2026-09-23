@@ -1,5 +1,4 @@
 ---
-# TODO(confirm): public detail level for SysAid work.
 title: Release automation platform
 kicker: SysAid · 2025
 summary: A platform that releases 29 software components automatically, replacing manual coordination.
@@ -24,6 +23,6 @@ results:
   - figure: "0"
     label: manual release steps
 order: 2
-# Hidden until the public detail level is confirmed.
+# Employer work: not published at launch.
 draft: true
 ---
