@@ -1,0 +1,52 @@
+---
+/** Next project and Hire me at the end of a case study (docs/information-architecture.md → Case study 6). */
+import Button from "@/components/ui/Button.astro";
+
+interface Props {
+  next?: { title: string; href: string } | undefined;
+  contactHref: string;
+}
+
+const { next, contactHref } = Astro.props;
+---
+
+<div class="next">
+  <div>
+    <span class="label">{next ? "Next project" : "Like what you see?"}</span>
+    <p class="serif title">{next ? next.title : "Let's talk."}</p>
+  </div>
+  <div class="actions">
+    {next && (
+      <Button href={next.href} variant="ghost" trailingArrow>
+        Read next
+      </Button>
+    )}
+    <Button href={contactHref}>Hire me</Button>
+  </div>
+</div>
+
+<style>
+  .next {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-5);
+    margin-top: var(--space-5);
+    padding: 2.25rem;
+    border-radius: var(--radius-xl);
+    background: var(--ground-2);
+  }
+
+  .title {
+    margin-top: 10px;
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+</style>

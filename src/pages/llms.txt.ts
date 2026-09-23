@@ -3,9 +3,10 @@ import type { APIRoute } from "astro";
 import { getCollection, getEntry } from "astro:content";
 
 import { site } from "@/config/site";
-import { publishedProjects } from "@/lib/content";
+import { projectPath, publishedProjects } from "@/lib/content";
 import { llmsTxt } from "@/lib/crawlers";
-import { absoluteUrl, plainText } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/seo";
+import { plainText } from "@/lib/text";
 
 export const GET: APIRoute = async () => {
   const profile = await getEntry("profile", "profile");
@@ -19,10 +20,10 @@ export const GET: APIRoute = async () => {
       profile.data.lede,
       `${profile.data.status}. Skills: ${profile.data.skills.join(", ")}.`,
     ].map(plainText),
-    // Case study URLs join when their pages exist (roadmap row 12).
     projects: projects.map((p) => ({
       title: p.data.title,
       summary: p.data.summary,
+      url: absoluteUrl(projectPath(p.id)),
     })),
     links: [
       { label: "Website", url: absoluteUrl("/") },
