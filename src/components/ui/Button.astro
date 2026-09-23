@@ -10,16 +10,29 @@ import Icon, { type IconName } from "@/components/ui/Icon.astro";
 type Variant = "primary" | "ghost";
 type Size = "md" | "sm";
 
-type Props = {
+type Common = {
   variant?: Variant;
   size?: Size;
-  href?: string;
-  external?: boolean;
-  download?: boolean;
   icon?: IconName;
   trailingArrow?: boolean;
   class?: string;
+};
+
+// Link and button attributes are kept apart so button-only attributes such as
+// `disabled` can't be passed to a link, where they would do nothing.
+type LinkProps = Common & {
+  href: string;
+  external?: boolean;
+  download?: boolean;
+} & Omit<HTMLAttributes<"a">, "class" | "href" | "download">;
+
+type ButtonProps = Common & {
+  href?: undefined;
+  external?: never;
+  download?: never;
 } & Omit<HTMLAttributes<"button">, "class">;
+
+type Props = LinkProps | ButtonProps;
 
 const {
   variant = "primary",
@@ -51,7 +64,7 @@ const classes = ["btn", `btn-${variant}`, `btn-${size}`, className];
     {trailingArrow && <Icon name="arrow-right" class="arrow" />}
   </a>
 ) : (
-  <button class:list={classes} type={type} {...rest}>
+  <button class:list={classes} type={type as ButtonProps["type"]} {...rest}>
     {icon && <Icon name={icon} />}
     <slot />
     {trailingArrow && <Icon name="arrow-right" class="arrow" />}
