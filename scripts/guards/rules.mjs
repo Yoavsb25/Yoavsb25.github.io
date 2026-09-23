@@ -1,13 +1,12 @@
 // Project guard rules shared by Claude Code hooks (.claude/hooks) and git hooks (lefthook). Pure, no I/O.
+import path from "node:path";
 
 /** Paths that need explicit user approval before they change. Entries ending in "/" cover a directory. */
 const PROTECTED_PATHS = [
   ".github/workflows/",
   ".github/CODEOWNERS",
-  ".claude/settings.json",
-  ".claude/hooks/",
-  ".claude/agents/",
-  ".claude/skills/",
+  ".claude/",
+  "CLAUDE.md",
   ".mcp.json",
   "scripts/guards/",
   "package.json",
@@ -68,22 +67,29 @@ const BLOCKED_COMMANDS = [
 const WRITE_OPS =
   /\bsed\s+(-[a-zA-Z]*\s+)*-[a-zA-Z]*i|>|\btee\b|\bmv\b|\bcp\b|\brm\b|\btruncate\b|\bchmod\b|\bln\b|\bgit\s+(checkout|restore|rm|mv)\b/;
 
-/** Normalize an absolute or relative path to repo-relative with forward slashes. */
+/**
+ * Resolve a path against the repo root and return it repo-relative with forward slashes.
+ * Resolves "..", so traversal cannot dodge a rule. Paths outside the repo come back absolute.
+ */
 export function toRepoPath(filePath, projectDir) {
-  const p = filePath.replaceAll("\\", "/");
-  const root = projectDir.replaceAll("\\", "/").replace(/\/$/, "") + "/";
-  return p.startsWith(root) ? p.slice(root.length) : p.replace(/^\.\//, "");
+  const root = path.posix.resolve(projectDir.replaceAll("\\", "/"));
+  const abs = path.posix.resolve(root, filePath.replaceAll("\\", "/"));
+  const rel = path.posix.relative(root, abs);
+  const outside =
+    rel === ".." || rel.startsWith("../") || path.posix.isAbsolute(rel);
+  return outside ? abs : rel;
 }
 
 function isProtected(repoPath) {
-  return PROTECTED_PATHS.some((p) =>
-    p.endsWith("/") ? repoPath.startsWith(p) : repoPath === p,
+  const lower = repoPath.toLowerCase();
+  return PROTECTED_PATHS.map((p) => p.toLowerCase()).some((p) =>
+    p.endsWith("/") ? lower.startsWith(p) : lower === p,
   );
 }
 
 /** @returns {{ decision: "allow" | "ask" | "deny", reason?: string }} */
 export function checkPath(repoPath) {
-  if (FORBIDDEN.some((re) => re.test(repoPath))) {
+  if (FORBIDDEN.some((re) => re.test(repoPath.toLowerCase()))) {
     return {
       decision: "deny",
       reason: `${repoPath} may hold secrets and must not be written or committed.`,
@@ -123,7 +129,8 @@ export function protectedPathInCommand(command) {
     "",
   );
   if (!WRITE_OPS.test(cleaned)) return null;
-  return PROTECTED_PATHS.find((p) => cleaned.includes(p)) ?? null;
+  const lower = cleaned.toLowerCase();
+  return PROTECTED_PATHS.find((p) => lower.includes(p.toLowerCase())) ?? null;
 }
 
 /** @returns {boolean} true if the command is a git commit. */
@@ -179,34 +186,36 @@ export function currentRoadmapItem(markdown) {
   );
 }
 
-/** Commands a read-only reviewer agent may run. Every command segment must match one of these. */
+/** Agents whose Bash is limited to READ_ONLY_COMMANDS. */
+export const READ_ONLY_AGENTS = ["code-reviewer", "security-reviewer"];
+
+/** Agents whose writes are limited to site copy. */
+export const CONTENT_AGENTS = ["content-editor"];
+
+/** Git options that write files or run programs. */
+const UNSAFE_GIT_ARGS = /\s--(output|ext-diff|textconv|upload-pack|exec)\b/;
+
+/** Whole commands a read-only agent may run. Anything else is denied. */
 const READ_ONLY_COMMANDS = [
-  /^git\s+(diff|log|show|status|fetch|rev-parse|rev-list|ls-files|blame|merge-base)\b(?!.*--output)/,
-  /^git\s+branch\s+--show-current$/,
-  /^(ls|cat|head|tail|wc|grep|rg|pwd)\b/,
-  /^find\b(?!.*\s-(exec|execdir|delete|ok)\b)/,
-  /^npm\s+run\s+(verify|audit|check|lint|test|format:check)\b/,
-  /^npm\s+audit\b(?!.*\bfix\b)/,
+  /^git (diff|log|show|status|rev-parse|rev-list|ls-files|merge-base|blame)( [^\s].*)?$/,
+  /^git branch --show-current$/,
+  /^git fetch( --quiet)? origin$/,
+  /^(ls|cat|head|tail|wc|pwd)( [^\s].*)?$/,
+  /^npm run (verify|audit|check|lint|test)$/,
 ];
 
 /** @returns {string | null} why a read-only agent may not run this command, or null if allowed. */
 export function checkReadOnlyCommand(command) {
-  const cleaned = command.replace(
-    /\d?>&\d|&>\s*\/dev\/null|\d?>\s*\/dev\/null/g,
-    "",
-  );
-  if (/[>`]|\$\(/.test(cleaned))
-    return "Read-only agents cannot redirect output or use command substitution.";
-  const segments = cleaned
-    .split(/&&|\|\||;|\|/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const bad = segments.find(
-    (s) => !READ_ONLY_COMMANDS.some((re) => re.test(s)),
-  );
-  return bad
-    ? `Read-only agent: "${bad}" is not an allowed read-only command.`
-    : null;
+  const cmd = command.trim();
+  if (/[;&|<>()`$\\\n\r]/.test(cmd)) {
+    return "Read-only agents run one plain command at a time: no chaining, redirection, pipes, or substitution.";
+  }
+  if (cmd.startsWith("git ") && UNSAFE_GIT_ARGS.test(cmd)) {
+    return "Read-only agents cannot use git options that write files or run programs.";
+  }
+  return READ_ONLY_COMMANDS.some((re) => re.test(cmd))
+    ? null
+    : `Read-only agent: "${cmd}" is not an allowed read-only command.`;
 }
 
 /** Paths the content-editor agent may write. */
@@ -214,7 +223,7 @@ const CONTENT_PATHS = [/^src\/content\//, /^docs\/content-inventory\.md$/];
 
 /** @returns {string | null} why the content editor may not write this path, or null if allowed. */
 export function checkContentPath(repoPath) {
-  return CONTENT_PATHS.some((re) => re.test(repoPath))
+  return CONTENT_PATHS.some((re) => re.test(repoPath.toLowerCase()))
     ? null
     : `content-editor may only write src/content/** and docs/content-inventory.md, not ${repoPath}.`;
 }

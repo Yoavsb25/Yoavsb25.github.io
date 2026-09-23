@@ -19,15 +19,17 @@ There is no backend, auth, or user data. The main risks are:
 
 Claude reads untrusted text (web pages, copy notes, diffs), so a prompt injection could try to make it change its own guardrails or run code. Mitigations (ADR-0003, ADR-0009):
 
-| Risk                                   | Mitigation                                                                                                                                                       |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Agent edits its own guardrails         | `.claude/settings.json`, `.claude/hooks/`, `.claude/agents/`, `.claude/skills/`, `scripts/guards/` are protected: edits ask first, and CODEOWNERS review applies |
-| Malicious MCP launch command           | `.mcp.json` is protected; the server is a pinned devDependency launched with `npx --no-install`                                                                  |
-| Destructive or outward-facing commands | Bash guard denies push, `--no-verify`, hard reset, recursive force delete, global installs, `curl \| sh`, commits on `main`                                      |
-| Malicious npm script                   | `package.json` is protected (edits ask first)                                                                                                                    |
-| "Read-only" agents writing             | Reviewer agents' Bash is limited to read-only commands by a frontmatter hook; `a11y-reviewer` has no shell                                                       |
-| Content agent writing outside copy     | `content-editor` writes are limited to `src/content/**` and `docs/content-inventory.md`                                                                          |
-| Browser reaching files or the internet | Playwright MCP: headless, isolated profile, `--allowed-origins http://localhost:4321`; file upload and arbitrary code tools denied                               |
+| Risk                                   | Mitigation                                                                                                                                                                                                                 |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent edits its own guardrails         | All of `.claude/` (including the gitignored `settings.local.json`), `CLAUDE.md`, and `scripts/guards/` are protected: edits ask first (paths resolved, case-insensitive), and CODEOWNERS review applies to committed files |
+| Malicious MCP launch command           | `.mcp.json` is protected; the server is a pinned devDependency launched with `npx --no-install`                                                                                                                            |
+| Destructive or outward-facing commands | Bash guard denies push, `--no-verify`, hard reset, recursive force delete, global installs, `curl \| sh`, commits on `main`                                                                                                |
+| Malicious npm script                   | `package.json` is protected (edits ask first)                                                                                                                                                                              |
+| "Read-only" agents writing             | Global guard hooks key on `agent_type`: reviewers may run one plain read-only command (no metacharacters, whole-command allowlist); `a11y-reviewer` has no shell                                                           |
+| Content agent writing outside copy     | `content-editor` writes are limited to `src/content/**` and `docs/content-inventory.md`                                                                                                                                    |
+| Browser reaching files or the internet | Playwright MCP: headless, isolated profile, `--allowed-origins http://localhost:4321`; file upload and arbitrary code tools denied                                                                                         |
+
+Guard hooks fail closed: an error in a guard denies the action.
 
 Known limits: the Bash guard reads command text, so scripts that write files are not inspected; CODEOWNERS review is the backstop. In auto mode, "ask" decisions may be approved without a visible prompt.
 

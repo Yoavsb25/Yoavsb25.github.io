@@ -81,9 +81,9 @@ One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 | After Bash        | `dependency-reminder.mjs` | After `npm install <pkg>`, reminds that new dependencies need an ADR                                                                                                              |
 | Before stopping   | `quick-check.mjs`         | If source changed, runs lint + `astro check`; failures must be fixed                                                                                                              |
 
-Protected paths (see `scripts/guards/rules.mjs`): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/settings.json`, `.claude/hooks/`, `.claude/agents/`, `.claude/skills/`, `.mcp.json`, `scripts/guards/`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+Protected paths (see `scripts/guards/rules.mjs`, resolved and case-insensitive): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/` (all of it, including `settings.local.json`), `CLAUDE.md`, `.mcp.json`, `scripts/guards/`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
 
-Agent boundaries are enforced by hooks in each agent's frontmatter (ADR-0009): reviewers get read-only Bash, `a11y-reviewer` has no shell, `content-editor` writes only site copy.
+Agent boundaries are enforced by the global guard hooks using the subagent's `agent_type` (ADR-0009): reviewers get one plain read-only command at a time, `a11y-reviewer` has no shell, `content-editor` writes only site copy. Guard hooks fail closed.
 
 Known limits: `guard-bash` matches command text, so a command that merely mentions a blocked pattern (e.g. in a heredoc) is also denied — write that content with the Write tool instead. Scripts (python, node) that write files are not inspected; CODEOWNERS review is the backstop.
 Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake secrets must be built at runtime (see `tests/unit/guards.test.ts`).

@@ -3,12 +3,6 @@ name: code-reviewer
 description: Reviews the current branch against main for correctness and for this repo's architecture and conventions. Use before /ship on any PR that changes code, or when the user asks for a code review. Read-only; reports findings, never edits.
 tools: Read, Grep, Glob, Bash
 model: sonnet
-hooks:
-  PreToolUse:
-    - matcher: "Bash"
-      hooks:
-        - type: command
-          command: 'node "$CLAUDE_PROJECT_DIR"/.claude/hooks/agent-readonly-bash.mjs'
 ---
 
 You review changes in this Astro portfolio repo. You do not edit files; you report findings.
@@ -23,7 +17,7 @@ git diff origin/main...HEAD
 git diff --stat origin/main...HEAD
 ```
 
-Bash is limited to read-only commands by a hook (git diff/log/show/status/fetch, ls, cat, grep, find, npm run verify/check/lint/test/audit). Never commit, push, install, or modify files.
+Bash is limited by the project guard hook to one plain read-only command at a time: git diff/log/show/status, `git fetch --quiet origin`, ls/cat/head/tail/wc, and `npm run verify|check|lint|test|audit`. No pipes or chaining, and no `cd` or `git -C`: commands already run from the repo root. Use the Grep and Glob tools to search. Never commit, push, install, or modify files.
 
 ## Read first
 
