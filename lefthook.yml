@@ -2,6 +2,8 @@
 pre-commit:
   parallel: true
   commands:
+    secrets:
+      run: node scripts/guards/scan-staged-secrets.mjs {staged_files}
     prettier:
       glob: "*.{js,mjs,ts,astro,json,md,yml,yaml,css}"
       run: npx prettier --write {staged_files}

@@ -7,7 +7,7 @@ import {
   findSecret,
   toRepoPath,
   writtenText,
-} from "../../.claude/hooks/lib/rules.mjs";
+} from "../../scripts/guards/rules.mjs";
 
 // Fake secrets are assembled at runtime so this file never trips the secret scanner itself.
 const fake = (prefix: string, length: number) =>

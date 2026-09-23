@@ -1,10 +1,12 @@
-// Pure decision logic for Claude Code hooks. No I/O, so it can be unit tested.
+// Project guard rules shared by Claude Code hooks (.claude/hooks) and git hooks (lefthook). Pure, no I/O.
 
 /** Paths that need explicit user approval before Claude edits them. */
 const PROTECTED = [
   /^\.github\/workflows\//,
   /^\.claude\/settings\.json$/,
   /^\.claude\/hooks\//,
+  /^scripts\/guards\//,
+  /^\.github\/CODEOWNERS$/,
   /^package-lock\.json$/,
   /^lefthook\.yml$/,
   /^public\/CNAME$/,

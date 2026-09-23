@@ -1,0 +1,9 @@
+# Changes to guardrails and supply chain need the owner's review.
+# Enforced when branch protection requires review from code owners.
+/.github/        @Yoavsb25
+/.claude/        @Yoavsb25
+/scripts/guards/ @Yoavsb25
+/lefthook.yml    @Yoavsb25
+/package.json    @Yoavsb25
+/package-lock.json @Yoavsb25
+/CLAUDE.md       @Yoavsb25

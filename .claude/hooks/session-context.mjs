@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { projectDir } from "./lib/io.mjs";
-import { currentRoadmapItem } from "./lib/rules.mjs";
+import { currentRoadmapItem } from "../../scripts/guards/rules.mjs";
 
 const git = (...args) =>
   spawnSync("git", args, { cwd: projectDir, encoding: "utf8" }).stdout.trim();

@@ -25,7 +25,8 @@ src/pages/           routes
 tests/unit/          Vitest tests, mirror src/lib
 docs/                architecture, security, roadmap, ADRs
 .claude/settings.json  shared permissions + hook wiring (protected)
-.claude/hooks/       hook scripts; logic in lib/rules.mjs, tested in tests/unit/hooks.test.ts
+.claude/hooks/       Claude Code hook entry scripts (thin wrappers)
+scripts/guards/      shared guard rules for Claude + git hooks (protected, tested in tests/unit/guards.test.ts)
 .github/workflows/   CI (protected — change only when asked)
 ```
 
@@ -42,6 +43,14 @@ docs/                architecture, security, roadmap, ADRs
 - Pin GitHub Actions to full commit SHAs with a version comment.
 - A significant decision (new dependency, pattern, or service) needs an ADR in `docs/adr/`.
 
+## Guardrail layers
+
+One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
+
+1. **Claude hooks** (`.claude/`) — intercept the agent's actions _before_ they happen.
+2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, Prettier, ESLint, commitlint.
+3. **GitHub** — CI checks, branch protection, CODEOWNERS review, secret scanning. Cannot be bypassed.
+
 ## Claude Code hooks (enforced automatically)
 
 | When              | Hook                  | Effect                                                                                                           |
@@ -54,7 +63,7 @@ docs/                architecture, security, roadmap, ADRs
 | Before stopping   | `quick-check.mjs`     | If source changed, runs lint + `astro check`; failures must be fixed                                             |
 
 `guard-bash` matches the whole command text, so a command that merely mentions a blocked pattern (e.g. in a heredoc) is also denied — write the content with the Write tool instead.
-Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake secrets must be built at runtime (see `tests/unit/hooks.test.ts`).
+Personal overrides go in `.claude/settings.local.json` (gitignored). Test fake secrets must be built at runtime (see `tests/unit/guards.test.ts`).
 
 ## Docs
 
