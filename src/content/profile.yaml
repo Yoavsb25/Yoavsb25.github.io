@@ -1,0 +1,27 @@
+# Home and resume prose. Name, email, and socials live in src/config/site.ts.
+# TODO(confirm): portrait (GitHub avatar → src/assets/portrait.jpg) and the
+# phone-free public/cv.pdf land with launch content (roadmap PR 13).
+status: Open to AI engineering roles · London
+headline: I plan AI systems. Then I *ship* them.
+lede: I'm Yoav, an AI engineer who takes products from idea to production. I plan them, build them, test them, and keep improving them, with the care that makes AI dependable.
+badge: Automation Engineer · at SysAid · London
+skills:
+  - AI agents & tools
+  - LLM applications
+  - Automation
+  - Python
+  - TypeScript
+  - CI/CD & deployment
+  - Docker & AWS
+skillGroups:
+  - group: AI & automation
+    items: [Claude Code, LLM integrations, AI-assisted tooling]
+  - group: Languages
+    items: [Python, TypeScript, SQL]
+  - group: Infrastructure
+    items: [Docker, AWS, GitHub Actions, Kubernetes (GitOps)]
+  - group: Testing
+    items: [Pytest, Playwright, Vitest]
+contact:
+  headline: Need an AI engineer who *ships*?
+  line: I'm looking for AI engineering roles in London or remote. I reply within a day.

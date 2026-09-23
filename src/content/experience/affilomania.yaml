@@ -1,0 +1,9 @@
+kind: role
+title: Data Analyst
+org: Affilomania
+location: Tel Aviv
+start: 2020
+end: 2021
+bullets:
+  - Improved how sales leads were distributed, increasing sales by 15%.
+order: 2

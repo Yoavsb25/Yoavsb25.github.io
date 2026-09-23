@@ -1,0 +1,44 @@
+# How I work. `selected` marks the stage shown first (exactly one).
+- id: plan
+  label: Plan
+  title: Start with the problem
+  explanation: "Before any code: who is this for, what problem does it solve, and how will we know it worked?"
+  practice: Every project starts with a one-page brief that sets the goal, the users, and what is out of scope.
+  order: 1
+- id: foundations
+  label: Foundations
+  title: Set up the guardrails
+  explanation: Automatic checks, reviews, and safe defaults go in first, so quality never depends on remembering.
+  practice: This website blocks leaked passwords and broken code before a change can even be saved.
+  order: 2
+- id: architect
+  label: Architect
+  title: Design for change
+  explanation: A simple structure with clear boundaries, so the system is easy to grow and easy to hand over.
+  practice: At SysAid I designed a way to move 29 components to a new release system without pausing weekly releases.
+  order: 3
+- id: build
+  label: Build
+  title: Ship in small steps
+  explanation: "Working software in small, reviewable pieces. AI speeds up the work; clear rules keep it right."
+  practice: I built an AI translation tool end to end, from the first prototype to a tool the team relies on.
+  order: 4
+  selected: true
+- id: test
+  label: Test
+  title: Prove it works
+  explanation: Automated tests confirm it works today and keep it working tomorrow.
+  practice: I built a central place for test results, so failures across every environment are visible in one view.
+  order: 5
+- id: deploy
+  label: Deploy
+  title: Release with confidence
+  explanation: Releases are automatic and repeatable, so shipping is routine instead of risky.
+  practice: Releases across 14 repositories are coordinated automatically, with no manual steps to forget.
+  order: 6
+- id: iterate
+  label: Iterate
+  title: Learn and improve
+  explanation: Measure what happened, learn from it, and make the next version better.
+  practice: My AI assistants help engineers find the root cause of incidents faster, and they improve with every use.
+  order: 7
