@@ -26,7 +26,7 @@ tests/unit/          Vitest tests, mirror src/lib
 docs/                architecture, security, roadmap, ADRs
 .claude/settings.json  shared permissions + hook wiring (protected)
 .claude/hooks/       Claude Code hook entry scripts (thin wrappers)
-.claude/skills/      project skills (/adr, /ship)
+.claude/skills/      project skills (/adr, /ship, /new-*, audits)
 .claude/agents/      review and content subagents
 .mcp.json            project MCP servers (Playwright, pinned)
 scripts/guards/      shared guard rules for Claude + git hooks (protected, tested in tests/unit/guards.test.ts)
@@ -52,14 +52,19 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 | ------------------------- | ----------------------------------------------------------------------------------------- |
 | `/adr`                    | A significant decision is made or reversed                                                |
 | `/ship`                   | Before calling a PR ready: preflight checks, scope check, PR title and body. Never pushes |
+| `/new-component`          | Adding a component: picks the layer, follows the design-system spec                       |
+| `/new-page`               | Adding a route that is in the information architecture                                    |
+| `/design-review`          | PRs that change pages, components, or styles: visual check against the design system      |
+| `/a11y-audit`             | Same PRs: static scan, then dispatches the `a11y-reviewer` agent, then triage             |
+| `/perf-audit`             | PRs that add pages, images, fonts, or scripts: byte budgets and Web Vitals on the build   |
 | `code-reviewer` agent     | Before `/ship` on any PR that changes code                                                |
 | `security-reviewer` agent | PRs touching `.github/`, `.claude/`, `scripts/guards/`, dependencies, or `<head>`         |
 | `a11y-reviewer` agent     | PRs that change pages, components, or styles (needs `npm run dev`)                        |
 | `content-editor` agent    | Writing or editing site copy in `src/content/` or `docs/content-inventory.md`             |
 
-Standard PR flow: plan in scope → build → `npm run verify` → review agents → `/ship` → the user pushes, opens the PR, merges when green.
+Standard PR flow: plan in scope → build → `npm run verify` → review agents and audits → `/ship` → the user pushes, opens the PR, merges when green.
 
-The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless, isolated browser limited to `http://localhost:4321` for the a11y and design reviews; artifacts go to `.playwright-mcp/` (gitignored). First-time setup: `npm ci && npx playwright install chromium`.
+The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless, isolated browser limited to `http://localhost:4321` for the a11y, design, and perf reviews; artifacts go to `.playwright-mcp/` (gitignored). First-time setup: `npm ci && npx playwright install chromium`.
 
 ## Guardrail layers
 

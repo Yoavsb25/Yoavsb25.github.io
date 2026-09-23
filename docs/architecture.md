@@ -95,4 +95,4 @@ AI is a development tool, not a runtime feature (ADR-0003). Claude Code is confi
 - `CLAUDE.md` (+ nested ones per area as folders appear) — rules and context.
 - `.claude/settings.json` — permissions and hook wiring.
 - `.claude/hooks/*.mjs` — thin entry scripts; decisions live in `scripts/guards/rules.mjs` (shared with git hooks, unit tested).
-- `.claude/skills/` and `.claude/agents/` — repeatable workflows (later PRs).
+- `.claude/skills/` and `.claude/agents/` — repeatable workflows: `/adr`, `/ship`, scaffolding (`/new-component`, `/new-page`), audits (`/design-review`, `/a11y-audit`, `/perf-audit`), and read-only review agents.
