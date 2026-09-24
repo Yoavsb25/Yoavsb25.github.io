@@ -133,7 +133,7 @@ const { section, stages, selected } = Astro.props;
   }
 
   .track-wrap {
-    /* Must match STAGE_COUNT in src/lib/content.ts (no style= attrs — CSP). */
+    /* Must match STAGE_COUNT in src/lib/content.ts (no style= attrs — CSP); tests/unit/stage-track.test.ts checks it. */
     --stage-count: 7;
     position: relative;
     margin-top: 3.75rem;
