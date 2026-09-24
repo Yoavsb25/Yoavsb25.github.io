@@ -28,14 +28,18 @@ import Icon from "@/components/ui/Icon.astro";
   } from "@/lib/theme";
 
   const root = document.documentElement;
-  const prefersDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
+  const system = matchMedia("(prefers-color-scheme: dark)");
   const current = () =>
-    resolveTheme(parseTheme(root.dataset["theme"]), prefersDark());
+    resolveTheme(parseTheme(root.dataset["theme"]), system.matches);
 
   for (const button of document.querySelectorAll<HTMLButtonElement>(
     "[data-theme-toggle]",
   )) {
     button.setAttribute("aria-label", toggleLabel(current()));
+    // With no saved choice the system theme applies, so it can change under the label.
+    system.addEventListener("change", () =>
+      button.setAttribute("aria-label", toggleLabel(current())),
+    );
     button.addEventListener("click", () => {
       const next = nextTheme(current());
       root.dataset["theme"] = next;

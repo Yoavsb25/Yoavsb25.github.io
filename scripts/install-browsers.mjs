@@ -1,6 +1,7 @@
 /**
- * Installs Chromium for both Playwright copies: the e2e runner (@playwright/test) and
- * the Playwright MCP server, which pins its own alpha build (ADR-0009, ADR-0011).
+ * Installs browsers for both Playwright copies: Chromium and WebKit (the iPhone project)
+ * for the e2e runner (@playwright/test), Chromium for the Playwright MCP server, which
+ * pins its own alpha build (ADR-0009, ADR-0011).
  * Each Playwright version deletes browser builds it does not recognise, so installing
  * for only one of them can remove the other's Chromium.
  */
@@ -14,11 +15,15 @@ const fromPackage = (pkg) => {
 };
 
 const extra = process.argv.slice(2); // e.g. --with-deps in CI
-for (const pkg of ["@playwright/test", "@playwright/mcp"]) {
+const browsers = {
+  "@playwright/test": ["chromium", "webkit"],
+  "@playwright/mcp": ["chromium"],
+};
+for (const [pkg, names] of Object.entries(browsers)) {
   const cli = fromPackage(pkg);
   const { status } = spawnSync(
     process.execPath,
-    [cli, "install", ...extra, "chromium"],
+    [cli, "install", ...extra, ...names],
     { stdio: "inherit" },
   );
   if (status !== 0) process.exit(status ?? 1);

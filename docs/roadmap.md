@@ -17,10 +17,10 @@ One PR at a time; the next starts only after the previous is merged.
 | 11  | `feat/seo`                     | SEO/JSON-LD, CSP, OG images, sitemap, robots, `llms.txt`                                                                             | ✅ merged      |
 | 12  | `feat/pages`                   | Home (hero, how I work, work, resume, contact), case study pages, 404; enable link fragment checks; delete `docs/design/mockup.html` | ✅ merged      |
 | 13  | `content/launch-content`       | Real case studies, experience, CV, portrait; resolve every `TODO(confirm)`                                                           | ✅ merged      |
-| 14  | `chore/launch`                 | Final audits, `v1.0.0` (custom domain deferred)                                                                                      | ✅ merged      |
+| 14  | `chore/launch`                 | Final audits (landed as #19 and #20; `v1.0.0` moved to PR 17, custom domain deferred)                                                | ✅ merged      |
 | 15  | `chore/root-domain`            | Rename the repo to `Yoavsb25.github.io`, `site.base` → `/` (ADR-0017)                                                                | ✅ merged      |
-| 16  | `fix/mobile-nav-and-content`   | Mobile header menu (CSS budget 20 → 22 KB), real result figures                                                                      | 🚧 in progress |
-| 17  | `chore/audit-low`              | Tag `v1.0.0`, WebKit + mobile e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                                            | planned        |
+| 16  | `fix/mobile-nav-and-content`   | Mobile header menu (CSS budget 20 → 22 KB), real result figures                                                                      | ✅ merged      |
+| 17  | `chore/audit-low`              | Version `1.0.0` (tag after merge), iPhone WebKit e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                         | 🚧 in progress |
 | 18  | `refactor/tokens-and-helpers`  | Font budget headroom, token-only spacing, `loadProfile()` helper                                                                     | planned        |
 | 19  | `test/visual-and-coverage`     | Visual regression screenshots, `src/lib` coverage threshold (ADR)                                                                    | planned        |
 

@@ -166,6 +166,18 @@ test("the theme toggle switches and remembers the theme", async ({ page }) => {
   await expect(root).toHaveAttribute("data-theme", nextTheme(before));
 });
 
+test("the theme toggle label follows a system theme change", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("");
+  const toggle = page.locator("[data-theme-toggle]").first();
+  await expect(toggle).toHaveAttribute("aria-label", "Switch to dark mode");
+
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(toggle).toHaveAttribute("aria-label", "Switch to light mode");
+});
+
 test("the How I work track switches stages", async ({ page }) => {
   await page.goto("");
   const buttons = page.locator("[data-stage]");
@@ -199,7 +211,13 @@ test("the mobile menu opens, navigates, and closes", async ({ page }) => {
   await expect(menu.locator("summary")).toBeFocused();
 });
 
-test("the skip link moves focus to the main content", async ({ page }) => {
+test("the skip link moves focus to the main content", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name === "iphone",
+    "Safari's Tab skips links by default (Option+Tab), and phones have no Tab key",
+  );
   await page.goto("");
   await page.keyboard.press("Tab");
   await expect(page.locator(".skip-link")).toBeFocused();
