@@ -17,6 +17,15 @@ describe("ogElement", () => {
     expect(json).not.toContain("*");
   });
 
+  it("shrinks the title font for long titles", () => {
+    const size = (title: string) =>
+      JSON.stringify(ogElement({ ...card, title })).match(
+        /"fontSize":(\d+),"lineHeight"/,
+      )?.[1];
+    expect(size("Short title")).toBe("84");
+    expect(size("A".repeat(61))).toBe("64");
+  });
+
   it("includes the label, footer, and initials", () => {
     const json = JSON.stringify(ogElement(card));
     for (const text of ["Case study", "Ada · Engineer", "AL"]) {

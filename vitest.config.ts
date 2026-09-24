@@ -8,5 +8,13 @@ export default defineConfig({
   },
   test: {
     include: ["tests/unit/**/*.test.ts"],
+    // src/lib holds the logic and is pure, so it is held to full coverage (ADR-0019).
+    coverage: {
+      enabled: true,
+      provider: "v8",
+      include: ["src/lib/**"],
+      reporter: ["text-summary"],
+      thresholds: { lines: 100, functions: 100, statements: 100, branches: 95 },
+    },
   },
 });
