@@ -20,8 +20,8 @@ One PR at a time; the next starts only after the previous is merged.
 | 14  | `chore/launch`                 | Final audits (landed as #19 and #20; `v1.0.0` moved to PR 17, custom domain deferred)                                                | ✅ merged      |
 | 15  | `chore/root-domain`            | Rename the repo to `Yoavsb25.github.io`, `site.base` → `/` (ADR-0017)                                                                | ✅ merged      |
 | 16  | `fix/mobile-nav-and-content`   | Mobile header menu (CSS budget 20 → 22 KB), real result figures                                                                      | ✅ merged      |
-| 17  | `chore/audit-low`              | Version `1.0.0` (tag after merge), iPhone WebKit e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                         | 🚧 in progress |
-| 18  | `refactor/tokens-and-helpers`  | Font budget headroom, token-only spacing, `loadProfile()` helper                                                                     | planned        |
+| 17  | `chore/audit-low`              | Version `1.0.0` (tag after merge), iPhone WebKit e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                         | ✅ merged      |
+| 18  | `refactor/tokens-and-helpers`  | Spacing tokens + documented exceptions, named OG title threshold, `pr-title` CI check                                                | 🚧 in progress |
 | 19  | `test/visual-and-coverage`     | Visual regression screenshots, `src/lib` coverage threshold (ADR)                                                                    | planned        |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
