@@ -9,7 +9,7 @@ import { site } from "../../src/config/site.ts";
  */
 export const budgets = {
   htmlBytes: 50_000,
-  cssBytes: 20_000,
+  cssBytes: 22_000, // 20 KB until PR 16 added the mobile header menu.
   jsBytes: 5_000,
   fontBytes: 150_000,
   preloadedFonts: 2,

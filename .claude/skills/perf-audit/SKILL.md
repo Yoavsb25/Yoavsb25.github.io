@@ -14,7 +14,7 @@ The byte budgets live in `tests/e2e/support.ts` (source of truth, checked in CI)
 | What                         | Budget                                                                            |
 | ---------------------------- | --------------------------------------------------------------------------------- |
 | HTML                         | ≤ 50 KB                                                                           |
-| CSS                          | ≤ 20 KB                                                                           |
+| CSS                          | ≤ 22 KB                                                                           |
 | JavaScript                   | ≤ 5 KB, inline only; only the scripts allowed in `docs/architecture.md`           |
 | Fonts                        | ≤ 150 KB total, `woff2` only, ≤ 2 preloaded                                       |
 | Images                       | through Astro `<Image>` with width and height; hero ≤ 150 KB; below the fold lazy |

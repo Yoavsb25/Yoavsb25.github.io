@@ -18,12 +18,12 @@ built:
   - Automated tests and a one-file installer.
 approach: I designed it as a simple pipeline of small steps, each tested on its own, so it stays reliable as the firm's needs change.
 results:
-  - figure: Sold
-    label: to a leading law firm
-  - figure: "1"
-    label: step from spreadsheet to merged PDFs
-  - figure: "1"
-    label: file installer, no setup needed
+  - figure: Daily
+    label: use at a top Israeli law firm
+  - figure: 300+
+    label: merged PDFs created
+  - figure: 30 sec
+    label: to merge 130 pages
 order: 3
 cover:
   src: ./cover.png

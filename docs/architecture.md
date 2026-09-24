@@ -72,7 +72,7 @@ Data flows one way: content/config → pages → features → ui. When a second 
 ## Rendering and interactivity
 
 - Everything is prerendered HTML; zero client JS by default.
-- Allowed scripts: the theme bootstrap (inline, CSP-hashed, ADR-0008), the theme toggle, and the How I work stage selector. All are progressive enhancements; content renders without JS. Each needs a justification comment.
+- Allowed scripts: the theme bootstrap (inline, CSP-hashed, ADR-0008), the theme toggle, the How I work stage selector, and closing the mobile header menu after a link tap. All are progressive enhancements; content renders without JS. Each needs a justification comment.
 - Images use Astro's `<Image>` (build-time optimization, width/height set, lazy by default).
 
 ## SEO and machine-readability

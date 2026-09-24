@@ -181,6 +181,24 @@ test("the How I work track switches stages", async ({ page }) => {
   await expect(page.locator("[data-stage-panel]:visible")).toHaveCount(1);
 });
 
+test("the mobile menu opens, navigates, and closes", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 });
+  await page.goto("");
+  const menu = page.locator("[data-menu]");
+  await expect(page.locator("header .links")).toBeHidden();
+
+  await menu.locator("summary").click();
+  await expect(menu).toHaveAttribute("open", "");
+  await menu.getByRole("link", { name: "Projects" }).click();
+  await expect(page).toHaveURL(/#projects$/);
+  await expect(menu).not.toHaveAttribute("open", "");
+
+  await menu.locator("summary").click();
+  await page.keyboard.press("Escape");
+  await expect(menu).not.toHaveAttribute("open", "");
+  await expect(menu.locator("summary")).toBeFocused();
+});
+
 test("the skip link moves focus to the main content", async ({ page }) => {
   await page.goto("");
   await page.keyboard.press("Tab");
