@@ -1,7 +1,11 @@
 ---
-/** Sticky site header (docs/design-system.md → Header, docs/information-architecture.md). */
+/**
+ * Sticky site header (docs/design-system.md → Header, docs/information-architecture.md).
+ * Below 900px the links collapse into a <details> menu, which works without JS.
+ */
 import ThemeToggle from "@/components/site/ThemeToggle.astro";
 import Button from "@/components/ui/Button.astro";
+import Icon from "@/components/ui/Icon.astro";
 import { nav, site } from "@/config/site";
 import { withBase } from "@/lib/url";
 ---
@@ -23,12 +27,47 @@ import { withBase } from "@/lib/url";
         ))}
       </ul>
       <ThemeToggle />
+      <details class="menu" data-menu>
+        <summary aria-label="Menu">
+          <Icon name="menu" size={18} />
+          <span class="menu-text">Menu</span>
+        </summary>
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a href={withBase(item.href)}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </details>
       <Button href={withBase("/#contact")} size="sm">
         Contact me
       </Button>
     </nav>
   </div>
 </header>
+
+<script>
+  // Client JS justified: a <details> stays open after an in-page link jumps, covering
+  // the section just reached. This closes it on a link tap, Escape, or a tap outside.
+  // Without JS the menu still opens and its links work (docs/architecture.md).
+  for (const menu of document.querySelectorAll<HTMLDetailsElement>(
+    "[data-menu]",
+  )) {
+    const close = () => menu.removeAttribute("open");
+    menu
+      .querySelectorAll("a")
+      .forEach((link) => link.addEventListener("click", close));
+    menu.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape" || !menu.open) return;
+      close();
+      menu.querySelector("summary")?.focus();
+    });
+    document.addEventListener("click", (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) close();
+    });
+  }
+</script>
 
 <style>
   .site-header {
@@ -94,9 +133,53 @@ import { withBase } from "@/lib/url";
     color: var(--ink);
   }
 
+  .menu {
+    display: none;
+  }
+
+  .menu summary {
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font-size: var(--text-small);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu ul {
+    position: absolute;
+    top: 100%;
+    right: var(--gutter);
+    padding: var(--space-2);
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+  }
+
+  .menu a {
+    display: block;
+    padding: var(--space-3) var(--space-6) var(--space-3) var(--space-4);
+    text-decoration: none;
+  }
+
   @media (max-width: 900px) {
     .links {
       display: none;
+    }
+
+    .menu {
+      display: block;
     }
 
     nav {
@@ -106,6 +189,14 @@ import { withBase } from "@/lib/url";
 
   @media (max-width: 420px) {
     .name {
+      display: none;
+    }
+
+    .menu summary {
+      padding-inline: var(--space-3);
+    }
+
+    .menu-text {
       display: none;
     }
   }

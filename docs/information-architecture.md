@@ -18,7 +18,7 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 
 ## Global elements
 
-- **Header** (sticky, translucent): YS mark + name (→ home), How I work, Projects, Resume, theme toggle (sun/moon), and a primary **Contact me** button (→ #contact). Links collapse on mobile; theme toggle and Contact me stay visible. This is the one persistent contact button: other sections don't repeat it.
+- **Header** (sticky, translucent): YS mark + name (→ home), How I work, Projects, Resume, theme toggle (sun/moon), and a primary **Contact me** button (→ #contact). Below 900px the links collapse into a **Menu** disclosure; theme toggle and Contact me stay visible. This is the one persistent contact button: other sections don't repeat it.
 - **Footer**: copyright and a one-line sign-off ("Planned, built, and tested with care.").
 - Skip link; visible focus states everywhere.
 
