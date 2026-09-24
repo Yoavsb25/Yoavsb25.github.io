@@ -46,9 +46,12 @@ const el = (
   children?: unknown,
 ): Node => ({ type, props: { style, children } });
 
+/** Titles longer than this drop from 84px to 64px so they still fit the card. */
+const LONG_TITLE_CHARS = 60;
+
 /** The card as a satori element tree. Pure, so it can be tested without rendering. */
 export function ogElement(card: OgCard): Node {
-  const long = card.title.length > 60;
+  const long = card.title.length > LONG_TITLE_CHARS;
   return el(
     "div",
     {
