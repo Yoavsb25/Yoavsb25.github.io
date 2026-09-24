@@ -14,11 +14,15 @@ skills:
   - Docker & AWS
 skillGroups:
   - group: AI & automation
-    items: [Claude Code, LLM integrations, AI-assisted tooling]
+    items: [Claude Code, Cursor, LLM integrations, AI-assisted tooling]
   - group: Languages
-    items: [Python, TypeScript, SQL]
+    items: [Python, TypeScript, JavaScript, HTML, CSS, Java, SQL, Bash, C]
+  - group: Backend
+    items: [Flask, Django, Express, REST APIs]
   - group: Infrastructure
-    items: [Docker, AWS, GitHub Actions, Kubernetes (GitOps)]
+    items: [Docker, AWS, GitHub Actions, ArgoCD/Kargo (GitOps), Linux]
+  - group: Frontend
+    items: [React, Vite]
   - group: Testing
     items: [Pytest, Playwright, Vitest]
 sections:
