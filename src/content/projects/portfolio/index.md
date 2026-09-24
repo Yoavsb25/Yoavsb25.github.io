@@ -22,8 +22,8 @@ results:
     label: of changes reviewed and tested before going live
   - figure: "0"
     label: passwords or secrets ever committed
-  - figure: "1"
-    label: click to publish a new version
+  - figure: "7"
+    label: automatic checks every change must pass to go live
 order: 1
 featured: true
 ---
