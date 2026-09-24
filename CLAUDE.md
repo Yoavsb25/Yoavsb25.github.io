@@ -8,15 +8,15 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 ## Commands
 
-| Command            | Purpose                                                                 |
-| ------------------ | ----------------------------------------------------------------------- |
-| `npm run dev`      | Local dev server at http://localhost:4321/ (`site.base`)                |
-| `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build   |
-| `npm run format`   | Auto-format everything                                                  |
-| `npm run test`     | Unit tests (Vitest)                                                     |
-| `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes) |
-| `npm run browsers` | Install Chromium for the e2e runner and the Playwright MCP              |
-| `npm run audit`    | Fail on high/critical dependency vulnerabilities                        |
+| Command            | Purpose                                                                         |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `npm run dev`      | Local dev server at http://localhost:4321/ (`site.base`)                        |
+| `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build           |
+| `npm run format`   | Auto-format everything                                                          |
+| `npm run test`     | Unit tests (Vitest)                                                             |
+| `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone) |
+| `npm run browsers` | Install Chromium + WebKit for the e2e runner, Chromium for the MCP              |
+| `npm run audit`    | Fail on high/critical dependency vulnerabilities                                |
 
 ## Layout
 

@@ -13,7 +13,7 @@ The product brief asks for WCAG AA in both themes and a small byte budget per pa
 - Routes are discovered from `dist/`, so every new page is tested without editing the suite.
 - Per route, in light and dark (`colorScheme` emulation): HTTP 200, zero axe violations for WCAG 2.0/2.1/2.2 A and AA, no console or page errors.
 - Per route, once: the byte budgets in `tests/e2e/support.ts` (HTML, CSS, JS, fonts, woff2 only, preloaded fonts). That file is the source of truth for the budgets; `/perf-audit` reads it.
-- `npm run browsers` installs Chromium for both the e2e runner and the MCP server, since each Playwright version prunes browsers it does not know.
+- `npm run browsers` installs Chromium for both the e2e runner and the MCP server (plus WebKit for the runner's iPhone project), since each Playwright version prunes browsers it does not know.
 
 ## Consequences
 

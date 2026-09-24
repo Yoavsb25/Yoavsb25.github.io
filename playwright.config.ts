@@ -27,6 +27,11 @@ export default defineConfig({
       name: "dark",
       use: { ...devices["Desktop Chrome"], colorScheme: "dark" },
     },
+    // Safari's engine at phone width: the mobile header menu and collapsed layouts.
+    {
+      name: "iphone",
+      use: { ...devices["iPhone 16"], colorScheme: "light" },
+    },
   ],
   webServer: {
     command: `npm run preview -- --port ${port} --host 127.0.0.1`,
