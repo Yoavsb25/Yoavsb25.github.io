@@ -68,6 +68,7 @@ Headings use `text-wrap: balance`. Numbers in timelines use `tabular-nums`.
 - Container: max 1120px, 24px side gutter (16px minimum on small phones).
 - Section rhythm: `--section-y`, 120px vertical padding on desktop, 80px below 900px. The hero is tighter because it sits under the header.
 - Spacing scale (px): 4, 8, 12, 16, 24, 32, 48, 64, 96, 120. Use `gap` on flex/grid, not margins between siblings.
+- New spacing uses the scale tokens (`--space-1` … `--space-10`). Two exceptions, kept as literals: small spacing inside a component (under 16px, e.g. 6px icon gaps, 14px label-to-heading), and the larger off-scale values already in place (e.g. 56px column gaps), which came from the approved mockup and stay until a redesign.
 - Grids: work cards in 3 columns (featured spans all), resume 1.6fr / 1fr, case study 220px TOC / content. All collapse to one column below 900px.
 
 ## Shape and depth

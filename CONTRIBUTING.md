@@ -14,7 +14,8 @@ npm run dev
 2. Branch from `main`: `<type>/<short-name>` (e.g. `feat/design-system`).
 3. Commit with [Conventional Commits](https://www.conventionalcommits.org/). The `commit-msg` hook rejects anything else.
 4. Run `npm run verify` before opening the PR.
-5. CI must be green (`verify`, `audit`, `e2e`, `lighthouse`, `links`, `actionlint`, `codeql`) before merge.
+5. Give the PR a Conventional Commit title (`gh pr create --title "feat: …"`, not the branch-name default): the repo squash-merges, so it becomes the commit on `main`. The `pr-title` check enforces it.
+6. CI must be green (`verify`, `audit`, `e2e`, `lighthouse`, `links`, `actionlint`, `codeql`, `pr-title`) before merge.
 
 ## Git hooks (lefthook)
 

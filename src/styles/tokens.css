@@ -1,6 +1,7 @@
 /*
  * Design tokens: the single source of truth for color, type, space, shape, and motion
- * (docs/design-system.md, ADR-0007). Components use these variables only.
+ * (docs/design-system.md, ADR-0007). Components use these variables; the spacing
+ * exceptions are listed in docs/design-system.md → Layout and spacing.
  *
  * Themes: light is the default on :root. Dark applies when the visitor chose it
  * ([data-theme="dark"]) or, with no choice saved, when the system prefers dark.
