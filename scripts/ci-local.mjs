@@ -25,7 +25,7 @@ const steps = [
   // verify already built dist/, so run Playwright directly instead of test:e2e. Its own
   // CLI by path: the MCP's Playwright alpha also ships a `playwright` bin (see ci.yml).
   ["e2e", "node", ["node_modules/@playwright/test/cli.js", "test"]],
-  ["links", "npm", ["run", "stage"]],
+  ["stage", "npm", ["run", "stage"]],
   [
     "links",
     "lychee",

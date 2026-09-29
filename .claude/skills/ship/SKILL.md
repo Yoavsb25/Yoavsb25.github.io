@@ -25,7 +25,7 @@ The goal is that what gets merged is exactly what was reviewed and verified. Thi
 
 2. **Fix what failed**, within the current PR's scope:
    - Uncommitted changes: commit them (conventional message) or ask the user if they belong to this PR.
-   - Behind `origin/main`: `git rebase origin/main`, resolve conflicts, rerun verify. Tell the user a force-push of the branch will be needed.
+   - Behind `origin/main`: `git rebase origin/main`, resolve conflicts, rerun the preflight. Tell the user a force-push of the branch will be needed.
    - `ci:local` failing: fix the cause; never weaken a check to pass.
    - Not pushed: tell the user to push; do not push.
      Then rerun the preflight until every line is ✅ except "pushed".

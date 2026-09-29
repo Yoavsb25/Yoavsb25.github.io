@@ -9,6 +9,7 @@ const PROTECTED_PATHS = [
   "CLAUDE.md",
   ".mcp.json",
   "scripts/guards/",
+  "scripts/ci-local.mjs", // the pre-push gate (ADR-0020)
   "package.json",
   "package-lock.json",
   "lefthook.yml",

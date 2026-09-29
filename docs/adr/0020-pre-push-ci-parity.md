@@ -12,6 +12,7 @@ Pre-push ran only `npm run verify`. `audit`, `e2e`, `links`, and `actionlint` fi
 - `npm run ci:local` (`scripts/ci-local.mjs`) runs, in order and stopping at the first failure: `verify`, `audit`, Playwright e2e on the build `verify` made, `stage` + lychee `--offline` (the CI `links` job), and `actionlint`.
 - lefthook pre-push runs `ci:local` instead of `verify`. The `/ship` preflight does too.
 - `lychee` and `actionlint` are local binaries (`brew install lychee actionlint`), not npm dependencies. The script fails with the install command when either is missing, so the gate never passes silently.
+- `scripts/ci-local.mjs` is a protected path: it holds the gate, so weakening it is the same bypass as `--no-verify`.
 - `verify` stays the Definition of Done for a single change; `ci:local` is the bar for a push.
 
 ## Consequences
