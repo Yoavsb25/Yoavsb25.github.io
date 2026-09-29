@@ -71,11 +71,11 @@ if (!upstream.ok) {
   );
 }
 
-const verify = run("npm", ["run", "--silent", "verify"]);
+const ci = run("npm", ["run", "--silent", "ci:local"]);
 check(
-  verify.ok,
-  "npm run verify",
-  verify.ok ? "" : (verify.out + "\n" + verify.err).slice(-1500),
+  ci.ok,
+  "npm run ci:local",
+  ci.ok ? "" : (ci.out + "\n" + ci.err).slice(-1500),
 );
 
 for (const { ok, label, hint } of results) {

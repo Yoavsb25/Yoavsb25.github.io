@@ -1,4 +1,4 @@
-# Local git hooks. Same standards as CI, scoped to staged files for speed.
+# Local git hooks. Same standards as CI; pre-commit is scoped to staged files for speed.
 pre-commit:
   parallel: true
   commands:
@@ -15,10 +15,11 @@ pre-commit:
       run: npx eslint --max-warnings 0 --fix {staged_files}
       stage_fixed: true
 
+# Every CI check that runs on a Mac, so a push should not turn a PR red (ADR-0020).
 pre-push:
   commands:
-    verify:
-      run: npm run verify
+    ci-local:
+      run: npm run ci:local
 
 commit-msg:
   commands:

@@ -22,7 +22,8 @@ One PR at a time; the next starts only after the previous is merged.
 | 16  | `fix/mobile-nav-and-content`   | Mobile header menu (CSS budget 20 → 22 KB), real result figures                                                                      | ✅ merged      |
 | 17  | `chore/audit-low`              | Version `1.0.0` (tag after merge), iPhone WebKit e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                         | ✅ merged      |
 | 18  | `refactor/tokens-and-helpers`  | Spacing tokens + documented exceptions, named OG title threshold, `pr-title` CI check                                                | ✅ merged      |
-| 19  | `test/visual-and-coverage`     | Per-section visual regression on Linux baselines (ADR-0018), 100% `src/lib` coverage (ADR-0019)                                      | 🚧 in progress |
+| 19  | `test/visual-and-coverage`     | Per-section visual regression on Linux baselines (ADR-0018), 100% `src/lib` coverage (ADR-0019)                                      | ✅ merged      |
+| 20  | `ci/pre-push-parity`           | `npm run ci:local` (verify, audit, e2e, links, actionlint) as the pre-push hook and `/ship` gate (ADR-0020)                          | 🚧 in progress |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
 `

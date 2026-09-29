@@ -17,6 +17,7 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 | `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone) |
 | `npm run browsers` | Install Chromium + WebKit for the e2e runner, Chromium for the MCP              |
 | `npm run audit`    | Fail on high/critical dependency vulnerabilities                                |
+| `npm run ci:local` | Pre-push gate: verify, audit, e2e, internal links, actionlint (ADR-0020)        |
 
 ## Layout
 
@@ -77,7 +78,7 @@ The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless,
 One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 
 1. **Claude hooks** (`.claude/`) — intercept the agent's actions _before_ they happen.
-2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, file size (500 KB), lockfile sync, Prettier, ESLint, commitlint; `npm run verify` before push.
+2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, file size (500 KB), lockfile sync, Prettier, ESLint, commitlint; `npm run ci:local` before push.
 3. **GitHub** — CI checks, branch protection, CODEOWNERS review, secret scanning. Cannot be bypassed.
 
 ## Claude Code hooks (enforced automatically)
