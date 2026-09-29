@@ -17,6 +17,10 @@ npm run dev
 5. Give the PR a Conventional Commit title (`gh pr create --title "feat: …"`, not the branch-name default): the repo squash-merges, so it becomes the commit on `main`. The `pr-title` check enforces it.
 6. CI must be green (`verify`, `audit`, `e2e`, `lighthouse`, `links`, `actionlint`, `codeql`, `pr-title`) before merge.
 
+## Visual baselines
+
+Screenshots in `tests/e2e/__screenshots__/` are rendered on Linux in CI (ADR-0018), so visual tests skip on macOS. After an intended visual change, delete the affected PNGs (or the project folder) and push: the `e2e` job fails, and its `playwright-report` artifact contains the new baselines under `tests/e2e/__screenshots__/`. Review them, commit them, and push again. An unintended diff shows up in the same artifact's HTML report.
+
 ## Git hooks (lefthook)
 
 - **pre-commit** — secret scan, `.env` block, 500 KB file limit, lockfile-in-sync check, Prettier and ESLint `--fix` on staged files.

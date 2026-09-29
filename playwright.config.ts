@@ -18,6 +18,11 @@ export default defineConfig({
     baseURL,
     trace: "retain-on-failure",
   },
+  // Visual baselines (ADR-0018): Linux only, so no platform suffix in the path.
+  snapshotPathTemplate: "{testDir}/__screenshots__/{projectName}/{arg}{ext}",
+  expect: {
+    toHaveScreenshot: { maxDiffPixelRatio: 0.002, animations: "disabled" },
+  },
   projects: [
     {
       name: "light",
