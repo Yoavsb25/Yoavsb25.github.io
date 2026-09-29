@@ -5,6 +5,8 @@
 ```sh
 nvm use          # Node version from .nvmrc
 npm ci           # also installs git hooks via lefthook
+npm run browsers # Chromium + WebKit for e2e
+brew install lychee actionlint  # used by the pre-push hook
 npm run dev
 ```
 
@@ -13,7 +15,7 @@ npm run dev
 1. Pick the next item in `docs/roadmap.md`; one PR per item.
 2. Branch from `main`: `<type>/<short-name>` (e.g. `feat/design-system`).
 3. Commit with [Conventional Commits](https://www.conventionalcommits.org/). The `commit-msg` hook rejects anything else.
-4. Run `npm run verify` before opening the PR.
+4. Run `npm run verify` while working; the pre-push hook runs `npm run ci:local` (every CI check that runs on a Mac, ADR-0020).
 5. Give the PR a Conventional Commit title (`gh pr create --title "feat: …"`, not the branch-name default): the repo squash-merges, so it becomes the commit on `main`. The `pr-title` check enforces it.
 6. CI must be green (`verify`, `audit`, `e2e`, `lighthouse`, `links`, `actionlint`, `codeql`, `pr-title`) before merge.
 
@@ -25,7 +27,7 @@ Screenshots in `tests/e2e/__screenshots__/` are rendered on Linux in CI (ADR-001
 
 - **pre-commit** — secret scan, `.env` block, 500 KB file limit, lockfile-in-sync check, Prettier and ESLint `--fix` on staged files.
 - **commit-msg** — commitlint (conventional commits).
-- **pre-push** — `npm run verify`.
+- **pre-push** — `npm run ci:local`: verify, audit, e2e, internal links, actionlint. Visual diffs, Lighthouse, CodeQL, and `pr-title` run only in CI.
 
 Do not bypass hooks with `--no-verify`.
 

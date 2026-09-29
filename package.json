@@ -20,6 +20,7 @@
     "browsers": "node scripts/install-browsers.mjs",
     "verify": "npm run format:check && npm run lint && npm run check && npm run test && npm run build",
     "audit": "npm audit --audit-level=high",
+    "ci:local": "node scripts/ci-local.mjs",
     "prepare": "lefthook install"
   },
   "dependencies": {

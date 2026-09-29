@@ -42,6 +42,7 @@ describe("checkPath", () => {
     ".mcp.json",
     "package.json",
     "package-lock.json",
+    "scripts/ci-local.mjs",
   ])("asks before editing %s", (p) =>
     expect(checkPath(p).decision).toBe("ask"),
   );

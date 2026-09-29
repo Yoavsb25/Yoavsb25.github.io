@@ -21,12 +21,12 @@ The goal is that what gets merged is exactly what was reviewed and verified. Thi
    - branch contains the latest `origin/main` (after `git fetch`)
    - all commit messages follow Conventional Commits
    - every local commit is pushed to the branch's upstream (no upstream is reported, not failed)
-   - `npm run verify` passes
+   - `npm run ci:local` passes (verify, audit, e2e, internal links, actionlint; ADR-0020)
 
 2. **Fix what failed**, within the current PR's scope:
    - Uncommitted changes: commit them (conventional message) or ask the user if they belong to this PR.
-   - Behind `origin/main`: `git rebase origin/main`, resolve conflicts, rerun verify. Tell the user a force-push of the branch will be needed.
-   - Verify failing: fix the cause; never weaken a check to pass.
+   - Behind `origin/main`: `git rebase origin/main`, resolve conflicts, rerun the preflight. Tell the user a force-push of the branch will be needed.
+   - `ci:local` failing: fix the cause; never weaken a check to pass.
    - Not pushed: tell the user to push; do not push.
      Then rerun the preflight until every line is ✅ except "pushed".
 

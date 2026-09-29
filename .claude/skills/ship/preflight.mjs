@@ -1,8 +1,8 @@
 // /ship preflight: report whether the current branch is ready for a PR. Read-only apart from `git fetch`.
 import { spawnSync } from "node:child_process";
 
-const run = (cmd, args) => {
-  const r = spawnSync(cmd, args, { encoding: "utf8" });
+const run = (cmd, args, opts = {}) => {
+  const r = spawnSync(cmd, args, { encoding: "utf8", ...opts });
   return {
     ok: r.status === 0,
     out: (r.stdout ?? "").trim(),
@@ -71,11 +71,14 @@ if (!upstream.ok) {
   );
 }
 
-const verify = run("npm", ["run", "--silent", "verify"]);
+// Minutes of e2e output: raise spawnSync's 1 MiB buffer so the log cannot kill the run.
+const ci = run("npm", ["run", "--silent", "ci:local"], {
+  maxBuffer: 64 * 1024 * 1024,
+});
 check(
-  verify.ok,
-  "npm run verify",
-  verify.ok ? "" : (verify.out + "\n" + verify.err).slice(-1500),
+  ci.ok,
+  "npm run ci:local",
+  ci.ok ? "" : (ci.out + "\n" + ci.err).slice(-1500),
 );
 
 for (const { ok, label, hint } of results) {

@@ -17,6 +17,7 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 | `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone) |
 | `npm run browsers` | Install Chromium + WebKit for the e2e runner, Chromium for the MCP              |
 | `npm run audit`    | Fail on high/critical dependency vulnerabilities                                |
+| `npm run ci:local` | Pre-push gate: verify, audit, e2e, internal links, actionlint (ADR-0020)        |
 
 ## Layout
 
@@ -77,7 +78,7 @@ The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless,
 One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 
 1. **Claude hooks** (`.claude/`) — intercept the agent's actions _before_ they happen.
-2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, file size (500 KB), lockfile sync, Prettier, ESLint, commitlint; `npm run verify` before push.
+2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, file size (500 KB), lockfile sync, Prettier, ESLint, commitlint; `npm run ci:local` before push.
 3. **GitHub** — CI checks, branch protection, CODEOWNERS review, secret scanning. Cannot be bypassed.
 
 ## Claude Code hooks (enforced automatically)
@@ -92,7 +93,7 @@ One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 | After Bash        | `dependency-reminder.mjs` | After `npm install <pkg>`, reminds that new dependencies need an ADR                                                                                                              |
 | Before stopping   | `quick-check.mjs`         | If source changed, runs lint + `astro check`; failures must be fixed                                                                                                              |
 
-Protected paths (see `scripts/guards/rules.mjs`, resolved and case-insensitive): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/` (all of it, including `settings.local.json`), `CLAUDE.md`, `.mcp.json`, `scripts/guards/`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+Protected paths (see `scripts/guards/rules.mjs`, resolved and case-insensitive): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/` (all of it, including `settings.local.json`), `CLAUDE.md`, `.mcp.json`, `scripts/guards/`, `scripts/ci-local.mjs`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
 
 Agent boundaries are enforced by the global guard hooks using the subagent's `agent_type` (ADR-0009): reviewers get one plain read-only command at a time, `a11y-reviewer` has no shell, `content-editor` writes only site copy. Guard hooks fail closed.
 
