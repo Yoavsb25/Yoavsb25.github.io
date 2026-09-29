@@ -24,11 +24,13 @@ for (const route of builtRoutes()) {
     await page.goto(route, { waitUntil: "networkidle" });
     await page.evaluate(async () => {
       await document.fonts.ready;
-      // Sticky, it would paint over every block below it. Set through the DOM because
-      // the CSP blocks an injected <style>.
-      document
-        .querySelector<HTMLElement>(".site-header")
-        ?.style.setProperty("position", "static");
+      // Sticky, it would paint over every block below it. Its backdrop blur can keep
+      // software-rendered WebKit (iphone in CI) from settling before the stability
+      // check times out. Set through the DOM because the CSP blocks an injected <style>.
+      const header = document.querySelector<HTMLElement>(".site-header");
+      header?.style.setProperty("position", "static");
+      header?.style.setProperty("backdrop-filter", "none");
+      header?.style.setProperty("-webkit-backdrop-filter", "none");
     });
 
     const blocks = await page
