@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  behindRemote,
   checkAgentCommand,
   checkBranch,
   checkCommand,
@@ -448,4 +449,21 @@ describe("compareSuppressions", () => {
       ]);
     },
   );
+});
+
+describe("behindRemote", () => {
+  it("allows a branch that has every remote commit", () => {
+    expect(behindRemote(0, "origin/feat/x")).toBeNull();
+  });
+
+  it("ignores a count it could not read", () => {
+    expect(behindRemote(Number.NaN, "origin/feat/x")).toBeNull();
+  });
+
+  it("names the merge to run when the remote is ahead", () => {
+    expect(behindRemote(1, "origin/feat/x")).toBe(
+      "origin/feat/x has 1 commit this branch does not. Merge it first: git merge origin/feat/x",
+    );
+    expect(behindRemote(3, "origin/feat/x")).toMatch(/has 3 commits/);
+  });
 });

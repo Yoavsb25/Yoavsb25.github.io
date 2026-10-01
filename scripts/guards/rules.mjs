@@ -330,3 +330,14 @@ export function checkContentPath(repoPath) {
     ? null
     : `content-editor may only write src/content/**, not ${repoPath}.`;
 }
+
+/**
+ * @param {number} behind commits on the remote branch that HEAD lacks (`git rev-list --count HEAD..<ref>`)
+ * @param {string} remoteRef e.g. origin/feat/x
+ * @returns {string | null} why a push would be rejected, or null (ADR-0022)
+ */
+export function behindRemote(behind, remoteRef) {
+  if (!Number.isInteger(behind) || behind <= 0) return null;
+  const commits = behind === 1 ? "commit" : "commits";
+  return `${remoteRef} has ${behind} ${commits} this branch does not. Merge it first: git merge ${remoteRef}`;
+}
