@@ -7,7 +7,7 @@
  */
 import { spawnSync } from "node:child_process";
 
-import { behindRemote } from "./guards/rules.mjs";
+import { behindRemote, remoteRefFor } from "./guards/rules.mjs";
 
 const tools = {
   lychee: "brew install lychee",
@@ -24,24 +24,28 @@ if (missing.length) {
 }
 
 // A branch updated on GitHub (e.g. "Update branch") rejects the push after every check has run.
-// Fetch it first; skip when there is no remote branch yet or no network.
+// Fetch it first; skip on a detached HEAD, when there is no remote branch yet, or offline.
 const branch = spawnSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], {
   encoding: "utf8",
 }).stdout.trim();
-if (spawnSync("git", ["fetch", "--quiet", "origin", branch]).status === 0) {
+const remoteRef = remoteRefFor(branch);
+if (
+  remoteRef &&
+  spawnSync("git", ["fetch", "--quiet", "origin", branch]).status === 0
+) {
   const behind = Number(
-    spawnSync("git", ["rev-list", "--count", `HEAD..origin/${branch}`], {
+    spawnSync("git", ["rev-list", "--count", `HEAD..${remoteRef}`], {
       encoding: "utf8",
     }).stdout.trim(),
   );
-  const why = behindRemote(behind, `origin/${branch}`);
+  const why = behindRemote(behind, remoteRef);
   if (why) {
     console.error(`✖ ${why}`);
     process.exit(1);
   }
 } else {
   console.log(
-    `▷ remote: no origin/${branch} to compare (new branch or offline)`,
+    `▷ remote: nothing to compare for ${branch} (detached, new branch, or offline)`,
   );
 }
 

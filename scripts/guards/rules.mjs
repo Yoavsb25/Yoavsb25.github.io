@@ -332,6 +332,15 @@ export function checkContentPath(repoPath) {
 }
 
 /**
+ * @param {string} branch from `git rev-parse --abbrev-ref HEAD`
+ * @returns {string | null} the remote branch ci:local compares against, or null on a detached
+ *   HEAD, where origin/HEAD is main and would block wrongly (ADR-0022)
+ */
+export function remoteRefFor(branch) {
+  return branch && branch !== "HEAD" ? `origin/${branch}` : null;
+}
+
+/**
  * @param {number} behind commits on the remote branch that HEAD lacks (`git rev-list --count HEAD..<ref>`)
  * @param {string} remoteRef e.g. origin/feat/x
  * @returns {string | null} why a push would be rejected, or null (ADR-0022)

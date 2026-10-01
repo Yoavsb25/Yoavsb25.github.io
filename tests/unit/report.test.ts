@@ -149,7 +149,8 @@ describe("pickRun", () => {
 
   it("refuses when CI has not run this commit", () => {
     expect(pickRun([run({ headSha: "other" })], sha)).toEqual({
-      error: expect.stringMatching(/No CI run for 0c9275e/),
+      // CI runs on pull requests, not on every branch push.
+      error: expect.stringMatching(/No CI run for 0c9275e.*open a PR/),
     });
   });
 

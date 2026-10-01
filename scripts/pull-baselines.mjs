@@ -64,7 +64,7 @@ const tmp = mkdtempSync(path.join(tmpdir(), "baselines-"));
 run(
   "gh",
   ["run", "download", id, "--name", "playwright-report", "--dir", tmp],
-  `CI run ${id} has no playwright-report artifact: the e2e job passed or did not run.`,
+  `CI run ${id} has no playwright-report artifact: the e2e job passed or did not run, or the artifact expired (kept 7 days; re-run the e2e job).`,
 );
 const report = path.join(tmp, "playwright-report");
 const zip = path.join(tmp, "report.zip");

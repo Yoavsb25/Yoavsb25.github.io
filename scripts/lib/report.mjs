@@ -83,7 +83,7 @@ export function pickRun(runs, headSha) {
   const run = runs.find((r) => r.headSha === headSha);
   if (!run) {
     return {
-      error: `No CI run for ${headSha.slice(0, 7)}. Push it and wait for CI, or pull first if the branch moved.`,
+      error: `No CI run for ${headSha.slice(0, 7)}. CI runs on pull requests: push, open a PR, and wait for it, or pull first if the branch moved.`,
     };
   }
   if (run.status !== "completed") {

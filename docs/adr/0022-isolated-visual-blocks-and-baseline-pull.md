@@ -12,8 +12,8 @@ PR #34 changed one card and one case-study header. CI failed 30 screenshots: 15 
 - `tests/e2e/visual.spec.ts` hides every other block before screenshotting one, so a block's position never depends on another's height. A visual change fails only the blocks it touches.
 - `npm run baselines:pull` (`scripts/pull-baselines.mjs`) finds the failed CI run for HEAD with `gh`, reads the Playwright HTML report from its `playwright-report` artifact, and copies each failed screenshot's actual image over its baseline. It refuses when the run is for another commit, still running, or passed, and when the failure has no screenshots. Parsing is pure and tested (`scripts/lib/report.mjs`), and skips any name that could write outside `tests/e2e/__screenshots__/<project>/`.
 - The guard asks before `baselines:pull` runs, as it does for `--update-snapshots`.
-- `ci:local` fetches the branch's remote first and stops if it is behind, naming the merge to run.
-- Amends ADR-0018: accepting a visual change is now push → CI fails → `npm run baselines:pull` → look → commit → push.
+- `ci:local` fetches the branch's remote first and stops if it is behind, naming the merge to run. It skips the check on a detached HEAD, where `origin/HEAD` is `main`.
+- Amends ADR-0018: accepting a visual change is now push with a PR open (CI runs on pull requests) → CI fails → `npm run baselines:pull` → look → commit → push.
 
 ## Consequences
 

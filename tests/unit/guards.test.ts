@@ -16,6 +16,7 @@ import {
   installedPackages,
   isGitCommit,
   protectedPathInCommand,
+  remoteRefFor,
   toRepoPath,
   writtenText,
 } from "../../scripts/guards/rules.mjs";
@@ -465,5 +466,16 @@ describe("behindRemote", () => {
       "origin/feat/x has 1 commit this branch does not. Merge it first: git merge origin/feat/x",
     );
     expect(behindRemote(3, "origin/feat/x")).toMatch(/has 3 commits/);
+  });
+});
+
+describe("remoteRefFor", () => {
+  it("compares a branch with its own remote branch", () => {
+    expect(remoteRefFor("feat/x")).toBe("origin/feat/x");
+  });
+
+  // On a detached HEAD, origin/HEAD is main: comparing against it would block wrongly.
+  it.each(["HEAD", ""])("has nothing to compare for %j", (branch) => {
+    expect(remoteRefFor(branch)).toBeNull();
   });
 });
