@@ -101,7 +101,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/quick-check.mjs"
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/quick-check.mjs",
+            "timeout": 600
           }
         ]
       }

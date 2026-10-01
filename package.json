@@ -18,7 +18,8 @@
     "test:e2e": "astro build && playwright test",
     "stage": "node scripts/stage-site.mjs",
     "browsers": "node scripts/install-browsers.mjs",
-    "verify": "npm run format:check && npm run lint && npm run check && npm run test && npm run build",
+    "verify": "npm run guards && npm run format:check && npm run lint && npm run check && npm run test && npm run build",
+    "guards": "node scripts/guards/check-suppressions.mjs",
     "audit": "npm audit --audit-level=high",
     "ci:local": "node scripts/ci-local.mjs",
     "prepare": "lefthook install"
