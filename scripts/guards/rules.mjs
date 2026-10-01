@@ -3,9 +3,9 @@ import path from "node:path";
 
 /** Paths that need explicit user approval before they change. Entries ending in "/" cover a directory. */
 const PROTECTED_PATHS = [
-  ".github/workflows/",
-  ".github/CODEOWNERS",
+  ".github/", // workflows, composite actions, CODEOWNERS, Dependabot, templates
   ".claude/",
+  ".cursor/",
   "CLAUDE.md",
   "AGENTS.md", // the rules every AI tool follows (ADR-0024)
   ".mcp.json",
@@ -27,6 +27,22 @@ const PROTECTED_PATHS = [
  */
 const PROTECTED_NAMES =
   /^(?:(?:eslint|vitest|playwright|commitlint|prettier)\.config\.(?:[cm]?[jt]s|json)|\.?stryker\.conf(?:ig)?\.(?:json|[cm]?[jt]s)|\.?knip(?:\.config)?\.(?:jsonc?|[cm]?[jt]s)|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
+
+/**
+ * Instruction files AI tools load, at any depth: a nested one overrides the root rules for its
+ * folder. Only the root AGENTS.md and CLAUDE.md are allowed (ADR-0024).
+ */
+const AGENT_RULE_FILES =
+  /^(?:AGENTS(?:\.override)?\.md|CLAUDE(?:\.local)?\.md|GEMINI\.md|\.cursorrules|\.windsurfrules|copilot-instructions\.md)$/i;
+const ROOT_RULE_FILES = ["AGENTS.md", "CLAUDE.md"];
+
+/** @returns {boolean} true for an AI instruction file other than the root AGENTS.md or CLAUDE.md. */
+export function isStrayAgentRuleFile(repoPath) {
+  return (
+    AGENT_RULE_FILES.test(path.posix.basename(repoPath)) &&
+    !ROOT_RULE_FILES.includes(repoPath)
+  );
+}
 
 /** Paths that must never be written or committed. */
 const FORBIDDEN = [/(^|\/)\.env(\..*)?$/];
@@ -95,7 +111,8 @@ export function toRepoPath(filePath, projectDir) {
 
 function isProtected(repoPath) {
   const lower = repoPath.toLowerCase();
-  if (PROTECTED_NAMES.test(path.posix.basename(lower))) return true;
+  const name = path.posix.basename(lower);
+  if (PROTECTED_NAMES.test(name) || AGENT_RULE_FILES.test(name)) return true;
   return PROTECTED_PATHS.map((p) => p.toLowerCase()).some((p) =>
     p.endsWith("/") ? lower.startsWith(p) : lower === p,
   );
@@ -152,9 +169,10 @@ export function protectedPathInCommand(command) {
   );
   if (dir) return dir;
   return (
-    lower
-      .split(/[\s"'=;&|()<>]+/)
-      .find((token) => PROTECTED_NAMES.test(path.posix.basename(token))) ?? null
+    lower.split(/[\s"'=;&|()<>]+/).find((token) => {
+      const name = path.posix.basename(token);
+      return PROTECTED_NAMES.test(name) || AGENT_RULE_FILES.test(name);
+    }) ?? null
   );
 }
 
@@ -265,50 +283,6 @@ export function currentRoadmapItem(markdown) {
       .find((line) => line.includes("🚧"))
       ?.trim() ?? null
   );
-}
-
-/**
- * Roadmap consistency for a PR (ADR-0024): at most one row in progress, and a roadmap branch
- * marks its own row in progress, so the roadmap never drifts from what is being merged.
- * @returns {string[]} problems, empty when consistent.
- */
-export function checkRoadmap(markdown, branch) {
-  const rows = markdown.split("\n").filter((l) => /^\|\s*\d+\s*\|/.test(l));
-  const problems = [];
-  const active = rows.filter((r) => r.includes("🚧"));
-  if (active.length > 1) {
-    problems.push(
-      `docs/roadmap.md: ${active.length} rows are 🚧 in progress; mark merged PRs ✅ merged.`,
-    );
-  }
-  const own = rows.find((r) => r.includes(`\`${branch}\``));
-  if (own && !own.includes("🚧")) {
-    problems.push(
-      `docs/roadmap.md: the row for ${branch} must be 🚧 in progress.`,
-    );
-  }
-  return problems;
-}
-
-/**
- * The commit-time checks, for one file a PR adds or changes, so they also hold for commits
- * made without the git hooks (any agent, any machine; ADR-0024).
- * @returns {string[]} problems with this file.
- */
-export function checkPrFile(repoPath, sizeBytes, text) {
-  if (checkPath(repoPath).decision === "deny") {
-    return [`${repoPath}: env files must never be committed`];
-  }
-  const problems = [];
-  if (sizeBytes > MAX_FILE_BYTES) {
-    problems.push(
-      `${repoPath}: ${Math.round(sizeBytes / 1024)} KB exceeds ${MAX_FILE_BYTES / 1024} KB`,
-    );
-  }
-  const secret = findSecret(text);
-  if (secret)
-    problems.push(`${repoPath}: looks like it contains a secret (${secret})`);
-  return problems;
 }
 
 /** Agents whose Bash is limited to READ_ONLY_COMMANDS. */

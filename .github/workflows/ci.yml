@@ -44,10 +44,22 @@ jobs:
         with:
           node-version-file: .nvmrc
       # No npm install: the guard scripts use only Node built-ins. Refs go through env (injection).
+      # Runs the base branch's copy of the guard, so a PR cannot weaken the check on itself. Only
+      # when the base has no guard yet (the PR that adds it) does the PR's own copy run.
       - env:
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
-        run: node scripts/guards/check-pr.mjs "origin/$BASE_REF" "$HEAD_REF"
+        run: |
+          guards="$RUNNER_TEMP/guards"
+          mkdir -p "$guards"
+          for f in check-pr.mjs pr-rules.mjs rules.mjs; do
+            if git cat-file -e "origin/$BASE_REF:scripts/guards/pr-rules.mjs" 2>/dev/null; then
+              git show "origin/$BASE_REF:scripts/guards/$f" > "$guards/$f"
+            else
+              cp "scripts/guards/$f" "$guards/$f"
+            fi
+          done
+          node "$guards/check-pr.mjs" "origin/$BASE_REF" "$HEAD_REF"
 
   audit:
     name: audit
