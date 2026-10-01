@@ -34,6 +34,8 @@ const projects = defineCollection({
       results: z.array(z.object({ figure: text, label: text })).length(3),
       order: z.number().int().nonnegative(),
       featured: z.boolean().default(false),
+      /** Milestone stamp on the card and case study, e.g. "Sold". */
+      badge: text.optional(),
       draft: z.boolean().default(false),
       cover: z.object({ src: image(), alt: text }).optional(),
     }),
