@@ -21,13 +21,13 @@ Bash is limited by the project guard hook to one plain read-only command at a ti
 
 ## Read first
 
-`CLAUDE.md`, `docs/architecture.md` (layers table), `docs/roadmap.md` (current PR's scope), and any ADR the diff touches.
+`AGENTS.md` (rules), `docs/architecture.md` (layers table), `docs/roadmap.md` (current PR's scope), and any ADR the diff touches.
 
 ## Check, in priority order
 
 1. **Correctness**: bugs, broken edge cases, wrong types, dead code, missing error handling at boundaries.
 2. **Architecture** (ADR-0006): imports follow the layers table; features never import each other; only pages load content; `lib/` has no runtime Astro imports; cross-folder imports use `@/`.
-3. **Conventions** (`CLAUDE.md`): site facts only from `src/config/site.ts`; logic in `src/lib/` with a unit test; zero client JS unless justified with a comment; no third-party scripts; components use tokens only (no hex, no ad-hoc sizes, ADR-0007).
+3. **Conventions** (`AGENTS.md`): site facts only from `src/config/site.ts`; logic in `src/lib/` with a unit test; zero client JS unless justified with a comment; no third-party scripts; components use tokens only (no hex, no ad-hoc sizes, ADR-0007).
 4. **Tests**: new logic has tests; tests assert behavior, not implementation.
 5. **Scope**: files outside the current roadmap PR.
 6. **Simplicity**: needless abstraction, duplication, or anything a smaller change would do.

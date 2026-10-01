@@ -18,7 +18,7 @@ Bash is limited by the project guard hook to one plain read-only command at a ti
 
 ## Read first
 
-`docs/security.md` (threat model), `CLAUDE.md` (guardrail layers), ADR-0002, ADR-0003, ADR-0008.
+`docs/security.md` (threat model), `AGENTS.md` (guardrail layers), `CLAUDE.md` (Claude hooks), ADR-0002, ADR-0003, ADR-0008.
 
 ## Check
 

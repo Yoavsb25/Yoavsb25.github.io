@@ -3,10 +3,11 @@ import path from "node:path";
 
 /** Paths that need explicit user approval before they change. Entries ending in "/" cover a directory. */
 const PROTECTED_PATHS = [
-  ".github/workflows/",
-  ".github/CODEOWNERS",
+  ".github/", // workflows, composite actions, CODEOWNERS, Dependabot, templates
   ".claude/",
+  ".cursor/",
   "CLAUDE.md",
+  "AGENTS.md", // the rules every AI tool follows (ADR-0024)
   ".mcp.json",
   "scripts/guards/",
   "scripts/ci-local.mjs", // the pre-push gate (ADR-0020)
@@ -26,6 +27,22 @@ const PROTECTED_PATHS = [
  */
 const PROTECTED_NAMES =
   /^(?:(?:eslint|vitest|playwright|commitlint|prettier)\.config\.(?:[cm]?[jt]s|json)|\.?stryker\.conf(?:ig)?\.(?:json|[cm]?[jt]s)|\.?knip(?:\.config)?\.(?:jsonc?|[cm]?[jt]s)|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
+
+/**
+ * Instruction files AI tools load, at any depth: a nested one overrides the root rules for its
+ * folder. Only the root AGENTS.md and CLAUDE.md are allowed (ADR-0024).
+ */
+const AGENT_RULE_FILES =
+  /^(?:AGENTS(?:\.override)?\.md|CLAUDE(?:\.local)?\.md|GEMINI\.md|\.cursorrules|\.windsurfrules|copilot-instructions\.md)$/i;
+const ROOT_RULE_FILES = ["AGENTS.md", "CLAUDE.md"];
+
+/** @returns {boolean} true for an AI instruction file other than the root AGENTS.md or CLAUDE.md. */
+export function isStrayAgentRuleFile(repoPath) {
+  return (
+    AGENT_RULE_FILES.test(path.posix.basename(repoPath)) &&
+    !ROOT_RULE_FILES.includes(repoPath)
+  );
+}
 
 /** Paths that must never be written or committed. */
 const FORBIDDEN = [/(^|\/)\.env(\..*)?$/];
@@ -94,7 +111,8 @@ export function toRepoPath(filePath, projectDir) {
 
 function isProtected(repoPath) {
   const lower = repoPath.toLowerCase();
-  if (PROTECTED_NAMES.test(path.posix.basename(lower))) return true;
+  const name = path.posix.basename(lower);
+  if (PROTECTED_NAMES.test(name) || AGENT_RULE_FILES.test(name)) return true;
   return PROTECTED_PATHS.map((p) => p.toLowerCase()).some((p) =>
     p.endsWith("/") ? lower.startsWith(p) : lower === p,
   );
@@ -111,7 +129,7 @@ export function checkPath(repoPath) {
   if (isProtected(repoPath)) {
     return {
       decision: "ask",
-      reason: `${repoPath} is a protected file (see CLAUDE.md). Confirm this edit.`,
+      reason: `${repoPath} is a protected file (see AGENTS.md). Confirm this edit.`,
     };
   }
   return { decision: "allow" };
@@ -151,9 +169,10 @@ export function protectedPathInCommand(command) {
   );
   if (dir) return dir;
   return (
-    lower
-      .split(/[\s"'=;&|()<>]+/)
-      .find((token) => PROTECTED_NAMES.test(path.posix.basename(token))) ?? null
+    lower.split(/[\s"'=;&|()<>]+/).find((token) => {
+      const name = path.posix.basename(token);
+      return PROTECTED_NAMES.test(name) || AGENT_RULE_FILES.test(name);
+    }) ?? null
   );
 }
 

@@ -2,7 +2,12 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   // Claude Code runs these directly (.claude/settings.json, skills), so nothing imports them.
-  "entry": [".claude/hooks/*.mjs", ".claude/skills/*/*.mjs"],
+  "entry": [
+    ".claude/hooks/*.mjs",
+    ".claude/skills/*/*.mjs",
+    // CI runs the base branch's copy from a temp directory (ADR-0024).
+    "scripts/guards/check-pr.mjs",
+  ],
   "ignoreDependencies": [
     // Launched by .mcp.json, not imported.
     "@playwright/mcp",

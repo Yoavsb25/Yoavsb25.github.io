@@ -19,7 +19,7 @@ An ADR captures one decision so a future reader (human or agent) knows what was 
    - **Context**: the problem and constraints, 2–4 sentences. Link the doc or ADR that forced the question.
    - **Decision**: what we chose, concretely (package names, file paths, rules). Bullets are fine.
    - **Consequences**: what gets easier, what gets harder, and one line naming the main alternative(s) rejected and why.
-5. **Update references.** If the decision changes a rule or structure described elsewhere, update that doc in the same change: `CLAUDE.md` (rules), `docs/architecture.md` (structure), `docs/security.md` (threats), `docs/design-system.md` (design).
+5. **Update references.** If the decision changes a rule or structure described elsewhere, update that doc in the same change: `AGENTS.md` (or `CLAUDE.md` for Claude-only hooks and agents) (rules), `docs/architecture.md` (structure), `docs/security.md` (threats), `docs/design-system.md` (design).
 6. **Verify.** Run `npm run verify` (Prettier formats Markdown tables).
 
 ## Rules

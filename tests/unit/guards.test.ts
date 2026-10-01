@@ -57,6 +57,15 @@ describe("checkPath", () => {
     "tsconfig.build.json",
     "src/.prettierrc",
     ".npmrc",
+    ".github/dependabot.yml",
+    ".github/actions/setup/action.yml",
+    "src/content/projects/AGENTS.md",
+    "src/lib/CLAUDE.md",
+    "CLAUDE.local.md",
+    "AGENTS.override.md",
+    ".cursorrules",
+    ".cursor/rules/style.mdc",
+    ".github/copilot-instructions.md",
     "knip.jsonc",
     "stryker.config.json",
     "stryker.config.mjs",
@@ -154,7 +163,7 @@ describe("checkBranch", () => {
 
 describe("protectedPathInCommand", () => {
   it.each([
-    ["sed -i '' 's/a/b/' .github/workflows/ci.yml", ".github/workflows/"],
+    ["sed -i '' 's/a/b/' .github/workflows/ci.yml", ".github/"],
     ["echo x > lefthook.yml", "lefthook.yml"],
     ["cat a >> .claude/settings.json", ".claude/"],
     ["mv tmp scripts/guards/rules.mjs", "scripts/guards/"],
@@ -364,9 +373,12 @@ describe("path traversal and case", () => {
     expect(checkPath(p).decision).toBe("deny");
   });
 
-  it.each([".claude/settings.local.json", "CLAUDE.md"])("protects %s", (p) => {
-    expect(checkPath(p).decision).toBe("ask");
-  });
+  it.each([".claude/settings.local.json", "CLAUDE.md", "AGENTS.md"])(
+    "protects %s",
+    (p) => {
+      expect(checkPath(p).decision).toBe("ask");
+    },
+  );
 });
 
 describe("countSuppressions", () => {

@@ -18,7 +18,7 @@ git log --oneline origin/main..HEAD
 
 Bash is limited by the project guard hook to one plain read-only command at a time: git diff/log/show/status, `git fetch --quiet origin`, ls/cat/head/tail/wc, and `npm run verify|check|lint|test|audit`. No pipes or chaining, and no `cd` or `git -C`: commands already run from the repo root. Use the Grep and Glob tools to search. Never commit, push, install, or modify files.
 
-Read `CLAUDE.md`, `docs/architecture.md`, and the `/refactor` skill (`.claude/skills/refactor/SKILL.md`) first.
+Read `AGENTS.md`, `docs/architecture.md`, and the `/refactor` skill (`.claude/skills/refactor/SKILL.md`) first.
 
 ## Check, in priority order
 
