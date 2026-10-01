@@ -167,6 +167,8 @@ describe("protectedPathInCommand", () => {
     ],
     ["cp a.json tests/tsconfig.json", "tests/tsconfig.json"],
     ["npm run test:e2e -- --update-snapshots", "tests/e2e/__screenshots__/"],
+    ["npm run baselines:pull", "tests/e2e/__screenshots__/"],
+    ["node scripts/pull-baselines.mjs", "tests/e2e/__screenshots__/"],
   ])("flags %s", (cmd, path) => {
     expect(protectedPathInCommand(cmd)).toBe(path);
   });

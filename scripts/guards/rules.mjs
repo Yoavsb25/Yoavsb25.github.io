@@ -137,8 +137,12 @@ export function checkCommand(command) {
 
 /** @returns {string | null} the protected path a command may modify, or null. */
 export function protectedPathInCommand(command) {
-  // Playwright rewrites the visual baselines itself, with no write operator in the command.
-  if (/--update-snapshots\b/.test(command)) return "tests/e2e/__screenshots__/";
+  // These rewrite the visual baselines themselves, with no write operator in the command.
+  if (
+    /--update-snapshots\b|\bbaselines:pull\b|pull-baselines\.mjs/.test(command)
+  ) {
+    return "tests/e2e/__screenshots__/";
+  }
   const cleaned = command.replace(
     /\d?>&\d|&>\s*\/dev\/null|\d?>\s*\/dev\/null/g,
     "",

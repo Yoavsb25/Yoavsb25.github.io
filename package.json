@@ -24,6 +24,7 @@
     "guards": "node scripts/guards/check-suppressions.mjs",
     "audit": "npm audit --audit-level=high",
     "ci:local": "node scripts/ci-local.mjs",
+    "baselines:pull": "node scripts/pull-baselines.mjs",
     "prepare": "lefthook install"
   },
   "dependencies": {
