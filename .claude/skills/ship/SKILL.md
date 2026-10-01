@@ -35,7 +35,7 @@ The goal is that what gets merged is exactly what was reviewed and verified. Thi
 4. **Update the roadmap** row for this PR if its scope changed, and make sure it says `🚧 in progress`.
 
 5. **Draft the PR** and show it to the user:
-   - **Title**: a Conventional Commit, e.g. `feat: add design system tokens and primitives`. The repo squash-merges, so this title becomes the commit on `main`.
+   - **Title**: a Conventional Commit, e.g. `feat: add design system tokens and primitives`. The repo squash-merges, so this title becomes the commit on `main`. Check it with `printf '%s\n' "<title>" | npx --no-install commitlint` — the same check the `PR title` workflow runs. Never let GitHub default the title to the branch name (it does for multi-commit PRs opened in the web UI); if a PR for this branch already exists, check its title with `gh pr view --json title` and give `gh pr edit --title "<title>"` when it fails.
    - **Body**: fill `.github/pull_request_template.md`: What (1–2 sentences), How to verify (commands or steps), checklist.
    - The exact commands for the user:
      ```sh
