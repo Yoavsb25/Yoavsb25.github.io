@@ -8,19 +8,20 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 ## Commands
 
-| Command                 | Purpose                                                                                           |
-| ----------------------- | ------------------------------------------------------------------------------------------------- |
-| `npm run dev`           | Local dev server at http://localhost:4321/ (`site.base`)                                          |
-| `npm run verify`        | **Definition of Done** — guards, format:check, lint, knip, astro check, test, build               |
-| `npm run format`        | Auto-format everything                                                                            |
-| `npm run test`          | Unit tests (Vitest)                                                                               |
-| `npm run test:mutation` | Stryker on `src/lib` (~80 s): tests must catch planted bugs; score ≥ `break` threshold (ADR-0023) |
-| `npm run knip`          | Unused files, exports, dependencies (ADR-0022)                                                    |
-| `npm run test:e2e`      | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone)                   |
-| `npm run browsers`      | Install Chromium + WebKit for the e2e runner, Chromium for the MCP                                |
-| `npm run guards`        | Suppression ratchet: no new lint/type disables, coverage ignores, skipped tests (ADR-0021)        |
-| `npm run audit`         | Fail on high/critical dependency vulnerabilities                                                  |
-| `npm run ci:local`      | Pre-push gate: verify, audit, mutation, e2e, internal links, actionlint (ADR-0020)                |
+| Command                  | Purpose                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------- |
+| `npm run dev`            | Local dev server at http://localhost:4321/ (`site.base`)                                          |
+| `npm run verify`         | **Definition of Done** — guards, format:check, lint, knip, astro check, test, build               |
+| `npm run format`         | Auto-format everything                                                                            |
+| `npm run test`           | Unit tests (Vitest)                                                                               |
+| `npm run test:mutation`  | Stryker on `src/lib` (~80 s): tests must catch planted bugs; score ≥ `break` threshold (ADR-0023) |
+| `npm run knip`           | Unused files, exports, dependencies (ADR-0022)                                                    |
+| `npm run test:e2e`       | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone)                   |
+| `npm run browsers`       | Install Chromium + WebKit for the e2e runner, Chromium for the MCP                                |
+| `npm run guards`         | Suppression ratchet: no new lint/type disables, coverage ignores, skipped tests (ADR-0021)        |
+| `npm run audit`          | Fail on high/critical dependency vulnerabilities                                                  |
+| `npm run ci:local`       | Pre-push gate: verify, audit, mutation, e2e, internal links, actionlint (ADR-0020)                |
+| `npm run baselines:pull` | After CI fails a visual test: install the screenshots CI rendered as baselines (ADR-0024)         |
 
 ## Layout
 

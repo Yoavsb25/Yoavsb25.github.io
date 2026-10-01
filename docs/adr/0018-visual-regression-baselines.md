@@ -1,6 +1,6 @@
 # 0018. Visual regression with Linux baselines
 
-- Status: accepted
+- Status: accepted, amended by 0024
 - Date: 2026-09-24
 
 ## Context

@@ -4,8 +4,9 @@ import { builtRoutes } from "./support";
 
 /**
  * Visual regression (ADR-0018): every built page, per project (light, dark, iphone), one
- * screenshot per block (site header, each child of <main>, footer) so a failure names the
- * section and every file stays under the 500 KB limit. Baselines: tests/e2e/__screenshots__.
+ * screenshot per block (site header, each child of <main>, footer), shown on its own so its
+ * position never depends on another block (ADR-0024), so a failure names the section and
+ * every file stays under the 500 KB limit. Baselines: tests/e2e/__screenshots__.
  * Photos are masked: they are content, not layout.
  */
 test.skip(
@@ -37,14 +38,24 @@ for (const route of builtRoutes()) {
       );
     });
 
-    const blocks = await page
-      .locator(".site-header, main > :not(script), body > footer")
-      .all();
+    const selector = ".site-header, main > :not(script), body > footer";
+    const blocks = await page.locator(selector).all();
     expect(blocks.length).toBeGreaterThan(2);
     for (const [i, block] of blocks.entries()) {
       const label = await block.evaluate(
         (el) => el.id || el.classList[0] || el.tagName.toLowerCase(),
       );
+      // Show only this block, so its position never depends on the others' heights: a
+      // change in one section (even a subpixel one) cannot shift and fail the next.
+      await block.evaluate(async (keep, all) => {
+        for (const el of document.querySelectorAll<HTMLElement>(all)) {
+          if (el === keep) el.style.removeProperty("display");
+          else el.style.setProperty("display", "none");
+        }
+        await new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        );
+      }, selector);
       await expect
         .soft(block)
         .toHaveScreenshot(`${pageName}-${i}-${label}.png`, {

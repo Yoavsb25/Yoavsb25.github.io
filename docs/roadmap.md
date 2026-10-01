@@ -25,8 +25,9 @@ One PR at a time; the next starts only after the previous is merged.
 | 19  | `test/visual-and-coverage`     | Per-section visual regression on Linux baselines (ADR-0018), 100% `src/lib` coverage (ADR-0019)                                                                             | ✅ merged      |
 | 20  | `ci/pre-push-parity`           | `npm run ci:local` (verify, audit, e2e, links, actionlint) as the pre-push hook and `/ship` gate (ADR-0020)                                                                 | ✅ merged      |
 | 21  | `chore/tamper-proof-gates`     | Protect check config and visual baselines, suppression ratchet in `verify`/pre-commit/Stop hook, Stop hook runs unit tests (ADR-0021)                                       | ✅ merged      |
-| 22  | `chore/refactor-engine`        | `/refactor` and `/fix-bug` skills, `refactor-reviewer` agent, knip and ESLint size limits (ADR-0022), Stryker mutation testing on `src/lib` in `ci:local` and CI (ADR-0023) | 🚧 in progress |
+| 22  | `chore/refactor-engine`        | `/refactor` and `/fix-bug` skills, `refactor-reviewer` agent, knip and ESLint size limits (ADR-0022), Stryker mutation testing on `src/lib` in `ci:local` and CI (ADR-0023) | ✅ merged      |
 | 23  | `chore/agent-agnostic-rules`   | `AGENTS.md` as the source of truth, guard rules over the whole PR diff in CI, roadmap scope check, AI change notes in the PR template                                       | ⏳ planned     |
+| 24  | `test/visual-blocks`           | Isolated visual blocks, `npm run baselines:pull`, `ci:local` stops when behind its remote (ADR-0024)                                                                        | 🚧 in progress |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
 `

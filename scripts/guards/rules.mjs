@@ -137,8 +137,12 @@ export function checkCommand(command) {
 
 /** @returns {string | null} the protected path a command may modify, or null. */
 export function protectedPathInCommand(command) {
-  // Playwright rewrites the visual baselines itself, with no write operator in the command.
-  if (/--update-snapshots\b/.test(command)) return "tests/e2e/__screenshots__/";
+  // These rewrite the visual baselines themselves, with no write operator in the command.
+  if (
+    /--update-snapshots\b|\bbaselines:pull\b|pull-baselines\.mjs/.test(command)
+  ) {
+    return "tests/e2e/__screenshots__/";
+  }
   const cleaned = command.replace(
     /\d?>&\d|&>\s*\/dev\/null|\d?>\s*\/dev\/null/g,
     "",
@@ -325,4 +329,24 @@ export function checkContentPath(repoPath) {
   return CONTENT_PATHS.some((re) => re.test(repoPath.toLowerCase()))
     ? null
     : `content-editor may only write src/content/**, not ${repoPath}.`;
+}
+
+/**
+ * @param {string} branch from `git rev-parse --abbrev-ref HEAD`
+ * @returns {string | null} the remote branch ci:local compares against, or null on a detached
+ *   HEAD, where origin/HEAD is main and would block wrongly (ADR-0024)
+ */
+export function remoteRefFor(branch) {
+  return branch && branch !== "HEAD" ? `origin/${branch}` : null;
+}
+
+/**
+ * @param {number} behind commits on the remote branch that HEAD lacks (`git rev-list --count HEAD..<ref>`)
+ * @param {string} remoteRef e.g. origin/feat/x
+ * @returns {string | null} why a push would be rejected, or null (ADR-0024)
+ */
+export function behindRemote(behind, remoteRef) {
+  if (!Number.isInteger(behind) || behind <= 0) return null;
+  const commits = behind === 1 ? "commit" : "commits";
+  return `${remoteRef} has ${behind} ${commits} this branch does not. Merge it first: git merge ${remoteRef}`;
 }

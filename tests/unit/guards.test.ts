@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  behindRemote,
   checkAgentCommand,
   checkBranch,
   checkCommand,
@@ -15,6 +16,7 @@ import {
   installedPackages,
   isGitCommit,
   protectedPathInCommand,
+  remoteRefFor,
   toRepoPath,
   writtenText,
 } from "../../scripts/guards/rules.mjs";
@@ -167,6 +169,8 @@ describe("protectedPathInCommand", () => {
     ],
     ["cp a.json tests/tsconfig.json", "tests/tsconfig.json"],
     ["npm run test:e2e -- --update-snapshots", "tests/e2e/__screenshots__/"],
+    ["npm run baselines:pull", "tests/e2e/__screenshots__/"],
+    ["node scripts/pull-baselines.mjs", "tests/e2e/__screenshots__/"],
   ])("flags %s", (cmd, path) => {
     expect(protectedPathInCommand(cmd)).toBe(path);
   });
@@ -446,4 +450,32 @@ describe("compareSuppressions", () => {
       ]);
     },
   );
+});
+
+describe("behindRemote", () => {
+  it("allows a branch that has every remote commit", () => {
+    expect(behindRemote(0, "origin/feat/x")).toBeNull();
+  });
+
+  it("ignores a count it could not read", () => {
+    expect(behindRemote(Number.NaN, "origin/feat/x")).toBeNull();
+  });
+
+  it("names the merge to run when the remote is ahead", () => {
+    expect(behindRemote(1, "origin/feat/x")).toBe(
+      "origin/feat/x has 1 commit this branch does not. Merge it first: git merge origin/feat/x",
+    );
+    expect(behindRemote(3, "origin/feat/x")).toMatch(/has 3 commits/);
+  });
+});
+
+describe("remoteRefFor", () => {
+  it("compares a branch with its own remote branch", () => {
+    expect(remoteRefFor("feat/x")).toBe("origin/feat/x");
+  });
+
+  // On a detached HEAD, origin/HEAD is main: comparing against it would block wrongly.
+  it.each(["HEAD", ""])("has nothing to compare for %j", (branch) => {
+    expect(remoteRefFor(branch)).toBeNull();
+  });
 });
