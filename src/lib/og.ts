@@ -49,9 +49,75 @@ const el = (
 /** Titles longer than this drop from 84px to 64px so they still fit the card. */
 const LONG_TITLE_CHARS = 60;
 
+/** Top row: the initials badge and the page label. */
+const header = (card: OgCard): Node =>
+  el("div", { display: "flex", alignItems: "center", gap: 20 }, [
+    el(
+      "div",
+      {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 64,
+        height: 64,
+        borderRadius: 999,
+        background: ogColor.accent,
+        color: ogColor.accentInk,
+        fontSize: 26,
+        fontWeight: 600,
+      },
+      card.initials,
+    ),
+    el(
+      "div",
+      {
+        fontSize: 26,
+        fontWeight: 600,
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        color: ogColor.accent,
+      },
+      card.label,
+    ),
+  ]);
+
+/** The serif title, with *emphasis* in the accent color, smaller when long. */
+const title = (text: string): Node =>
+  el(
+    "div",
+    {
+      display: "flex",
+      flexWrap: "wrap",
+      fontFamily: "Source Serif 4",
+      fontSize: text.length > LONG_TITLE_CHARS ? 64 : 84,
+      lineHeight: 1.08,
+      letterSpacing: "-0.02em",
+    },
+    emphasisParts(text).map((part) =>
+      el(
+        "span",
+        { color: part.em ? ogColor.accent : ogColor.ink, whiteSpace: "pre" },
+        part.text,
+      ),
+    ),
+  );
+
+/** Bottom row above a rule: the footer text. */
+const footer = (text: string): Node =>
+  el(
+    "div",
+    {
+      display: "flex",
+      paddingTop: 28,
+      borderTop: `2px solid ${ogColor.line}`,
+      fontSize: 28,
+      color: ogColor.ink2,
+    },
+    text,
+  );
+
 /** The card as a satori element tree. Pure, so it can be tested without rendering. */
 export function ogElement(card: OgCard): Node {
-  const long = card.title.length > LONG_TITLE_CHARS;
   return el(
     "div",
     {
@@ -65,69 +131,7 @@ export function ogElement(card: OgCard): Node {
       color: ogColor.ink,
       fontFamily: "Instrument Sans",
     },
-    [
-      el("div", { display: "flex", alignItems: "center", gap: 20 }, [
-        el(
-          "div",
-          {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 64,
-            height: 64,
-            borderRadius: 999,
-            background: ogColor.accent,
-            color: ogColor.accentInk,
-            fontSize: 26,
-            fontWeight: 600,
-          },
-          card.initials,
-        ),
-        el(
-          "div",
-          {
-            fontSize: 26,
-            fontWeight: 600,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            color: ogColor.accent,
-          },
-          card.label,
-        ),
-      ]),
-      el(
-        "div",
-        {
-          display: "flex",
-          flexWrap: "wrap",
-          fontFamily: "Source Serif 4",
-          fontSize: long ? 64 : 84,
-          lineHeight: 1.08,
-          letterSpacing: "-0.02em",
-        },
-        emphasisParts(card.title).map((part) =>
-          el(
-            "span",
-            {
-              color: part.em ? ogColor.accent : ogColor.ink,
-              whiteSpace: "pre",
-            },
-            part.text,
-          ),
-        ),
-      ),
-      el(
-        "div",
-        {
-          display: "flex",
-          paddingTop: 28,
-          borderTop: `2px solid ${ogColor.line}`,
-          fontSize: 28,
-          color: ogColor.ink2,
-        },
-        card.footer,
-      ),
-    ],
+    [header(card), title(card.title), footer(card.footer)],
   );
 }
 
