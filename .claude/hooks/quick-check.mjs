@@ -1,4 +1,4 @@
-// Stop: before Claude finishes, lint and type-check if source files changed. Failures send Claude back to fix them.
+// Stop: before Claude finishes, if source files changed, run the suppression guard, lint, astro check, and unit tests. Failures send Claude back to fix them.
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
@@ -36,7 +36,8 @@ const changed = sh("git", ["status", "--porcelain"]).stdout;
 if (!/\.(js|mjs|ts|astro)$/m.test(changed)) process.exit(0);
 
 const failures = [];
-for (const script of ["lint", "check"]) {
+// Unit tests take about a second, so a refactor that breaks behavior is caught before "done".
+for (const script of ["guards", "lint", "check", "test"]) {
   const r = sh("npm", ["run", "--silent", script]);
   if (r.status !== 0)
     failures.push(

@@ -14,6 +14,18 @@ const PROTECTED_PATHS = [
   "package-lock.json",
   "lefthook.yml",
   "public/CNAME",
+  // Config that sets what the checks enforce; loosening it is a bypass (ADR-0021).
+  "eslint.config.js",
+  "tsconfig.json",
+  "vitest.config.ts",
+  "playwright.config.ts",
+  "commitlint.config.js",
+  "lighthouserc.json",
+  "lychee.toml",
+  ".prettierrc.json",
+  ".prettierignore",
+  "tests/e2e/support.ts",
+  "tests/e2e/__screenshots__/",
 ];
 
 /** Paths that must never be written or committed. */
@@ -175,6 +187,47 @@ export function writtenText(toolInput) {
     ...(toolInput.edits ?? []).map((e) => e.new_string),
   ];
   return parts.filter(Boolean).join("\n");
+}
+
+/**
+ * Comments and calls that switch a check off for some code: lint and type-check suppressions,
+ * coverage ignores, skipped or focused tests (ADR-0021). The lint directive is split so this
+ * file does not count itself.
+ */
+const SUPPRESSION = new RegExp(
+  [
+    ["eslint", "disable"].join("-"),
+    "@ts-(?:ignore|nocheck|expect-error)",
+    "(?:c8|v8|istanbul) ignore",
+    "\\.(?:only|skip|skipIf|fixme)\\s*\\(",
+  ].join("|"),
+  "g",
+);
+
+/** Files scanned for suppressions. */
+export const SUPPRESSION_FILES = /\.(js|mjs|cjs|ts|astro)$/;
+
+/** @returns {number} how many suppressions the text contains. */
+export function countSuppressions(text) {
+  return text.match(SUPPRESSION)?.length ?? 0;
+}
+
+/**
+ * Compare per-file suppression counts with the approved baseline ({ file: { count, why } }).
+ * @returns {{ added: string[], removed: string[] }} files above and below their allowance.
+ */
+export function compareSuppressions(counts, baseline) {
+  const files = new Set([...Object.keys(counts), ...Object.keys(baseline)]);
+  const added = [];
+  const removed = [];
+  for (const file of [...files].sort()) {
+    const found = counts[file] ?? 0;
+    const allowed = baseline[file]?.count ?? 0;
+    if (found > allowed) added.push(`${file}: ${found} (approved ${allowed})`);
+    if (found < allowed)
+      removed.push(`${file}: ${found} (approved ${allowed})`);
+  }
+  return { added, removed };
 }
 
 /** Extract the in-progress row from docs/roadmap.md, if any. */

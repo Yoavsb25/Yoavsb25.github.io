@@ -1,0 +1,10 @@
+{
+  "tests/e2e/pages.spec.ts": {
+    "count": 3,
+    "why": "Playwright test.skip by project: head and byte checks run once (light); iPhone has no Tab key"
+  },
+  "tests/e2e/visual.spec.ts": {
+    "count": 1,
+    "why": "Visual baselines are rendered on Linux only (ADR-0018)"
+  }
+}

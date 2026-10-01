@@ -15,3 +15,10 @@
 /lychee.toml     @Yoavsb25
 /tests/e2e/support.ts @Yoavsb25
 /commitlint.config.js @Yoavsb25
+# Config that sets what the checks enforce, and the visual baselines (ADR-0021).
+/eslint.config.js @Yoavsb25
+/tsconfig.json   @Yoavsb25
+/vitest.config.ts @Yoavsb25
+/.prettierrc.json @Yoavsb25
+/.prettierignore @Yoavsb25
+/tests/e2e/__screenshots__/ @Yoavsb25
