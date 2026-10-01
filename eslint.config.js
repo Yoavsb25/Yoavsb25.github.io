@@ -44,6 +44,13 @@ export default defineConfig(
     "playwright-report/",
     ".lighthouseci/",
   ]),
+  // Rules are set here only: no inline config or disable comments can switch them off (ADR-0021).
+  {
+    linterOptions: {
+      noInlineConfig: true,
+      reportUnusedDisableDirectives: "error",
+    },
+  },
   js.configs.recommended,
   tseslint.configs.strict,
   astro.configs.recommended,
