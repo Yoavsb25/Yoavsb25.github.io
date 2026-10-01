@@ -26,7 +26,7 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 
 1. **Hero** (`#top`): status line with a pulsing dot ("Open to AI engineering roles · London"), serif headline with one italic accent word, one-paragraph lede, _See my work_ (primary; contact is already in the header). Portrait on the right. Plain-language skill chips under a hairline.
 2. **How I work** (`#how`): tonal band. Headline, one-line intro, a 7-stage track (Plan → Foundations → Architect → Build → Test → Deploy → Iterate). Selecting a stage shows its plain explanation and an "In practice" example from real work. Default selection: Build.
-3. **Selected work** (`#projects`): one featured card (full width) + three cards. The whole card is a link to the case study.
+3. **Selected work** (`#projects`): one featured card (full width) + three cards. The whole card is a link to the case study. A card may carry one milestone badge (e.g. Sold) on its illustration.
 4. **Resume** (`#resume`): experience timeline (roles and education, 1–4 plain bullets each) + sticky aside with "Download CV" and grouped skills.
 5. **Contact** (`#contact`): headline, availability line, buttons (Email me, LinkedIn, GitHub, Download CV).
 
@@ -35,7 +35,7 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 Fixed structure: each section is a required frontmatter field, enforced by the content schema (ADR-0005):
 
 1. "← Back to work" back link (→ /#projects).
-2. Header: kicker ("Case study · SysAid · 2025"), title, one-sentence outcome.
+2. Header: kicker ("Case study · SysAid · 2025") with the optional badge beside it, title, one-sentence outcome.
 3. Meta row: Role, Timeline, Stack, Links.
 4. Visual: screenshot or window illustration.
 5. Sections with a sticky side table of contents (hidden on mobile):

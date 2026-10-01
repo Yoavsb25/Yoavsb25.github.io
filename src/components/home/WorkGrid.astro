@@ -3,7 +3,8 @@
  * Selected work (docs/information-architecture.md → Home 3; design-system → Work card).
  * Each card is one link to its case study; the featured card spans the grid.
  * Cover image when present; otherwise the Window illustration (same as case study).
- * An optional badge sits on the illustration's top corner.
+ * An optional badge sits on the illustration's top-right corner; it comes last in the DOM so
+ * the link name reads title first.
  */
 import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
@@ -60,7 +61,6 @@ const columns = workGridColumns(projects.map((p) => p.entry));
                 size={data.featured ? "lg" : "md"}
               />
             )}
-            {data.badge && <Badge class="badge">{data.badge}</Badge>}
             <div class="body">
               <span class="label">{data.kicker}</span>
               <h3 class="serif">{data.title}</h3>
@@ -77,6 +77,11 @@ const columns = workGridColumns(projects.map((p) => p.entry));
                 <Icon name="arrow-right" size={15} class="arrow" />
               </span>
             </div>
+            {data.badge && (
+              <span class="stamp">
+                <Badge>{data.badge}</Badge>
+              </span>
+            )}
           </a>
         </li>
       ))}
@@ -134,7 +139,6 @@ const columns = workGridColumns(projects.map((p) => p.entry));
   }
 
   .card {
-    position: relative;
     display: grid;
     grid-template-rows: auto 1fr;
     overflow: hidden;
@@ -155,10 +159,18 @@ const columns = workGridColumns(projects.map((p) => p.entry));
     border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
   }
 
-  .card :global(.badge) {
-    position: absolute;
-    top: var(--space-4);
-    left: var(--space-4);
+  /* The illustration is pinned to the first cell so the explicitly placed stamp cannot displace it. */
+  .card > :global(:first-child) {
+    grid-area: 1 / 1;
+  }
+
+  /* Shares the illustration's grid cell, so it follows the cover in every layout. */
+  .stamp {
+    z-index: 1;
+    grid-area: 1 / 1;
+    align-self: start;
+    justify-self: end;
+    margin: var(--space-4);
   }
 
   .card:focus-visible {
