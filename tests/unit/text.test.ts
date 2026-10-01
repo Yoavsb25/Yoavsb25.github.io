@@ -22,6 +22,20 @@ describe("emphasisParts", () => {
   });
 });
 
+describe("emphasisParts edge cases", () => {
+  it("emphasizes a single character", () => {
+    expect(emphasisParts("Plan *a* now")).toEqual([
+      { text: "Plan ", em: false },
+      { text: "a", em: true },
+      { text: " now", em: false },
+    ]);
+  });
+
+  it("returns no empty parts when emphasis is the whole text", () => {
+    expect(emphasisParts("*ship*")).toEqual([{ text: "ship", em: true }]);
+  });
+});
+
 describe("plainText", () => {
   it("drops emphasis markers", () => {
     expect(plainText("Need an AI engineer who *ships*?")).toBe(
@@ -42,6 +56,20 @@ describe("sentences", () => {
     expect(sentences("Need an AI engineer who *ships*?")).toEqual([
       "Need an AI engineer who *ships*?",
     ]);
+  });
+});
+
+describe("sentences edge cases", () => {
+  it("treats any run of whitespace as one break", () => {
+    expect(sentences("One.  Two.\n\nThree.")).toEqual([
+      "One.",
+      "Two.",
+      "Three.",
+    ]);
+  });
+
+  it("returns nothing for empty text", () => {
+    expect(sentences("")).toEqual([]);
   });
 });
 

@@ -59,6 +59,8 @@ describe("personJsonLd", () => {
       name: site.name,
       jobTitle: site.jobTitle,
       email: `mailto:${site.email}`,
+      url: absoluteUrl("/"),
+      address: { "@type": "PostalAddress", addressLocality: site.location },
     });
     expect(data["sameAs"]).toEqual(Object.values(site.socials));
   });
@@ -73,6 +75,7 @@ describe("creativeWorkJsonLd", () => {
       keywords: ["Python", "Automation"],
     });
     expect(data).toMatchObject({
+      "@context": "https://schema.org",
       "@type": "CreativeWork",
       name: "Files Unifier",
       url: absoluteUrl("/projects/files-unifier/"),

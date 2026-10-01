@@ -23,6 +23,7 @@ describe("ogElement", () => {
         /"fontSize":(\d+),"lineHeight"/,
       )?.[1];
     expect(size("Short title")).toBe("84");
+    expect(size("A".repeat(60))).toBe("84");
     expect(size("A".repeat(61))).toBe("64");
   });
 

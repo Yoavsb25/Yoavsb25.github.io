@@ -65,6 +65,12 @@ describe("nextProject", () => {
     expect(nextProject([project("a", 1)], "a")).toBeUndefined();
   });
 
+  it("pairs two projects with each other", () => {
+    const two = [project("a", 1), project("b", 2)];
+    expect(nextProject(two, "a")?.id).toBe("b");
+    expect(nextProject(two, "b")?.id).toBe("a");
+  });
+
   it("skips drafts", () => {
     const withDraft = [...list, project("d", 2.5, false, true)];
     expect(nextProject(withDraft, "b")?.id).toBe("c");
