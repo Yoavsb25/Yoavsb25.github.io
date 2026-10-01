@@ -1,6 +1,6 @@
 /**
  * Runs the CI checks that can run on a Mac, in CI's order, stopping at the first failure
- * (ADR-0020). Stops first if the branch is behind its remote (ADR-0022). lefthook runs it
+ * (ADR-0020). Stops first if the branch is behind its remote (ADR-0024). lefthook runs it
  * before every push; /ship runs it before a PR. Mutation testing runs right after audit
  * (ADR-0023).
  * Not covered: Linux-only visual diffs (skipped off Linux, ADR-0018), Lighthouse, CodeQL, pr-title.

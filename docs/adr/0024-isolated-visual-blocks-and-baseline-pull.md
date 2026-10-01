@@ -1,4 +1,4 @@
-# 0022. Isolated visual blocks and one-command baseline updates
+# 0024. Isolated visual blocks and one-command baseline updates
 
 - Status: accepted
 - Date: 2026-10-01

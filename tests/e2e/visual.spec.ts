@@ -5,7 +5,7 @@ import { builtRoutes } from "./support";
 /**
  * Visual regression (ADR-0018): every built page, per project (light, dark, iphone), one
  * screenshot per block (site header, each child of <main>, footer), shown on its own so its
- * position never depends on another block (ADR-0022), so a failure names the section and
+ * position never depends on another block (ADR-0024), so a failure names the section and
  * every file stays under the 500 KB limit. Baselines: tests/e2e/__screenshots__.
  * Photos are masked: they are content, not layout.
  */

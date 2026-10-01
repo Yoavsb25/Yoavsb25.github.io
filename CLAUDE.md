@@ -21,7 +21,7 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 | `npm run guards`         | Suppression ratchet: no new lint/type disables, coverage ignores, skipped tests (ADR-0021)        |
 | `npm run audit`          | Fail on high/critical dependency vulnerabilities                                                  |
 | `npm run ci:local`       | Pre-push gate: verify, audit, mutation, e2e, internal links, actionlint (ADR-0020)                |
-| `npm run baselines:pull` | After CI fails a visual test: install the screenshots CI rendered as baselines (ADR-0022)         |
+| `npm run baselines:pull` | After CI fails a visual test: install the screenshots CI rendered as baselines (ADR-0024)         |
 
 ## Layout
 

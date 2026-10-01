@@ -121,6 +121,7 @@ describe("actualScreenshots", () => {
                 attachment("y..-actual.png", "data/ab.png"),
                 attachment("y-actual.png", "../../etc/ab.png"),
                 attachment("z-actual.png", "/tmp/ab.png"),
+                null,
               ],
             },
           ],

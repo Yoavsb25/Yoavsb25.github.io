@@ -1,5 +1,5 @@
 /**
- * Installs new visual baselines from this commit's failed CI run (ADR-0022): each screenshot
+ * Installs new visual baselines from this commit's failed CI run (ADR-0024): each screenshot
  * that was missing or differed gets the image CI rendered on Linux. Look at them, then commit.
  * Needs the GitHub CLI, signed in (`gh auth login`), and `unzip`.
  */

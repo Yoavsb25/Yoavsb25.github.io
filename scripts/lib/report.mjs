@@ -1,4 +1,4 @@
-// Reads a Playwright HTML report and picks the CI run to read it from (ADR-0022). Pure, no I/O.
+// Reads a Playwright HTML report and picks the CI run to read it from (ADR-0024). Pure, no I/O.
 
 const ZIP_PREFIX = "data:application/zip;base64,";
 // What the report may name: a project folder, a PNG in it, and a report data file.
@@ -20,11 +20,25 @@ export function reportZip(html) {
   return Buffer.from(data, "base64");
 }
 
-/** @param {unknown} name */
-function isSafeActual(name) {
-  return (
-    typeof name === "string" && SAFE_ACTUAL.test(name) && !name.includes("..")
-  );
+/**
+ * @param {unknown} attachment one entry of a test result's attachments
+ * @param {string | undefined} project the project the result belongs to
+ * @returns {{ project: string, file: string, source: string } | null} the baseline it replaces,
+ *   or null when it is not a failed screenshot or a name is unsafe
+ */
+function toShot(attachment, project) {
+  if (!attachment || typeof attachment !== "object") return null;
+  const { name, path } = /** @type {Record<string, unknown>} */ (attachment);
+  const safe =
+    project !== undefined &&
+    SAFE_PROJECT.test(project) &&
+    typeof name === "string" &&
+    SAFE_ACTUAL.test(name) &&
+    !name.includes("..") &&
+    typeof path === "string" &&
+    SAFE_SOURCE.test(path);
+  if (!safe) return null;
+  return { project, file: name.replace(/-actual\.png$/, ".png"), source: path };
 }
 
 /**
@@ -53,17 +67,9 @@ export function actualScreenshots(docs) {
     const attachments = Array.isArray(record["attachments"])
       ? record["attachments"]
       : [];
-    for (const { name, path } of attachments) {
-      if (
-        here !== undefined &&
-        SAFE_PROJECT.test(here) &&
-        isSafeActual(name) &&
-        typeof path === "string" &&
-        SAFE_SOURCE.test(path)
-      ) {
-        const file = name.replace(/-actual\.png$/, ".png");
-        found.set(`${here}/${file}`, { project: here, file, source: path });
-      }
+    for (const attachment of attachments) {
+      const shot = toShot(attachment, here);
+      if (shot) found.set(`${shot.project}/${shot.file}`, shot);
     }
     for (const value of Object.values(record)) walk(value, here);
   };
