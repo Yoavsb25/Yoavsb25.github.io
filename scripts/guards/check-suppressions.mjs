@@ -1,4 +1,4 @@
-// Fail when any file switches off more checks than scripts/guards/suppressions.json approves (ADR-0021).
+// Fail when any file's count of check suppressions differs from scripts/guards/suppressions.json (ADR-0021).
 // Stateless, so it runs the same in verify, CI, pre-commit, and the Claude Stop hook.
 // Usage: node scripts/guards/check-suppressions.mjs
 import { spawnSync } from "node:child_process";
@@ -13,13 +13,20 @@ import {
 const BASELINE = "scripts/guards/suppressions.json";
 
 // Tracked and new (not ignored) files, so an uncommitted suppression is caught too.
-const files = spawnSync(
+// -z: unquoted paths, so names with special characters are not skipped.
+const ls = spawnSync(
   "git",
-  ["ls-files", "--cached", "--others", "--exclude-standard"],
+  ["ls-files", "-z", "--cached", "--others", "--exclude-standard"],
   { encoding: "utf8", maxBuffer: 10 * 1024 * 1024 },
-)
-  .stdout.split("\n")
-  .filter((f) => SUPPRESSION_FILES.test(f));
+);
+if (ls.status !== 0) {
+  // Fail closed: an empty listing would otherwise pass.
+  console.error(`Suppression check could not list files:\n${ls.stderr}`);
+  process.exit(1);
+}
+const files = [...new Set(ls.stdout.split("\0"))].filter((f) =>
+  SUPPRESSION_FILES.test(f),
+);
 
 const counts = {};
 for (const file of files) {
@@ -34,18 +41,14 @@ for (const file of files) {
 }
 
 const baseline = JSON.parse(readFileSync(BASELINE, "utf8"));
-const { added, removed } = compareSuppressions(counts, baseline);
+const problems = compareSuppressions(counts, baseline);
 
-if (removed.length) {
-  console.log(
-    `Fewer suppressions than approved; lower the counts in ${BASELINE}:\n  ${removed.join("\n  ")}`,
-  );
-}
-if (added.length) {
+if (problems.length) {
   console.error(
-    `New check suppressions (lint/type disables, coverage ignores, skipped or focused tests):\n  ${added.join("\n  ")}\n` +
+    `Check suppressions (lint/type disables, coverage ignores, skipped or focused tests) differ from ${BASELINE}:\n  ${problems.join("\n  ")}\n` +
       `Fix the underlying problem instead. If a suppression is truly needed, the owner approves it ` +
-      `by raising the count and giving the reason in ${BASELINE} (protected, CODEOWNERS).`,
+      `by setting the count and giving the reason in ${BASELINE} (protected, CODEOWNERS). ` +
+      `When suppressions are removed, lower the count to match.`,
   );
   process.exit(1);
 }

@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
+import { SUPPRESSION_FILES } from "../../scripts/guards/rules.mjs";
 import { projectDir, readInput } from "./lib/io.mjs";
 
 const input = readInput();
@@ -29,11 +30,24 @@ function envWithProjectNode() {
 }
 
 const env = envWithProjectNode();
+// A hung step counts as a failure (status null), so the check never passes by timing out.
 const sh = (cmd, args) =>
-  spawnSync(cmd, args, { cwd: projectDir, encoding: "utf8", env });
+  spawnSync(cmd, args, {
+    cwd: projectDir,
+    encoding: "utf8",
+    env,
+    timeout: 120_000,
+  });
 
-const changed = sh("git", ["status", "--porcelain"]).stdout;
-if (!/\.(js|mjs|ts|astro)$/m.test(changed)) process.exit(0);
+// -z and every untracked file, so new files in a new folder and unusual names are seen.
+const changed = sh("git", [
+  "status",
+  "--porcelain",
+  "-z",
+  "--untracked-files=all",
+]).stdout.split("\0");
+if (!changed.some((f) => SUPPRESSION_FILES.test(f) || f.endsWith(".json")))
+  process.exit(0);
 
 const failures = [];
 // Unit tests take about a second, so a refactor that breaks behavior is caught before "done".

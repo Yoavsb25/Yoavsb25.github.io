@@ -50,6 +50,13 @@ describe("checkPath", () => {
     "vitest.config.ts",
     "playwright.config.ts",
     "tests/e2e/__screenshots__/light/home-header.png",
+    "tests/e2e/visual.spec.ts",
+    "src/lib/eslint.config.js",
+    "src/eslint.config.mjs",
+    "tests/tsconfig.json",
+    "tsconfig.build.json",
+    "src/.prettierrc",
+    ".npmrc",
   ])("asks before editing %s", (p) =>
     expect(checkPath(p).decision).toBe("ask"),
   );
@@ -145,6 +152,13 @@ describe("protectedPathInCommand", () => {
     ["mv tmp scripts/guards/rules.mjs", "scripts/guards/"],
     ["rm package-lock.json", "package-lock.json"],
     ["git checkout -- .claude/hooks/guard-bash.mjs", ".claude/"],
+    ["rm -r tests/e2e/__screenshots__", "tests/e2e/__screenshots__/"],
+    [
+      "echo 'export default []' > src/lib/eslint.config.js",
+      "src/lib/eslint.config.js",
+    ],
+    ["cp a.json tests/tsconfig.json", "tests/tsconfig.json"],
+    ["npm run test:e2e -- --update-snapshots", "tests/e2e/__screenshots__/"],
   ])("flags %s", (cmd, path) => {
     expect(protectedPathInCommand(cmd)).toBe(path);
   });
@@ -362,6 +376,18 @@ describe("countSuppressions", () => {
     "it.skipIf" + "(isCI)(",
     call("fixme"),
     "test.describe." + "skip (",
+    "// @TS-" + "NOCHECK",
+    "/* v8  " + "ignore next */",
+    "/* node:coverage " + "disable */",
+    "it.skip" + ".each([1])(",
+    "describe.only" + ".for([1])(",
+    "test.skip" + ".concurrent(",
+    call("todo"),
+    call("fails"),
+    call("fail"),
+    'test["' + 'skip"](',
+    "x" + "it(",
+    "x" + "describe(",
   ])("counts %s", (text) => expect(countSuppressions(text)).toBe(1));
 
   it("counts every occurrence", () => {
@@ -373,6 +399,9 @@ describe("countSuppressions", () => {
     "items.skipWhile(x)",
     "describe('only the header', () => {})",
     "// eslint config",
+    ".skip-link { color: red }",
+    ".skip-link:focus {}",
+    "exit(1)",
   ])("ignores %s", (text) => expect(countSuppressions(text)).toBe(0));
 });
 
@@ -380,22 +409,28 @@ describe("compareSuppressions", () => {
   const baseline = { "a.ts": { count: 2, why: "reason" } };
 
   it("passes when counts match the baseline", () => {
-    expect(compareSuppressions({ "a.ts": 2 }, baseline)).toEqual({
-      added: [],
-      removed: [],
-    });
+    expect(compareSuppressions({ "a.ts": 2 }, baseline)).toEqual([]);
   });
 
   it("flags a file above its allowance or not in the baseline", () => {
-    expect(
-      compareSuppressions({ "a.ts": 3, "b.ts": 1 }, baseline).added,
-    ).toEqual(["a.ts: 3 (approved 2)", "b.ts: 1 (approved 0)"]);
+    expect(compareSuppressions({ "a.ts": 3, "b.ts": 1 }, baseline)).toEqual([
+      "a.ts: 3 found, 2 approved",
+      "b.ts: 1 found, 0 approved",
+    ]);
   });
 
-  it("reports a file below its allowance so the baseline can be lowered", () => {
-    expect(compareSuppressions({}, baseline)).toEqual({
-      added: [],
-      removed: ["a.ts: 0 (approved 2)"],
-    });
+  it("flags a file below its allowance so a removed slot cannot be reused", () => {
+    expect(compareSuppressions({ "a.ts": 1 }, baseline)).toEqual([
+      "a.ts: 1 found, 2 approved (lower the count)",
+    ]);
   });
+
+  it.each([{ count: 2 }, { count: 2, why: "  " }])(
+    "approves nothing for an entry without a reason: %o",
+    (entry) => {
+      expect(compareSuppressions({ "a.ts": 2 }, { "a.ts": entry })).toEqual([
+        "a.ts: 2 found, 0 approved",
+      ]);
+    },
+  );
 });
