@@ -8,16 +8,17 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 ## Commands
 
-| Command            | Purpose                                                                         |
-| ------------------ | ------------------------------------------------------------------------------- |
-| `npm run dev`      | Local dev server at http://localhost:4321/ (`site.base`)                        |
-| `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build           |
-| `npm run format`   | Auto-format everything                                                          |
-| `npm run test`     | Unit tests (Vitest)                                                             |
-| `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone) |
-| `npm run browsers` | Install Chromium + WebKit for the e2e runner, Chromium for the MCP              |
-| `npm run audit`    | Fail on high/critical dependency vulnerabilities                                |
-| `npm run ci:local` | Pre-push gate: verify, audit, e2e, internal links, actionlint (ADR-0020)        |
+| Command            | Purpose                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| `npm run dev`      | Local dev server at http://localhost:4321/ (`site.base`)                                   |
+| `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build                      |
+| `npm run format`   | Auto-format everything                                                                     |
+| `npm run test`     | Unit tests (Vitest)                                                                        |
+| `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone)            |
+| `npm run browsers` | Install Chromium + WebKit for the e2e runner, Chromium for the MCP                         |
+| `npm run guards`   | Suppression ratchet: no new lint/type disables, coverage ignores, skipped tests (ADR-0021) |
+| `npm run audit`    | Fail on high/critical dependency vulnerabilities                                           |
+| `npm run ci:local` | Pre-push gate: verify, audit, e2e, internal links, actionlint (ADR-0020)                   |
 
 ## Layout
 
@@ -78,22 +79,24 @@ The Playwright MCP server (`.mcp.json`, pinned devDependency) drives a headless,
 One rule set (`scripts/guards/rules.mjs`) enforced at three levels:
 
 1. **Claude hooks** (`.claude/`) — intercept the agent's actions _before_ they happen.
-2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, file size (500 KB), lockfile sync, Prettier, ESLint, commitlint; `npm run ci:local` before push.
+2. **Git hooks** (`lefthook.yml`) — every commit by anyone: secret scan, file size (500 KB), lockfile sync, suppression ratchet, Prettier, ESLint, commitlint; `npm run ci:local` before push.
 3. **GitHub** — CI checks, branch protection, CODEOWNERS review, secret scanning. Cannot be bypassed.
 
 ## Claude Code hooks (enforced automatically)
 
-| When              | Hook                      | Effect                                                                                                                                                                            |
-| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Session start     | `session-context.mjs`     | Injects branch, uncommitted changes, current roadmap PR                                                                                                                           |
-| Before Edit/Write | `guard-protected.mjs`     | Denies edits on `main`; asks before editing protected paths; denies `.env*`                                                                                                       |
-| Before Edit/Write | `scan-secrets.mjs`        | Denies content that looks like an API key, token, or private key                                                                                                                  |
-| Before Bash       | `guard-bash.mjs`          | Denies push, `--no-verify`, hard reset, recursive force delete, global installs, piping downloads to a shell, commits on `main`; asks before commands that modify protected paths |
-| After Edit/Write  | `format-file.mjs`         | Prettier + ESLint `--fix` on the file; reports remaining lint errors                                                                                                              |
-| After Bash        | `dependency-reminder.mjs` | After `npm install <pkg>`, reminds that new dependencies need an ADR                                                                                                              |
-| Before stopping   | `quick-check.mjs`         | If source changed, runs lint + `astro check`; failures must be fixed                                                                                                              |
+| When              | Hook                      | Effect                                                                                                                                                                                                    |
+| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Session start     | `session-context.mjs`     | Injects branch, uncommitted changes, current roadmap PR                                                                                                                                                   |
+| Before Edit/Write | `guard-protected.mjs`     | Denies edits on `main`; asks before editing protected paths; denies `.env*`                                                                                                                               |
+| Before Edit/Write | `scan-secrets.mjs`        | Denies content that looks like an API key, token, or private key                                                                                                                                          |
+| Before Bash       | `guard-bash.mjs`          | Denies push, `--no-verify`, hard reset, recursive force delete, global installs, piping downloads to a shell, commits on `main`; asks before commands that modify protected paths or `--update-snapshots` |
+| After Edit/Write  | `format-file.mjs`         | Prettier + ESLint `--fix` on the file; reports remaining lint errors                                                                                                                                      |
+| After Bash        | `dependency-reminder.mjs` | After `npm install <pkg>`, reminds that new dependencies need an ADR                                                                                                                                      |
+| Before stopping   | `quick-check.mjs`         | If source changed, runs guards, lint, `astro check`, unit tests; failures must be fixed                                                                                                                   |
 
-Protected paths (see `scripts/guards/rules.mjs`, resolved and case-insensitive): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/` (all of it, including `settings.local.json`), `CLAUDE.md`, `.mcp.json`, `scripts/guards/`, `scripts/ci-local.mjs`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`.
+Protected paths (see `scripts/guards/rules.mjs`, resolved and case-insensitive): `.github/workflows/`, `.github/CODEOWNERS`, `.claude/` (all of it, including `settings.local.json`), `CLAUDE.md`, `.mcp.json`, `scripts/guards/`, `scripts/ci-local.mjs`, `package.json`, `package-lock.json`, `lefthook.yml`, `public/CNAME`, and the check config at any depth (ESLint, Vitest, Playwright, commitlint, Prettier config, `tsconfig*.json`, `.npmrc`, Lighthouse, lychee) plus `tests/e2e/support.ts`, `tests/e2e/visual.spec.ts`, `tests/e2e/__screenshots__/` (ADR-0021). Inline ESLint config comments are disabled.
+
+Never add a lint disable, `@ts-` suppression, coverage ignore, or `.only`/`.skip` to make a check pass: `npm run guards` fails on it. Fix the cause, or ask the user to approve it in `scripts/guards/suppressions.json`.
 
 Agent boundaries are enforced by the global guard hooks using the subagent's `agent_type` (ADR-0009): reviewers get one plain read-only command at a time, `a11y-reviewer` has no shell, `content-editor` writes only site copy. Guard hooks fail closed.
 
