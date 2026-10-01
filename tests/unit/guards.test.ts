@@ -57,6 +57,14 @@ describe("checkPath", () => {
     "tsconfig.build.json",
     "src/.prettierrc",
     ".npmrc",
+    "knip.jsonc",
+    "stryker.config.json",
+    "stryker.config.mjs",
+    "stryker.conf.json",
+    ".stryker.config.mjs",
+    "knip.ts",
+    ".knip.json",
+    "knip.config.js",
   ])("asks before editing %s", (p) =>
     expect(checkPath(p).decision).toBe("ask"),
   );
@@ -293,6 +301,10 @@ describe("checkAgentCommand", () => {
     expect(checkAgentCommand("security-reviewer", "rm file")).toMatch(
       /^security-reviewer: /,
     );
+    expect(checkAgentCommand("refactor-reviewer", "npm run test")).toBeNull();
+    expect(checkAgentCommand("refactor-reviewer", "git commit -m x")).toMatch(
+      /^refactor-reviewer: /,
+    );
   });
 
   it("leaves the main agent and other agents alone", () => {
@@ -379,6 +391,7 @@ describe("countSuppressions", () => {
     "// @TS-" + "NOCHECK",
     "/* v8  " + "ignore next */",
     "/* node:coverage " + "disable */",
+    "// Stryker " + "disable next-line all",
     "it.skip" + ".each([1])(",
     "describe.only" + ".for([1])(",
     "test.skip" + ".concurrent(",

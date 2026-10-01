@@ -1,6 +1,7 @@
 /**
  * Runs the CI checks that can run on a Mac, in CI's order, stopping at the first failure
- * (ADR-0020). lefthook runs it before every push; /ship runs it before a PR.
+ * (ADR-0020). lefthook runs it before every push; /ship runs it before a PR. Mutation testing
+ * runs right after audit (ADR-0023).
  * Not covered: Linux-only visual diffs (skipped off Linux, ADR-0018), Lighthouse, CodeQL, pr-title.
  */
 import { spawnSync } from "node:child_process";
@@ -22,6 +23,7 @@ if (missing.length) {
 const steps = [
   ["verify", "npm", ["run", "verify"]],
   ["audit", "npm", ["run", "audit"]],
+  ["mutation", "npm", ["run", "test:mutation"]],
   // verify already built dist/, so run Playwright directly instead of test:e2e. Its own
   // CLI by path: the MCP's Playwright alpha also ships a `playwright` bin (see ci.yml).
   ["e2e", "node", ["node_modules/@playwright/test/cli.js", "test"]],

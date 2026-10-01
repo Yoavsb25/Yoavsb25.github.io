@@ -1,6 +1,27 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
-import { nextTheme, parseTheme, resolveTheme, toggleLabel } from "@/lib/theme";
+import {
+  THEME_STORAGE_KEY,
+  nextTheme,
+  parseTheme,
+  resolveTheme,
+  toggleLabel,
+} from "@/lib/theme";
+
+describe("THEME_STORAGE_KEY", () => {
+  // The bootstrap in BaseLayout cannot import it (ADR-0008), so it repeats the key; they must match
+  // or a saved theme is written by the toggle but never read on the next page load.
+  it("matches the key the inline bootstrap reads", () => {
+    const layout = readFileSync(
+      new URL("../../src/layouts/BaseLayout.astro", import.meta.url),
+      "utf8",
+    );
+    expect(layout).toContain(`localStorage.getItem("${THEME_STORAGE_KEY}")`);
+    expect(THEME_STORAGE_KEY).not.toBe("");
+  });
+});
 
 describe("parseTheme", () => {
   it.each(["light", "dark"] as const)("accepts %s", (t) => {

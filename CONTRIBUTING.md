@@ -27,7 +27,7 @@ Screenshots in `tests/e2e/__screenshots__/` are rendered on Linux in CI (ADR-001
 
 - **pre-commit** — secret scan, `.env` block, 500 KB file limit, lockfile-in-sync check, Prettier and ESLint `--fix` on staged files.
 - **commit-msg** — commitlint (conventional commits).
-- **pre-push** — `npm run ci:local`: verify, audit, e2e, internal links, actionlint. Visual diffs, Lighthouse, CodeQL, and `pr-title` run only in CI.
+- **pre-push** — `npm run ci:local`: verify, audit, mutation testing, e2e, internal links, actionlint. Visual diffs, Lighthouse, CodeQL, and `pr-title` run only in CI.
 
 Do not bypass hooks with `--no-verify`.
 

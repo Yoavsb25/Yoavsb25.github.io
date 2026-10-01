@@ -13,7 +13,7 @@ The a11y and design reviews need a real browser, which Claude Code gets through 
 - The browser runs `--headless --isolated` (in-memory profile) with `--allowed-origins http://localhost:4321`, and `browser_file_upload` and `browser_run_code_unsafe` are denied in `.claude/settings.json`.
 - All of `.claude/` (including the gitignored `settings.local.json`), `CLAUDE.md`, `.mcp.json`, and `package.json` are protected paths (edits ask first). Paths are resolved (`..` cannot dodge a rule) and matched case-insensitively.
 - Agent boundaries are enforced in the project's global guard hooks, keyed on the `agent_type` field Claude Code sends for subagent tool calls, and backed by tested rules in `scripts/guards/rules.mjs`:
-  - `code-reviewer`, `security-reviewer`: Bash limited to one plain read-only command at a time (`checkReadOnlyCommand`): no shell metacharacters, whole-command allowlist, no git options that write files or run programs.
+  - `code-reviewer`, `security-reviewer`, `refactor-reviewer` (ADR-0022): Bash limited to one plain read-only command at a time (`checkReadOnlyCommand`): no shell metacharacters, whole-command allowlist, no git options that write files or run programs.
   - `content-editor`: writes limited to `src/content/**` (`checkContentPath`; `docs/content-inventory.md` was also allowed until `feat/content-model` removed it).
   - `a11y-reviewer`: no shell at all.
 - Guard hooks fail closed: if a guard throws, the tool call is denied.

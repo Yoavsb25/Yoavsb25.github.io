@@ -9,6 +9,18 @@ describe("sitemapXml", () => {
     expect(xml).toContain("<loc>https://a.b/?x=1&amp;y=2</loc>");
     expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true);
   });
+
+  it("escapes every XML special character", () => {
+    expect(sitemapXml(['https://a.b/?q="<x>"&y'])).toContain(
+      "<loc>https://a.b/?q=&quot;&lt;x&gt;&quot;&amp;y</loc>",
+    );
+  });
+
+  it("puts one URL per line", () => {
+    expect(sitemapXml(["https://a.b/", "https://a.b/c/"])).toContain(
+      "<loc>https://a.b/</loc></url>\n  <url><loc>https://a.b/c/</loc>",
+    );
+  });
 });
 
 describe("robotsTxt", () => {
@@ -23,12 +35,40 @@ describe("llmsTxt", () => {
   const txt = llmsTxt({
     name: "Ada",
     summary: "Engineer.",
-    details: ["Builds things."],
+    details: ["Builds things.", "Ships them."],
     projects: [
       { title: "One", summary: "First.", url: "https://a.b/one/" },
       { title: "Two", summary: "Second." },
     ],
-    links: [{ label: "GitHub", url: "https://github.com/ada" }],
+    links: [
+      { label: "GitHub", url: "https://github.com/ada" },
+      { label: "Email", url: "mailto:ada@a.b" },
+    ],
+  });
+
+  it("renders the whole document with blank lines between blocks", () => {
+    expect(txt).toBe(
+      [
+        "# Ada",
+        "",
+        "> Engineer.",
+        "",
+        "Builds things.",
+        "",
+        "Ships them.",
+        "",
+        "## Case studies",
+        "",
+        "- [One](https://a.b/one/): First.",
+        "- Two: Second.",
+        "",
+        "## Links",
+        "",
+        "- [GitHub](https://github.com/ada)",
+        "- [Email](mailto:ada@a.b)",
+        "",
+      ].join("\n"),
+    );
   });
 
   it("follows the llms.txt shape: title, summary, sections", () => {

@@ -29,3 +29,6 @@ _site/
 test-results/
 playwright-report/
 .lighthouseci/
+
+# Stryker mutation-testing sandbox
+.stryker-tmp/

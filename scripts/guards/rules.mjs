@@ -25,7 +25,7 @@ const PROTECTED_PATHS = [
  * it is a bypass. Any depth, because a nested config overrides the root one (ADR-0021).
  */
 const PROTECTED_NAMES =
-  /^(?:(?:eslint|vitest|playwright|commitlint|prettier)\.config\.[cm]?[jt]s|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
+  /^(?:(?:eslint|vitest|playwright|commitlint|prettier)\.config\.(?:[cm]?[jt]s|json)|\.?stryker\.conf(?:ig)?\.(?:json|[cm]?[jt]s)|\.?knip(?:\.config)?\.(?:jsonc?|[cm]?[jt]s)|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
 
 /** Paths that must never be written or committed. */
 const FORBIDDEN = [/(^|\/)\.env(\..*)?$/];
@@ -209,6 +209,8 @@ const SUPPRESSION = new RegExp(
   [
     ["eslint", "disable"].join("-"),
     "(?:c8|v8|istanbul|node:coverage)\\s+(?:ignore|disable)",
+    // Mutation testing (ADR-0023).
+    "Stryker\\s+disable",
     // Test modifiers, called directly, chained before .each/.concurrent, or indexed by name.
     "\\.(?:only|skip|skipIf|runIf|fixme|fail|fails|todo)\\s*[(.]",
     "\\[\\s*[\"'`](?:only|skip|fixme|todo)[\"'`]\\s*\\]",
@@ -265,10 +267,14 @@ export function currentRoadmapItem(markdown) {
 }
 
 /** Agents whose Bash is limited to READ_ONLY_COMMANDS. */
-export const READ_ONLY_AGENTS = ["code-reviewer", "security-reviewer"];
+const READ_ONLY_AGENTS = [
+  "code-reviewer",
+  "security-reviewer",
+  "refactor-reviewer",
+];
 
 /** Agents with no shell at all (ADR-0009); their tool lists already omit Bash. */
-export const NO_SHELL_AGENTS = ["a11y-reviewer"];
+const NO_SHELL_AGENTS = ["a11y-reviewer"];
 
 /** @returns {string | null} why this agent may not run this command, or null if allowed. */
 export function checkAgentCommand(agent, command) {

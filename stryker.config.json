@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "command",
+  "commandRunner": {
+    "command": "vitest run --coverage.enabled=false"
+  },
+  "coverageAnalysis": "off",
+  "mutate": ["src/lib/**/*.ts"],
+  "reporters": ["clear-text", "progress"],
+  "clearTextReporter": {
+    "allowColor": false,
+    "logTests": false
+  },
+  "tempDirName": ".stryker-tmp",
+  "cleanTempDir": "always",
+  "thresholds": {
+    "high": 95,
+    "low": 85,
+    "break": 89
+  }
+}
