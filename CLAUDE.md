@@ -8,17 +8,19 @@ Astro 7 · TypeScript (strictest) · ESLint · Prettier · Vitest · GitHub Acti
 
 ## Commands
 
-| Command            | Purpose                                                                                    |
-| ------------------ | ------------------------------------------------------------------------------------------ |
-| `npm run dev`      | Local dev server at http://localhost:4321/ (`site.base`)                                   |
-| `npm run verify`   | **Definition of Done** — format:check, lint, astro check, test, build                      |
-| `npm run format`   | Auto-format everything                                                                     |
-| `npm run test`     | Unit tests (Vitest)                                                                        |
-| `npm run test:e2e` | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone)            |
-| `npm run browsers` | Install Chromium + WebKit for the e2e runner, Chromium for the MCP                         |
-| `npm run guards`   | Suppression ratchet: no new lint/type disables, coverage ignores, skipped tests (ADR-0021) |
-| `npm run audit`    | Fail on high/critical dependency vulnerabilities                                           |
-| `npm run ci:local` | Pre-push gate: verify, audit, e2e, internal links, actionlint (ADR-0020)                   |
+| Command                 | Purpose                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------- |
+| `npm run dev`           | Local dev server at http://localhost:4321/ (`site.base`)                                          |
+| `npm run verify`        | **Definition of Done** — guards, format:check, lint, knip, astro check, test, build               |
+| `npm run format`        | Auto-format everything                                                                            |
+| `npm run test`          | Unit tests (Vitest)                                                                               |
+| `npm run test:mutation` | Stryker on `src/lib` (~80 s): tests must catch planted bugs; score ≥ `break` threshold (ADR-0023) |
+| `npm run knip`          | Unused files, exports, dependencies (ADR-0022)                                                    |
+| `npm run test:e2e`      | Build, then Playwright + axe + byte budgets on every page (both themes, iPhone)                   |
+| `npm run browsers`      | Install Chromium + WebKit for the e2e runner, Chromium for the MCP                                |
+| `npm run guards`        | Suppression ratchet: no new lint/type disables, coverage ignores, skipped tests (ADR-0021)        |
+| `npm run audit`         | Fail on high/critical dependency vulnerabilities                                                  |
+| `npm run ci:local`      | Pre-push gate: verify, audit, mutation, e2e, internal links, actionlint (ADR-0020)                |
 
 ## Layout
 
@@ -47,6 +49,8 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 - Never push, force-push, or skip hooks (`--no-verify`).
 - Site-wide values come from `src/config/site.ts` — never hard-code the URL or name. Internal links go through `withBase()` (`src/lib/url.ts`, ADR-0010).
 - Logic goes in `src/lib/` with a test; `.astro` files stay presentational.
+- Size limits (ADR-0022): complexity 10, depth 3, 4 params, 60-line functions, 300-line files. Over a limit, split the code with `/refactor`; never raise the limit.
+- Refactors use `/refactor`, bug fixes use `/fix-bug`; never mix either with new behavior in one commit.
 - Ship zero client JS by default. Any `client:*` directive needs a comment justifying it.
 - No third-party scripts, trackers, or CDNs (see `docs/security.md`).
 - Pin GitHub Actions to full commit SHAs with a version comment.
@@ -64,7 +68,10 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 | `/a11y-audit`             | Same PRs: static scan, then dispatches the `a11y-reviewer` agent, then triage             |
 | `/perf-audit`             | PRs that add pages, images, fonts, or scripts: byte budgets and Web Vitals on the build   |
 | `code-reviewer` agent     | Before `/ship` on any PR that changes code                                                |
+| `refactor-reviewer` agent | After `/refactor`: checks behavior, public API, and tests are unchanged                   |
 | `security-reviewer` agent | PRs touching `.github/`, `.claude/`, `scripts/guards/`, dependencies, or `<head>`         |
+| `/refactor`               | Restructuring code: pin behavior first, small steps, knip clean, `refactor-reviewer`      |
+| `/fix-bug`                | A defect: failing test first, root cause, smallest fix, test kept                         |
 | `a11y-reviewer` agent     | PRs that change pages, components, or styles (needs `npm run dev`)                        |
 | `content-editor` agent    | Writing or editing site copy in `src/content/`                                            |
 | `/new-case-study`         | Adding a project: the fixed case-study structure the schema enforces                      |

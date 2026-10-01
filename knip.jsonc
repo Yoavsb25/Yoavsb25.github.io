@@ -1,0 +1,14 @@
+// Dead code, unused exports, and unused or unlisted dependencies (ADR-0022).
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  // Claude Code runs these directly (.claude/settings.json, skills), so nothing imports them.
+  "entry": [".claude/hooks/*.mjs", ".claude/skills/*/*.mjs"],
+  "ignoreDependencies": [
+    // Launched by .mcp.json, not imported.
+    "@playwright/mcp",
+    // Resolved inside each Playwright copy on purpose (scripts/install-browsers.mjs).
+    "playwright",
+    // Stryker's "command" test runner is built into @stryker-mutator/core.
+    "@stryker-mutator/command-runner",
+  ],
+}

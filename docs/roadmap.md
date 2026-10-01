@@ -2,31 +2,31 @@
 
 One PR at a time; the next starts only after the previous is merged.
 
-| #   | Branch                         | Scope                                                                                                                                 | Status         |
-| --- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| 1   | `chore/scaffold`               | Astro + TS strict, ESLint, Prettier, Vitest, `npm run verify`                                                                         | ✅ merged      |
-| 2   | `ci/pr-checks`                 | CI (verify, audit, actionlint, CodeQL), Dependabot, templates                                                                         | ✅ merged      |
-| 3   | `chore/guardrails`             | lefthook, commitlint, CONTRIBUTING, CLAUDE.md, docs, ADRs                                                                             | ✅ merged      |
-| 4   | `chore/claude-settings-hooks`  | Claude permissions + hooks, shared guard rules, CODEOWNERS                                                                            | ✅ merged      |
-| 5   | `docs/product-plan`            | Product brief, IA, content inventory (real copy and data), architecture, design system, ADR-0005 to 0008, mockup                      | ✅ merged      |
-| 6   | `chore/claude-skills-agents`   | `/adr`, `/ship` skills, 4 review/content subagents, Playwright MCP                                                                    | ✅ merged      |
-| 7   | `feat/design-system`           | Tokens, self-hosted fonts, `ui/` primitives, site chrome, BaseLayout, theme toggle, ESLint boundaries, `/styleguide`                  | ✅ merged      |
-| 8   | `chore/claude-skills-scaffold` | `/new-component`, `/new-page`, `/design-review`, `/a11y-audit`, `/perf-audit`                                                         | ✅ merged      |
-| 9   | `ci/deploy`                    | Deploy to Pages, e2e + axe, Lighthouse budgets, link check                                                                            | ✅ merged      |
-| 10  | `feat/content-model`           | Content collections + schemas, `/new-case-study`, `/sync-projects`; delete `content-inventory.md`                                     | ✅ merged      |
-| 11  | `feat/seo`                     | SEO/JSON-LD, CSP, OG images, sitemap, robots, `llms.txt`                                                                              | ✅ merged      |
-| 12  | `feat/pages`                   | Home (hero, how I work, work, resume, contact), case study pages, 404; enable link fragment checks; delete `docs/design/mockup.html`  | ✅ merged      |
-| 13  | `content/launch-content`       | Real case studies, experience, CV, portrait; resolve every `TODO(confirm)`                                                            | ✅ merged      |
-| 14  | `chore/launch`                 | Final audits (landed as #19 and #20; `v1.0.0` moved to PR 17, custom domain deferred)                                                 | ✅ merged      |
-| 15  | `chore/root-domain`            | Rename the repo to `Yoavsb25.github.io`, `site.base` → `/` (ADR-0017)                                                                 | ✅ merged      |
-| 16  | `fix/mobile-nav-and-content`   | Mobile header menu (CSS budget 20 → 22 KB), real result figures                                                                       | ✅ merged      |
-| 17  | `chore/audit-low`              | Version `1.0.0` (tag after merge), iPhone WebKit e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                          | ✅ merged      |
-| 18  | `refactor/tokens-and-helpers`  | Spacing tokens + documented exceptions, named OG title threshold, `pr-title` CI check                                                 | ✅ merged      |
-| 19  | `test/visual-and-coverage`     | Per-section visual regression on Linux baselines (ADR-0018), 100% `src/lib` coverage (ADR-0019)                                       | ✅ merged      |
-| 20  | `ci/pre-push-parity`           | `npm run ci:local` (verify, audit, e2e, links, actionlint) as the pre-push hook and `/ship` gate (ADR-0020)                           | ✅ merged      |
-| 21  | `chore/tamper-proof-gates`     | Protect check config and visual baselines, suppression ratchet in `verify`/pre-commit/Stop hook, Stop hook runs unit tests (ADR-0021) | 🚧 in progress |
-| 22  | `chore/refactor-engine`        | `/refactor` and `/fix-bug` skills, `refactor-reviewer` agent, knip, ESLint complexity limits, mutation testing on `src/lib`           | ⏳ planned     |
-| 23  | `chore/agent-agnostic-rules`   | `AGENTS.md` as the source of truth, guard rules over the whole PR diff in CI, roadmap scope check, AI change notes in the PR template | ⏳ planned     |
+| #   | Branch                         | Scope                                                                                                                                                                       | Status         |
+| --- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| 1   | `chore/scaffold`               | Astro + TS strict, ESLint, Prettier, Vitest, `npm run verify`                                                                                                               | ✅ merged      |
+| 2   | `ci/pr-checks`                 | CI (verify, audit, actionlint, CodeQL), Dependabot, templates                                                                                                               | ✅ merged      |
+| 3   | `chore/guardrails`             | lefthook, commitlint, CONTRIBUTING, CLAUDE.md, docs, ADRs                                                                                                                   | ✅ merged      |
+| 4   | `chore/claude-settings-hooks`  | Claude permissions + hooks, shared guard rules, CODEOWNERS                                                                                                                  | ✅ merged      |
+| 5   | `docs/product-plan`            | Product brief, IA, content inventory (real copy and data), architecture, design system, ADR-0005 to 0008, mockup                                                            | ✅ merged      |
+| 6   | `chore/claude-skills-agents`   | `/adr`, `/ship` skills, 4 review/content subagents, Playwright MCP                                                                                                          | ✅ merged      |
+| 7   | `feat/design-system`           | Tokens, self-hosted fonts, `ui/` primitives, site chrome, BaseLayout, theme toggle, ESLint boundaries, `/styleguide`                                                        | ✅ merged      |
+| 8   | `chore/claude-skills-scaffold` | `/new-component`, `/new-page`, `/design-review`, `/a11y-audit`, `/perf-audit`                                                                                               | ✅ merged      |
+| 9   | `ci/deploy`                    | Deploy to Pages, e2e + axe, Lighthouse budgets, link check                                                                                                                  | ✅ merged      |
+| 10  | `feat/content-model`           | Content collections + schemas, `/new-case-study`, `/sync-projects`; delete `content-inventory.md`                                                                           | ✅ merged      |
+| 11  | `feat/seo`                     | SEO/JSON-LD, CSP, OG images, sitemap, robots, `llms.txt`                                                                                                                    | ✅ merged      |
+| 12  | `feat/pages`                   | Home (hero, how I work, work, resume, contact), case study pages, 404; enable link fragment checks; delete `docs/design/mockup.html`                                        | ✅ merged      |
+| 13  | `content/launch-content`       | Real case studies, experience, CV, portrait; resolve every `TODO(confirm)`                                                                                                  | ✅ merged      |
+| 14  | `chore/launch`                 | Final audits (landed as #19 and #20; `v1.0.0` moved to PR 17, custom domain deferred)                                                                                       | ✅ merged      |
+| 15  | `chore/root-domain`            | Rename the repo to `Yoavsb25.github.io`, `site.base` → `/` (ADR-0017)                                                                                                       | ✅ merged      |
+| 16  | `fix/mobile-nav-and-content`   | Mobile header menu (CSS budget 20 → 22 KB), real result figures                                                                                                             | ✅ merged      |
+| 17  | `chore/audit-low`              | Version `1.0.0` (tag after merge), iPhone WebKit e2e, `STAGE_COUNT`↔CSS test, theme label follows the system                                                                | ✅ merged      |
+| 18  | `refactor/tokens-and-helpers`  | Spacing tokens + documented exceptions, named OG title threshold, `pr-title` CI check                                                                                       | ✅ merged      |
+| 19  | `test/visual-and-coverage`     | Per-section visual regression on Linux baselines (ADR-0018), 100% `src/lib` coverage (ADR-0019)                                                                             | ✅ merged      |
+| 20  | `ci/pre-push-parity`           | `npm run ci:local` (verify, audit, e2e, links, actionlint) as the pre-push hook and `/ship` gate (ADR-0020)                                                                 | ✅ merged      |
+| 21  | `chore/tamper-proof-gates`     | Protect check config and visual baselines, suppression ratchet in `verify`/pre-commit/Stop hook, Stop hook runs unit tests (ADR-0021)                                       | ✅ merged      |
+| 22  | `chore/refactor-engine`        | `/refactor` and `/fix-bug` skills, `refactor-reviewer` agent, knip and ESLint size limits (ADR-0022), Stryker mutation testing on `src/lib` in `ci:local` and CI (ADR-0023) | 🚧 in progress |
+| 23  | `chore/agent-agnostic-rules`   | `AGENTS.md` as the source of truth, guard rules over the whole PR diff in CI, roadmap scope check, AI change notes in the PR template                                       | ⏳ planned     |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
 `

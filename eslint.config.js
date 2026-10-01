@@ -149,4 +149,34 @@ export default defineConfig(
       { contentTypesOk: true },
     ),
   },
+
+  /**
+   * Size and complexity limits (ADR-0022): code an agent writes or refactors stays small enough
+   * to review. Over a limit, split the code; raising a limit is a protected config change.
+   */
+  {
+    rules: {
+      complexity: ["error", 10],
+      "max-depth": ["error", 3],
+      "max-params": ["error", 4],
+      "max-nested-callbacks": ["error", 3],
+      "max-lines": [
+        "error",
+        { max: 300, skipBlankLines: true, skipComments: true },
+      ],
+      "max-lines-per-function": [
+        "error",
+        { max: 60, skipBlankLines: true, skipComments: true },
+      ],
+    },
+  },
+  {
+    // describe/it callbacks nest and grow by design; a test file may cover a whole module.
+    files: ["tests/**"],
+    rules: {
+      "max-nested-callbacks": "off",
+      "max-lines-per-function": "off",
+      "max-lines": ["error", { max: 500, skipBlankLines: true }],
+    },
+  },
 );

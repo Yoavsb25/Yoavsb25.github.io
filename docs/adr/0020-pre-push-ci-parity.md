@@ -1,6 +1,6 @@
 # 0020. Run the CI checks before every push
 
-- Status: accepted
+- Status: accepted (ADR-0023 adds mutation testing after `audit`)
 - Date: 2026-09-29
 
 ## Context
