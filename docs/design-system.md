@@ -16,19 +16,19 @@ Inspiration: igaltal.github.io/portfolio (editorial type, restraint, "proof over
 
 **Source of truth: [`src/styles/tokens.css`](../src/styles/tokens.css)** (values for both themes). Components use tokens only: no hex values or ad-hoc sizes. See every token rendered in both themes at `/styleguide`.
 
-| Token           | Use                                         |
-| --------------- | ------------------------------------------- |
-| `--ground`      | Page background                             |
-| `--ground-2`    | Tonal band, footer, case-study "next" block |
-| `--surface`     | Cards, panels, ghost buttons                |
-| `--ink`         | Headings, primary text, primary button      |
-| `--ink-2`       | Body text, secondary text                   |
-| `--ink-3`       | Labels, meta, captions                      |
-| `--line`        | Borders, dividers, inactive track           |
-| `--accent`      | Accent word, ticks, links, active stage     |
-| `--accent-ink`  | Text on accent                              |
-| `--accent-soft` | Card illustration backgrounds               |
-| `--glow`        | Faint radial glow behind the hero           |
+| Token           | Use                                             |
+| --------------- | ----------------------------------------------- |
+| `--ground`      | Page background                                 |
+| `--ground-2`    | Tonal band, footer, case-study "next" block     |
+| `--surface`     | Cards, panels, ghost buttons                    |
+| `--ink`         | Headings, primary text, primary button          |
+| `--ink-2`       | Body text, secondary text                       |
+| `--ink-3`       | Labels, meta, captions                          |
+| `--line`        | Borders, dividers, inactive track               |
+| `--accent`      | Accent word, ticks, links, active stage, badges |
+| `--accent-ink`  | Text on accent                                  |
+| `--accent-soft` | Card illustration backgrounds                   |
+| `--glow`        | Faint radial glow behind the hero               |
 
 `--ink-3` is darker than in the mockup (light `#626B74`, dark `#8F9B95`): the mockup values failed WCAG AA for small label text (3.65:1). Every text/background pair now measures at least 4.6:1 in both themes.
 
@@ -102,6 +102,7 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 | **Status line**   | Pulsing 8px accent dot + 15px medium text                                                                                                                                                                                                                    |
 | **Portrait**      | 4:5, radius 28px, border + shadow                                                                                                                                                                                                                            |
 | **Skill chip**    | Pill, surface + line border, 14.5px `--ink-2`                                                                                                                                                                                                                |
+| **Badge**         | Accent pill, `--accent-ink` text in label style, leading check. Marks a real milestone (e.g. Sold) on the work card's illustration corner and next to the case-study label. At most one per project                                                          |
 | **Stage track**   | 7 stages on one line (vertical list on mobile). 32px dots: inactive = line border; done = accent border + tick; active = filled accent, scale 1.1. Accent fill line animates to the active stage. Detail area: explanation + "In practice" panel             |
 | **Work card**     | Whole card is a link. Illustration area shows the project's cover image when it has one, otherwise the accent-soft gradient window; body: label, serif title, summary, tags, "Read the case study →". Featured card spans all columns in two halves          |
 | **Timeline role** | Date column (150px, tabular) + title, place, 1–4 bullets with accent markers; hairline between roles                                                                                                                                                         |

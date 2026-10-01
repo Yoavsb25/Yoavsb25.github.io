@@ -1,6 +1,6 @@
 ---
 title: This website, built with AI
-kicker: Featured · 2026
+kicker: Personal project · 2026
 summary: "A portfolio built the way I build products: planned first, protected by automatic checks, and developed with AI assistants that follow the same rules as a human engineer."
 tags: [AI-assisted development, Quality automation, TypeScript]
 outcome: "A personal website that doubles as proof of how I work: every change planned, checked, and reviewed."
@@ -25,5 +25,4 @@ results:
   - figure: "7"
     label: automatic checks every change must pass to go live
 order: 1
-featured: true
 ---
