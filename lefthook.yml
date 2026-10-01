@@ -6,6 +6,9 @@ pre-commit:
       run: node scripts/guards/scan-staged-secrets.mjs {staged_files}
     files:
       run: node scripts/guards/check-staged-files.mjs {staged_files}
+    suppressions:
+      glob: "*.{js,mjs,cjs,ts,astro,json}"
+      run: node scripts/guards/check-suppressions.mjs
     prettier:
       glob: "*.{js,mjs,ts,astro,json,md,yml,yaml,css}"
       run: npx prettier --write {staged_files}

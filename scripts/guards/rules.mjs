@@ -14,7 +14,18 @@ const PROTECTED_PATHS = [
   "package-lock.json",
   "lefthook.yml",
   "public/CNAME",
+  // What the e2e checks compare against, and how strictly (ADR-0018, ADR-0021).
+  "tests/e2e/support.ts",
+  "tests/e2e/visual.spec.ts",
+  "tests/e2e/__screenshots__/",
 ];
+
+/**
+ * File names protected at any depth: config that sets what the checks enforce, so loosening
+ * it is a bypass. Any depth, because a nested config overrides the root one (ADR-0021).
+ */
+const PROTECTED_NAMES =
+  /^(?:(?:eslint|vitest|playwright|commitlint|prettier)\.config\.[cm]?[jt]s|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
 
 /** Paths that must never be written or committed. */
 const FORBIDDEN = [/(^|\/)\.env(\..*)?$/];
@@ -83,6 +94,7 @@ export function toRepoPath(filePath, projectDir) {
 
 function isProtected(repoPath) {
   const lower = repoPath.toLowerCase();
+  if (PROTECTED_NAMES.test(path.posix.basename(lower))) return true;
   return PROTECTED_PATHS.map((p) => p.toLowerCase()).some((p) =>
     p.endsWith("/") ? lower.startsWith(p) : lower === p,
   );
@@ -125,13 +137,24 @@ export function checkCommand(command) {
 
 /** @returns {string | null} the protected path a command may modify, or null. */
 export function protectedPathInCommand(command) {
+  // Playwright rewrites the visual baselines itself, with no write operator in the command.
+  if (/--update-snapshots\b/.test(command)) return "tests/e2e/__screenshots__/";
   const cleaned = command.replace(
     /\d?>&\d|&>\s*\/dev\/null|\d?>\s*\/dev\/null/g,
     "",
   );
   if (!WRITE_OPS.test(cleaned)) return null;
   const lower = cleaned.toLowerCase();
-  return PROTECTED_PATHS.find((p) => lower.includes(p.toLowerCase())) ?? null;
+  // A directory also matches without its trailing slash (e.g. `rm -r .claude`).
+  const dir = PROTECTED_PATHS.find((p) =>
+    lower.includes(p.toLowerCase().replace(/\/$/, "")),
+  );
+  if (dir) return dir;
+  return (
+    lower
+      .split(/[\s"'=;&|()<>]+/)
+      .find((token) => PROTECTED_NAMES.test(path.posix.basename(token))) ?? null
+  );
 }
 
 /** @returns {boolean} true if the command is a git commit. */
@@ -175,6 +198,60 @@ export function writtenText(toolInput) {
     ...(toolInput.edits ?? []).map((e) => e.new_string),
   ];
   return parts.filter(Boolean).join("\n");
+}
+
+/**
+ * Comments and calls that switch a check off for some code: lint and type-check suppressions,
+ * coverage ignores, skipped or focused tests (ADR-0021). The lint directive is split so this
+ * file does not count itself.
+ */
+const SUPPRESSION = new RegExp(
+  [
+    ["eslint", "disable"].join("-"),
+    "(?:c8|v8|istanbul|node:coverage)\\s+(?:ignore|disable)",
+    // Test modifiers, called directly, chained before .each/.concurrent, or indexed by name.
+    "\\.(?:only|skip|skipIf|runIf|fixme|fail|fails|todo)\\s*[(.]",
+    "\\[\\s*[\"'`](?:only|skip|fixme|todo)[\"'`]\\s*\\]",
+    "\\b(?:xit|xtest|xdescribe)\\s*\\(",
+  ].join("|"),
+  "g",
+);
+
+/** Files scanned for suppressions: everything ESLint, TypeScript, or Vitest may load. */
+export const SUPPRESSION_FILES = /\.(?:[cm]?[jt]sx?|astro)$/;
+
+/** TypeScript reads its pragmas case-insensitively, so this pattern is too. */
+const TS_PRAGMA = /@ts-(?:ignore|nocheck|expect-error)/gi;
+
+/** @returns {number} how many suppressions the text contains. */
+export function countSuppressions(text) {
+  return (
+    (text.match(SUPPRESSION)?.length ?? 0) +
+    (text.match(TS_PRAGMA)?.length ?? 0)
+  );
+}
+
+/**
+ * Compare per-file suppression counts with the approved baseline ({ file: { count, why } }).
+ * Counts must match exactly, so a removed suppression lowers the allowance instead of freeing
+ * a slot for a new one. An entry without a reason approves nothing.
+ * @returns {string[]} one line per file whose count differs from its allowance.
+ */
+export function compareSuppressions(counts, baseline) {
+  const files = new Set([...Object.keys(counts), ...Object.keys(baseline)]);
+  const problems = [];
+  for (const file of [...files].sort()) {
+    const found = counts[file] ?? 0;
+    const entry = baseline[file];
+    const allowed = entry?.why?.trim() ? (entry.count ?? 0) : 0;
+    if (found > allowed)
+      problems.push(`${file}: ${found} found, ${allowed} approved`);
+    if (found < allowed)
+      problems.push(
+        `${file}: ${found} found, ${allowed} approved (lower the count)`,
+      );
+  }
+  return problems;
 }
 
 /** Extract the in-progress row from docs/roadmap.md, if any. */
