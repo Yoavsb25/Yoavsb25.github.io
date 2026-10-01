@@ -1,6 +1,6 @@
 ---
 title: Files Unifier
-kicker: Client project
+kicker: Desktop app for a law firm
 summary: A desktop tool, sold to a leading law firm, that turns a spreadsheet into merged, ready-to-send PDFs.
 tags: [Automation, Python, Desktop app]
 outcome: Built and sold to Goldfarb Gross Seligman, now used internally for document workflows.
@@ -25,6 +25,8 @@ results:
   - figure: 30 sec
     label: to merge 130 pages
 order: 3
+featured: true
+badge: Sold
 cover:
   src: ./cover.png
   alt: "The PDF Batch Merger desktop app: fields for the serial numbers column, the instructions spreadsheet, and the source and output folders, a Run Merge button, and a detailed log panel."

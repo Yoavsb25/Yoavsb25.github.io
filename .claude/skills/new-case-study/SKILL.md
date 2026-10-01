@@ -16,6 +16,7 @@ A case study is a folder, `src/content/projects/<slug>/index.md`, whose frontmat
    - `meta`: `role`, `timeline` (optional), `stack` (list), `links` (list of `{label, href}`; omit for private or internal work).
    - `problem`, `built` (exactly 3), `approach`, `results` (exactly 3 `{figure, label}`; the figure is short: "29", "100%", "Sold").
    - `order` (position among projects), `featured` (at most one project), `draft: true` until the user approves the copy.
+   - `badge` is optional: one short, real milestone ("Sold"), shown on the card and case study. Only when the user confirms it.
    - `cover` is optional: `{ src: ./cover.png, alt: "…" }` with the image beside `index.md`.
    - The Markdown body below the frontmatter is an optional deep dive; leave it empty unless the user wants one.
 4. **Check the copy.** Dispatch the `content-editor` agent to review it against the voice rules, or follow them yourself (`docs/design-system.md` → Voice).

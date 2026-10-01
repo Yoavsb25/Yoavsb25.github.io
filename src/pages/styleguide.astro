@@ -4,6 +4,7 @@
  * and the a11y-reviewer agent. Not linked from navigation and not indexed.
  */
 import Button from "@/components/ui/Button.astro";
+import Badge from "@/components/ui/Badge.astro";
 import Chip from "@/components/ui/Chip.astro";
 import Icon, { type IconName } from "@/components/ui/Icon.astro";
 import Panel from "@/components/ui/Panel.astro";
@@ -123,6 +124,15 @@ const icons: IconName[] = [
         <Chip>Python</Chip>
         <Chip size="sm">Automation</Chip>
         <Chip size="sm">TypeScript</Chip>
+      </div>
+    </section>
+
+    <section aria-labelledby="badges">
+      <h2 id="badges" class="label">
+        Badges
+      </h2>
+      <div class="row">
+        <Badge>Sold</Badge>
       </div>
     </section>
 
