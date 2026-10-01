@@ -14,7 +14,10 @@ describe("THEME_STORAGE_KEY", () => {
   // The bootstrap in BaseLayout cannot import it (ADR-0008), so it repeats the key; they must match
   // or a saved theme is written by the toggle but never read on the next page load.
   it("matches the key the inline bootstrap reads", () => {
-    const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
+    const layout = readFileSync(
+      new URL("../../src/layouts/BaseLayout.astro", import.meta.url),
+      "utf8",
+    );
     expect(layout).toContain(`localStorage.getItem("${THEME_STORAGE_KEY}")`);
     expect(THEME_STORAGE_KEY).not.toBe("");
   });

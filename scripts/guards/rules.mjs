@@ -25,7 +25,7 @@ const PROTECTED_PATHS = [
  * it is a bypass. Any depth, because a nested config overrides the root one (ADR-0021).
  */
 const PROTECTED_NAMES =
-  /^(?:(?:eslint|vitest|playwright|commitlint|prettier|stryker)\.config\.(?:[cm]?[jt]s|json)|knip\.jsonc?|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
+  /^(?:(?:eslint|vitest|playwright|commitlint|prettier)\.config\.(?:[cm]?[jt]s|json)|\.?stryker\.conf(?:ig)?\.(?:json|[cm]?[jt]s)|\.?knip(?:\.config)?\.(?:jsonc?|[cm]?[jt]s)|tsconfig.*\.json|\.prettierrc.*|\.prettierignore|\.npmrc|lighthouserc\.json|lychee\.toml)$/i;
 
 /** Paths that must never be written or committed. */
 const FORBIDDEN = [/(^|\/)\.env(\..*)?$/];

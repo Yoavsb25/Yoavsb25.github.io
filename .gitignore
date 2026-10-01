@@ -32,4 +32,3 @@ playwright-report/
 
 # Stryker mutation-testing sandbox
 .stryker-tmp/
-reports/mutation/

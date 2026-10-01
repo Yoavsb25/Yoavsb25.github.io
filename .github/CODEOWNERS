@@ -27,5 +27,7 @@ tsconfig*.json   @Yoavsb25
 .npmrc           @Yoavsb25
 /tests/e2e/visual.spec.ts @Yoavsb25
 /tests/e2e/__screenshots__/ @Yoavsb25
-knip.json*       @Yoavsb25
-stryker.config.* @Yoavsb25
+knip.*           @Yoavsb25
+.knip.*          @Yoavsb25
+stryker.conf*    @Yoavsb25
+.stryker.conf*   @Yoavsb25

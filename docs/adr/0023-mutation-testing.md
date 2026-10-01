@@ -9,12 +9,12 @@
 
 ## Decision
 
-- **Stryker** (`@stryker-mutator/core`, `stryker.config.json`) mutates `src/lib/**/*.ts`; `npm run test:mutation` runs it (about 80 s).
+- **Stryker** (`@stryker-mutator/core`) mutates `src/lib/**/*.ts`; `npm run test:mutation` runs it with `stryker.config.json` named explicitly, so a stray `stryker.conf.*` (which Stryker would load first) has no effect; every Stryker config name is protected (about 80 s).
 - It uses Stryker's built-in `command` runner (Vitest per mutant, with coverage off). The Vitest plugin did not switch mutants on under Vitest 5 and reported a false 9%.
 - `thresholds.break` is the ratchet: set just under the current score (89 on adoption, 89.7% after adding tests for the real gaps). Raise it as the score rises; lowering it is a protected config change.
 - It runs in `ci:local` (pre-push, after `audit`) and as the `mutation` CI job, not in `verify`: too slow for every change. `/refactor` and `/fix-bug` run it when `src/lib/` changes.
 - `Stryker disable` comments count as suppressions in the ratchet (ADR-0021).
-- `qs` is overridden to 6.16.0: Stryker's `typed-rest-client` pins 6.15.1, which has moderate advisories. It is used only by the dashboard reporter, which this repo does not use.
+- `qs` is overridden to 6.16.0: Stryker's `typed-rest-client` pins 6.15.1, which has moderate advisories. It is used only by the dashboard reporter, which this repo does not use. Remove the override once Stryker ships a `typed-rest-client` that allows a patched `qs`.
 
 ## Consequences
 

@@ -60,6 +60,11 @@ describe("checkPath", () => {
     "knip.jsonc",
     "stryker.config.json",
     "stryker.config.mjs",
+    "stryker.conf.json",
+    ".stryker.config.mjs",
+    "knip.ts",
+    ".knip.json",
+    "knip.config.js",
   ])("asks before editing %s", (p) =>
     expect(checkPath(p).decision).toBe("ask"),
   );

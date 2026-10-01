@@ -28,7 +28,7 @@ Read `CLAUDE.md`, `docs/architecture.md`, and the `/refactor` skill (`.claude/sk
 4. **Gates.** No new suppressions, no edits to ESLint/Vitest/Stryker/knip config, `scripts/guards/suppressions.json`, or visual baselines unless the user approved them (ADR-0021).
 5. **Result.** The code is actually simpler: shorter, less duplicated, or better layered. Dead code removed (knip clean). No unrelated changes mixed in.
 
-Run `npm run test` and `npm run lint` once to confirm they pass. Mutation testing needs a shell you do not have: say whether `src/lib/` changed so the caller runs `npm run test:mutation`.
+Run `npm run verify` once: it includes lint, knip (dead code), and the unit tests. Mutation testing needs a shell you do not have: say whether `src/lib/` changed so the caller runs `npm run test:mutation`.
 
 ## Report
 

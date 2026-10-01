@@ -43,6 +43,7 @@ export default defineConfig(
     "test-results/",
     "playwright-report/",
     ".lighthouseci/",
+    ".stryker-tmp/",
   ]),
   // Rules are set here only: no inline config or disable comments can switch them off (ADR-0021).
   {

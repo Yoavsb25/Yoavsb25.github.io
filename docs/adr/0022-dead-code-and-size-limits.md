@@ -11,7 +11,7 @@ AI tools refactor freely. Two kinds of rot slip past lint, types, and tests: cod
 
 - **knip** (devDependency, `knip.jsonc`) reports unused files, exports, and dependencies, and unlisted dependencies. `npm run knip` runs in `verify`, so in pre-push and CI. Entry points it cannot infer (Claude hooks and skill scripts, launched by Claude Code) and dependencies used outside imports are listed in the config, each with its reason.
 - **ESLint limits** on all code: `complexity` 10, `max-depth` 3, `max-params` 4, `max-nested-callbacks` 3, `max-lines` 300, `max-lines-per-function` 60 (blank lines and comments skipped). Tests drop the callback and function-length limits (describe/it nest by design) and allow 500 lines per file.
-- Over a limit, the code is split (`/refactor`); a limit is not raised and not suppressed (inline config is off, ADR-0021). `knip.jsonc` is protected like the other check config.
+- Over a limit, the code is split (`/refactor`); a limit is not raised and not suppressed (inline config is off, ADR-0021). `npm run knip` names `knip.jsonc` explicitly, and every knip config name is protected like the other check config.
 
 ## Consequences
 

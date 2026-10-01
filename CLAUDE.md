@@ -70,12 +70,12 @@ scripts/guards/      shared guard rules for Claude + git hooks (protected, teste
 | `code-reviewer` agent     | Before `/ship` on any PR that changes code                                                |
 | `refactor-reviewer` agent | After `/refactor`: checks behavior, public API, and tests are unchanged                   |
 | `security-reviewer` agent | PRs touching `.github/`, `.claude/`, `scripts/guards/`, dependencies, or `<head>`         |
-| `/refactor`               | Restructuring code: pin behavior first, small steps, knip clean, `refactor-reviewer`      |
-| `/fix-bug`                | A defect: failing test first, root cause, smallest fix, test kept                         |
 | `a11y-reviewer` agent     | PRs that change pages, components, or styles (needs `npm run dev`)                        |
 | `content-editor` agent    | Writing or editing site copy in `src/content/`                                            |
 | `/new-case-study`         | Adding a project: the fixed case-study structure the schema enforces                      |
 | `/sync-projects`          | Proposing case studies from public GitHub repos; the user approves each one               |
+| `/refactor`               | Restructuring code: pin behavior first, small steps, knip clean, `refactor-reviewer`      |
+| `/fix-bug`                | A defect: failing test first, root cause, smallest fix, test kept                         |
 
 Standard PR flow: plan in scope → build → `npm run verify` → review agents and audits → `/ship` → the user pushes, opens the PR, merges when green.
 
