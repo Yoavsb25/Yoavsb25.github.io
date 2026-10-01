@@ -11,6 +11,7 @@ import MetaRow from "@/components/case-study/MetaRow.astro";
 import NextProject from "@/components/case-study/NextProject.astro";
 import ResultTiles from "@/components/case-study/ResultTiles.astro";
 import Toc from "@/components/case-study/Toc.astro";
+import Badge from "@/components/ui/Badge.astro";
 import Icon from "@/components/ui/Icon.astro";
 import Window from "@/components/ui/Window.astro";
 
@@ -42,7 +43,10 @@ const sections = [
     </a>
 
     <header class="head">
-      <span class="label">Case study · {data.kicker}</span>
+      <div class="eyebrow">
+        <span class="label">Case study · {data.kicker}</span>
+        {data.badge && <Badge>{data.badge}</Badge>}
+      </div>
       <h1 class="serif">{data.title}</h1>
       <p class="outcome">{data.outcome}</p>
     </header>
@@ -140,6 +144,13 @@ const sections = [
   .head {
     max-width: 51.25rem;
     margin-top: 2.25rem;
+  }
+
+  .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
   }
 
   h1 {
