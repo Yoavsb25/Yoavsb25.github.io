@@ -6,7 +6,9 @@ import {
   checkCommand,
   checkContentPath,
   checkPath,
+  checkPrFile,
   checkReadOnlyCommand,
+  checkRoadmap,
   compareSuppressions,
   countSuppressions,
   currentRoadmapItem,
@@ -364,9 +366,12 @@ describe("path traversal and case", () => {
     expect(checkPath(p).decision).toBe("deny");
   });
 
-  it.each([".claude/settings.local.json", "CLAUDE.md"])("protects %s", (p) => {
-    expect(checkPath(p).decision).toBe("ask");
-  });
+  it.each([".claude/settings.local.json", "CLAUDE.md", "AGENTS.md"])(
+    "protects %s",
+    (p) => {
+      expect(checkPath(p).decision).toBe("ask");
+    },
+  );
 });
 
 describe("countSuppressions", () => {
@@ -446,4 +451,71 @@ describe("compareSuppressions", () => {
       ]);
     },
   );
+});
+
+describe("checkRoadmap", () => {
+  const row = (n: number, branch: string, status: string) =>
+    `| ${n} | \`${branch}\` | scope | ${status} |`;
+  const md = (...rows: string[]) =>
+    [
+      "| # | Branch | Scope | Status |",
+      "| --- | --- | --- | --- |",
+      ...rows,
+    ].join("\n");
+
+  it("passes with one row in progress for this branch", () => {
+    const roadmap = md(
+      row(1, "a/x", "✅ merged"),
+      row(2, "b/y", "🚧 in progress"),
+    );
+    expect(checkRoadmap(roadmap, "b/y")).toEqual([]);
+  });
+
+  it("passes for a branch that is not on the roadmap", () => {
+    const roadmap = md(row(1, "a/x", "🚧 in progress"));
+    expect(checkRoadmap(roadmap, "fix/typo")).toEqual([]);
+  });
+
+  it("flags more than one row in progress", () => {
+    const roadmap = md(
+      row(1, "a/x", "🚧 in progress"),
+      row(2, "b/y", "🚧 in progress"),
+    );
+    expect(checkRoadmap(roadmap, "b/y")).toEqual([
+      "docs/roadmap.md: 2 rows are 🚧 in progress; mark merged PRs ✅ merged.",
+    ]);
+  });
+
+  it("flags a roadmap branch whose own row is not in progress", () => {
+    const roadmap = md(row(1, "a/x", "✅ merged"), row(2, "b/y", "⏳ planned"));
+    expect(checkRoadmap(roadmap, "b/y")).toEqual([
+      "docs/roadmap.md: the row for b/y must be 🚧 in progress.",
+    ]);
+  });
+
+  it("does not match a branch name inside another", () => {
+    const roadmap = md(row(1, "chore/x-y", "✅ merged"));
+    expect(checkRoadmap(roadmap, "chore/x")).toEqual([]);
+  });
+});
+
+describe("checkPrFile", () => {
+  it("passes a normal file", () => {
+    expect(checkPrFile("src/lib/a.ts", 1000, "export const a = 1;")).toEqual(
+      [],
+    );
+  });
+
+  it("rejects env files outright", () => {
+    expect(checkPrFile("config/.env.local", 10, "X=1")).toEqual([
+      "config/.env.local: env files must never be committed",
+    ]);
+  });
+
+  it("flags oversized files and secrets together", () => {
+    expect(checkPrFile("a.txt", 600 * 1024, fake("ghp_", 36))).toEqual([
+      "a.txt: 600 KB exceeds 500 KB",
+      "a.txt: looks like it contains a secret (GitHub token)",
+    ]);
+  });
 });

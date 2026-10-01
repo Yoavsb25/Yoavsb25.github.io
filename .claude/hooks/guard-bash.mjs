@@ -25,7 +25,7 @@ runGuard(({ tool_input: input, agent_type: agent }) => {
   else if (protectedPath) {
     preToolUseDecision(
       "ask",
-      `This command may modify ${protectedPath}, a protected path (see CLAUDE.md). Confirm.`,
+      `This command may modify ${protectedPath}, a protected path (see AGENTS.md). Confirm.`,
     );
   }
 });

@@ -28,6 +28,27 @@ jobs:
       - run: npm ci
       - run: npm run verify
 
+  # The commit-time guard rules over the whole PR diff, for commits made without the git hooks
+  # (other AI tools, the web editor, any machine), plus the roadmap check (ADR-0024).
+  guards:
+    name: guards
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      # No npm install: the guard scripts use only Node built-ins. Refs go through env (injection).
+      - env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: node scripts/guards/check-pr.mjs "origin/$BASE_REF" "$HEAD_REF"
+
   audit:
     name: audit
     runs-on: ubuntu-latest

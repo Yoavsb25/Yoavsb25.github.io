@@ -7,6 +7,7 @@ const PROTECTED_PATHS = [
   ".github/CODEOWNERS",
   ".claude/",
   "CLAUDE.md",
+  "AGENTS.md", // the rules every AI tool follows (ADR-0024)
   ".mcp.json",
   "scripts/guards/",
   "scripts/ci-local.mjs", // the pre-push gate (ADR-0020)
@@ -111,7 +112,7 @@ export function checkPath(repoPath) {
   if (isProtected(repoPath)) {
     return {
       decision: "ask",
-      reason: `${repoPath} is a protected file (see CLAUDE.md). Confirm this edit.`,
+      reason: `${repoPath} is a protected file (see AGENTS.md). Confirm this edit.`,
     };
   }
   return { decision: "allow" };
@@ -264,6 +265,50 @@ export function currentRoadmapItem(markdown) {
       .find((line) => line.includes("🚧"))
       ?.trim() ?? null
   );
+}
+
+/**
+ * Roadmap consistency for a PR (ADR-0024): at most one row in progress, and a roadmap branch
+ * marks its own row in progress, so the roadmap never drifts from what is being merged.
+ * @returns {string[]} problems, empty when consistent.
+ */
+export function checkRoadmap(markdown, branch) {
+  const rows = markdown.split("\n").filter((l) => /^\|\s*\d+\s*\|/.test(l));
+  const problems = [];
+  const active = rows.filter((r) => r.includes("🚧"));
+  if (active.length > 1) {
+    problems.push(
+      `docs/roadmap.md: ${active.length} rows are 🚧 in progress; mark merged PRs ✅ merged.`,
+    );
+  }
+  const own = rows.find((r) => r.includes(`\`${branch}\``));
+  if (own && !own.includes("🚧")) {
+    problems.push(
+      `docs/roadmap.md: the row for ${branch} must be 🚧 in progress.`,
+    );
+  }
+  return problems;
+}
+
+/**
+ * The commit-time checks, for one file a PR adds or changes, so they also hold for commits
+ * made without the git hooks (any agent, any machine; ADR-0024).
+ * @returns {string[]} problems with this file.
+ */
+export function checkPrFile(repoPath, sizeBytes, text) {
+  if (checkPath(repoPath).decision === "deny") {
+    return [`${repoPath}: env files must never be committed`];
+  }
+  const problems = [];
+  if (sizeBytes > MAX_FILE_BYTES) {
+    problems.push(
+      `${repoPath}: ${Math.round(sizeBytes / 1024)} KB exceeds ${MAX_FILE_BYTES / 1024} KB`,
+    );
+  }
+  const secret = findSecret(text);
+  if (secret)
+    problems.push(`${repoPath}: looks like it contains a secret (${secret})`);
+  return problems;
 }
 
 /** Agents whose Bash is limited to READ_ONLY_COMMANDS. */
