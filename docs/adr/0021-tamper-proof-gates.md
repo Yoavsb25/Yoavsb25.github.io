@@ -14,7 +14,7 @@ AI tools write and refactor most of this code. The gates (ADR-0004) stopped bad 
 - **Suppression ratchet.** `scripts/guards/check-suppressions.mjs` counts lint disables, `@ts-` pragmas (any case), coverage ignores (`c8`, `v8`, `istanbul`, `node:coverage`), and test modifiers (`.only`, `.skip`, `.skipIf`, `.runIf`, `.fixme`, `.fail(s)`, `.todo`, called, chained, or indexed; `xit`/`xtest`/`xdescribe`) in every file ESLint, TypeScript, or Vitest may load. Each file's count must equal its entry in `scripts/guards/suppressions.json`, so a removed suppression lowers the allowance instead of freeing a slot. An entry without a `why` approves nothing. Listing errors fail the check.
 - It is stateless (no diff against `main`), so the same check runs as `npm run guards` first in `verify` (local, pre-push, CI), in pre-commit, and in the Stop hook. Agents other than Claude Code are held to it by CI.
 - The baseline file sits in `scripts/guards/`, so changing a count is a protected, owner-reviewed change. There is deliberately no command to regenerate it.
-- The Stop hook also runs the unit tests (the whole hook takes about 7 s). It now notices new files in new folders, and a hung step counts as a failure.
+- The Stop hook also runs the unit tests (the whole hook takes about 7 s). It now notices new files in new folders; each step times out at 120 s and counts as a failure, inside a 600 s hook timeout, so the hook is never killed before it reports.
 
 ## Consequences
 
