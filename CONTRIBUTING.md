@@ -31,6 +31,8 @@ Screenshots in `tests/e2e/__screenshots__/` are rendered on Linux in CI (ADR-001
 
 Do not bypass hooks with `--no-verify`.
 
+AI coding agents follow `AGENTS.md` (Claude Code also reads `CLAUDE.md`, which imports it). The `guards` CI job re-runs the commit-time checks (secrets, `.env` files, file size, lockfile sync) and the roadmap check over the whole PR diff, so they hold for commits made without the git hooks (ADR-0024).
+
 New lint disables, `@ts-` suppressions, coverage ignores, and skipped or focused tests fail `npm run guards` (part of `verify`). If one is truly needed, raise that file's count in `scripts/guards/suppressions.json` with a `why`; the owner reviews it. Removing one means lowering the count in the same PR (ADR-0021).
 
 ## Decisions

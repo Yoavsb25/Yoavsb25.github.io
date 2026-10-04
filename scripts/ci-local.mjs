@@ -21,6 +21,7 @@ if (missing.length) {
 }
 
 const steps = [
+  ["guards", "node", ["scripts/guards/check-pr.mjs"]],
   ["verify", "npm", ["run", "verify"]],
   ["audit", "npm", ["run", "audit"]],
   ["mutation", "npm", ["run", "test:mutation"]],

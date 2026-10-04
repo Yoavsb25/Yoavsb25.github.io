@@ -9,7 +9,7 @@ if (packages.length) {
     JSON.stringify({
       hookSpecificOutput: {
         hookEventName: "PostToolUse",
-        additionalContext: `New dependency added (${packages.join(", ")}). Per CLAUDE.md, justify it with an ADR in docs/adr/ unless it is a trivial dev tool already covered by one.`,
+        additionalContext: `New dependency added (${packages.join(", ")}). Per AGENTS.md, justify it with an ADR in docs/adr/ unless it is a trivial dev tool already covered by one.`,
       },
     }),
   );
