@@ -9,16 +9,16 @@ export const site = {
   base: "/",
   name: "Yoav Sborovsky",
   initials: "YS",
-  jobTitle: "AI Engineer",
-  title: "Yoav Sborovsky — AI Engineer",
+  jobTitle: "Software Engineer",
+  title: "Yoav Sborovsky — Software Engineer & AI Builder",
   description:
-    "AI engineer who takes products from idea to production: planned, built, tested, and shipped.",
+    "Software engineer and AI builder who takes products from idea to production: planned, built, tested, and shipped.",
   location: "London",
   email: "Yoavsb25@gmail.com",
   cvPath: "/yoav-sborovsky-cv.pdf",
   socials: {
     github: "https://github.com/Yoavsb25",
-    linkedin: "https://www.linkedin.com/in/yoav-sborovsky-5a85b41a1/",
+    linkedin: "https://www.linkedin.com/in/yoav-sborovsky/",
   },
 } as const;
 

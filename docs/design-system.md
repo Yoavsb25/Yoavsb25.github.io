@@ -89,7 +89,6 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 - One curve: `--ease: cubic-bezier(.2, .7, .2, 1)`. Durations: `--dur-fast` 160ms (press, hover), `--dur-base` 240ms / `--dur-swap` 340ms (cards, content swaps), `--dur-slow` 400ms (theme change), `--dur-track` 520ms (track fill), `--dur-hero` 700ms (hero load).
 - Hero lines rise 12px on load, staggered 90ms, starting visible (opacity .4 → 1), never hidden.
 - Cards lift 4px on hover; arrows nudge 3px right.
-- Status dot pulses (2.4s).
 - `prefers-reduced-motion`: all animation and transitions off.
 
 ## Components
@@ -99,7 +98,6 @@ Borders separate; shadows lift. A card gets a shadow only on hover.
 | **Button**        | 48px tall (40px in header), pill. _Primary_: ink background, hover → accent. _Ghost_: surface + line border. Optional trailing arrow. Press scales to .98                                                                                                    |
 | **Header**        | Sticky, 70px, translucent ground + blur, hairline bottom border. Brand mark: 34px ink square (9px radius) with serif "YS". Below 900px the links move into a 40px pill "Menu" disclosure (icon only below 420px) that opens a surface panel under the header |
 | **Theme toggle**  | 40px circle, sun/moon icon. Follows the system theme until chosen, then remembered. No flash on load (ADR-0008)                                                                                                                                              |
-| **Status line**   | Pulsing 8px accent dot + 15px medium text                                                                                                                                                                                                                    |
 | **Portrait**      | 4:5, radius 28px, border + shadow                                                                                                                                                                                                                            |
 | **Skill chip**    | Pill, surface + line border, 14.5px `--ink-2`                                                                                                                                                                                                                |
 | **Badge**         | Accent pill, `--accent-ink` text in label style, leading check. Marks a real milestone (e.g. Sold) on the work card's illustration (top-right corner) and next to the case-study label. At most one per project                                              |

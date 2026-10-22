@@ -1,0 +1,10 @@
+title: Founder
+org: Unifier
+location: Tel Aviv · Remote
+start: 2026
+bullets:
+  - Took Unifier from client discovery to production as the sole engineer.
+  - Turned a law firm's manual workflow into a clear technical spec with its legal-operations team, cutting document assembly from hours to seconds.
+  - Designed a step-by-step pipeline with scored file matching and automatic edge-case checks, so no bundle is assembled wrong.
+  - Set up a hands-off release pipeline that builds, signs, and packages licensed Windows and macOS apps.
+order: 1

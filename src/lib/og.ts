@@ -29,7 +29,7 @@ export type OgCard = {
   label: string;
   /** Title; `*word*` is drawn in the accent color. */
   title: string;
-  /** Footer line, e.g. "Yoav Sborovsky · AI Engineer · London". */
+  /** Footer line, e.g. "Yoav Sborovsky · Software Engineer · London". */
   footer: string;
   /** Monogram in the corner mark, e.g. "YS". */
   initials: string;

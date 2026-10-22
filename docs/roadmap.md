@@ -26,7 +26,8 @@ One PR at a time; the next starts only after the previous is merged.
 | 20  | `ci/pre-push-parity`           | `npm run ci:local` (verify, audit, e2e, links, actionlint) as the pre-push hook and `/ship` gate (ADR-0020)                                                                                                 | ✅ merged      |
 | 21  | `chore/tamper-proof-gates`     | Protect check config and visual baselines, suppression ratchet in `verify`/pre-commit/Stop hook, Stop hook runs unit tests (ADR-0021)                                                                       | ✅ merged      |
 | 22  | `chore/refactor-engine`        | `/refactor` and `/fix-bug` skills, `refactor-reviewer` agent, knip and ESLint size limits (ADR-0022), Stryker mutation testing on `src/lib` in `ci:local` and CI (ADR-0023)                                 | ✅ merged      |
-| 23  | `chore/agent-agnostic-rules`   | `AGENTS.md` as the tool-agnostic source of truth (`CLAUDE.md` imports it), `guards` CI job running the commit-time rules and a roadmap check over the whole PR diff, AI notes in the PR template (ADR-0024) | 🚧 in progress |
+| 23  | `chore/agent-agnostic-rules`   | `AGENTS.md` as the tool-agnostic source of truth (`CLAUDE.md` imports it), `guards` CI job running the commit-time rules and a roadmap check over the whole PR diff, AI notes in the PR template (ADR-0024) | ✅ merged      |
+| 24  | `content/linkedin-sync`        | Match LinkedIn: Software Engineer title, Unifier and IAF (Project Manager) experience, SysAid bullets, role-neutral headline, no "open to roles" status line, new LinkedIn URL                              | 🚧 in progress |
 
 Phase 2 (after launch): writing/blog, `/new-post` skill, RSS.
 `
