@@ -1,14 +1,16 @@
 ---
 title: Files Unifier
-kicker: Desktop app for a law firm
+kicker: Unifier · Desktop app for a law firm
 summary: A desktop tool, sold to a leading law firm, that turns a spreadsheet into merged, ready-to-send PDFs.
 tags: [Automation, Python, Desktop app]
 outcome: Built and sold to Goldfarb Gross Seligman, now used internally for document workflows.
 meta:
-  role: Solo, sold to client
+  role: Founder, sole engineer
   timeline: "2026"
   stack: [Python, GitHub Actions]
   links:
+    - label: Website
+      href: https://yoavsb25.github.io/files-unifier/
     - label: GitHub
       href: https://github.com/Yoavsb25/files-unifier
 problem: Staff were assembling large batches of documents by hand, a slow and repetitive task where mistakes were costly.
@@ -29,5 +31,5 @@ featured: true
 badge: Sold
 cover:
   src: ./cover.png
-  alt: "The PDF Batch Merger desktop app: fields for the serial numbers column, the instructions spreadsheet, and the source and output folders, a Run Merge button, and a detailed log panel."
+  alt: 'The Unifier brand card: the blue U logo, the name Unifier, the tagline "Many files. One document.", and the line "Files Unifier — document assembly for operations teams".'
 ---
