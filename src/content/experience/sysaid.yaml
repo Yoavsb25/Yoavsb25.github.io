@@ -1,10 +1,10 @@
-title: Automation Engineer
-org: SysAid Technologies
+title: Software Engineer
+org: SysAid
 location: London
 start: 2025
 bullets:
-  - Built the platform the company uses to release its 29 software components, and automated release coordination across 14 repositories.
-  - Created an AI-powered translation tool that translates keys across 7 different languages which made the translation process 75% faster.
-  - Built AI assistants (Claude Code) that help engineers find the root cause of incidents and failed tests faster.
-  - Built a central test-results database that shows failures and trends across every environment.
-order: 1
+  - Built the deployment platform for 29 software components on GitHub Actions, cutting production-access requests by 65%.
+  - Shipped an AI translation tool (Gemini) that now opens 90% of translation PRs, raising same-day delivery from 8% to 53% company-wide.
+  - Built a test-data platform that grew from 200 to 26,000+ CI runs and 15M+ records, feeding automated failure analysis.
+  - Built Claude root-cause analysis agents across 2,200+ staging runs, cutting triage time by over 85%.
+order: 2

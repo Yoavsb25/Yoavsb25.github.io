@@ -80,7 +80,6 @@ const stages = defineCollection({
 const profile = defineCollection({
   loader: glob({ pattern: "profile.yaml", base: "./src/content" }),
   schema: z.object({
-    status: text,
     headline: text,
     lede: text,
     skills: z.array(text).min(1),

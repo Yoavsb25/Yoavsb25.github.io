@@ -2,27 +2,27 @@
 
 ## Goal
 
-Get Yoav hired as an **AI engineer**, and build a long-term personal brand around that identity.
+Get Yoav hired, in **AI engineering or technical program management** roles, and build a long-term personal brand as someone who takes products from idea to production. The site never names a single target title, so it fits both.
 
 The site is a business card that proves the claim instead of stating it: every page, and the repo itself, demonstrates how he plans, builds, tests, and ships.
 
 ## Positioning
 
-**Today** (GitHub profile, CV): "Full-Stack Developer · Automation Engineer · AI Enthusiast".
-**Target**: an AI engineer who takes products from idea to production. Automation, CI/CD, and full-stack experience become the _evidence_, not the title.
+**Today** (LinkedIn): "Software Engineer @ SysAid | AI Builder". The site matches it.
+**Target**: a software engineer and AI builder who takes products from idea to production. Automation, CI/CD, delivery, and stakeholder work become the _evidence_, not the title.
 
 Approved hero copy (from the design mockup):
 
-> **I plan AI systems. Then I _ship_ them.**
-> I'm Yoav, an AI engineer who takes products from idea to production. I plan them, build them, test them, and keep improving them, with the care that makes AI dependable.
+> **I turn ideas into _working_ tech.**
+> I'm Yoav. I take products from idea to production: I plan them, build them, test them, and keep improving them, working with everyone who has a stake in the result.
 
 ## Audiences
 
-| Priority | Who                                          | Time on site | Needs to find                                                               |
-| -------- | -------------------------------------------- | ------------ | --------------------------------------------------------------------------- |
-| 1        | **Recruiter**                                | ~30 s        | Title, location, photo, core skills, 2–3 standout projects, CV, contact     |
-| 2        | **Hiring manager / AI engineer interviewer** | 3–10 min     | How he thinks: case studies with problem, approach, results; code on GitHub |
-| 3        | **Community / peers** (brand)                | varies       | What he builds and believes; later, writing                                 |
+| Priority | Who                              | Time on site | Needs to find                                                               |
+| -------- | -------------------------------- | ------------ | --------------------------------------------------------------------------- |
+| 1        | **Recruiter**                    | ~30 s        | Title, location, photo, core skills, 2–3 standout projects, CV, contact     |
+| 2        | **Hiring manager / interviewer** | 3–10 min     | How he thinks: case studies with problem, approach, results; code on GitHub |
+| 3        | **Community / peers** (brand)    | varies       | What he builds and believes; later, writing                                 |
 
 **Recruiters come first.** The site must be easy to read and use: plain language, no jargon, few numbers, no diagrams on the home page, no developer-terminal aesthetic. Technical depth lives inside case studies, for those who look for it.
 
@@ -70,7 +70,6 @@ Full copy and data: `src/content/` (schemas in `src/content.config.ts`). Anythin
 | ------------------- | --------------------------------------------------------- |
 | Title and hero copy | Approved (above)                                          |
 | Case studies        | This website, release platform, Files Unifier, Pitch Star |
-| Location line       | "Open to AI engineering roles · London"                   |
 | Contact             | Email Yoavsb25@gmail.com, LinkedIn, GitHub, CV download   |
 | Photo               | GitHub headshot in the hero                               |
 | Design              | Direction A, recruiter-first (`docs/design-system.md`)    |

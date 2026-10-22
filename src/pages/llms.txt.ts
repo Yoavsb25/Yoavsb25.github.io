@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
     summary: `${site.description} Based in ${site.location}.`,
     details: [
       profile.data.lede,
-      `${profile.data.status}. Skills: ${profile.data.skills.join(", ")}.`,
+      `Skills: ${profile.data.skills.join(", ")}.`,
     ].map(plainText),
     projects: projects.map((p) => ({
       title: p.data.title,

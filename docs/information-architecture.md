@@ -24,7 +24,7 @@ Home is one page with anchored sections so a recruiter never has to navigate. Ca
 
 ## Home `/`
 
-1. **Hero** (`#top`): status line with a pulsing dot ("Open to AI engineering roles · London"), serif headline with one italic accent word, one-paragraph lede, _See my work_ (primary; contact is already in the header). Portrait on the right. Plain-language skill chips under a hairline.
+1. **Hero** (`#top`): serif headline with one italic accent word, one-paragraph lede, _See my work_ (primary; contact is already in the header). Portrait on the right. Plain-language skill chips under a hairline.
 2. **How I work** (`#how`): tonal band. Headline, one-line intro, a 7-stage track (Plan → Foundations → Architect → Build → Test → Deploy → Iterate). Selecting a stage shows its plain explanation and an "In practice" example from real work. Default selection: Build.
 3. **Selected work** (`#projects`): one featured card (full width) + three cards. The whole card is a link to the case study. A card may carry one milestone badge (e.g. Sold) on its illustration.
 4. **Resume** (`#resume`): experience timeline (roles and education, 1–4 plain bullets each) + sticky aside with "Download CV" and grouped skills.

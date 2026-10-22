@@ -21,10 +21,6 @@ const { profile, name, workHref } = Astro.props;
 <section class="hero" id="top" aria-labelledby="hero-title">
   <div class="wrap grid">
     <div class="copy">
-      <p class="status">
-        <span class="pulse" aria-hidden="true"></span>
-        {profile.status}
-      </p>
       <h1 id="hero-title" class="serif">
         {sentences(profile.headline).map((line) => (
           <span class="line">
@@ -81,35 +77,6 @@ const { profile, name, workHref } = Astro.props;
     grid-template-columns: minmax(0, 1fr) 21.25rem;
     gap: 3.5rem;
     align-items: center;
-  }
-
-  .status {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    color: var(--ink-2);
-    font-size: var(--text-small);
-    font-weight: 500;
-  }
-
-  .pulse {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    /* Looping ambient pulse: its own timing, outside the motion tokens. */
-    animation: pulse 2.4s ease-out infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
-    }
-
-    70%,
-    100% {
-      box-shadow: 0 0 0 9px transparent;
-    }
   }
 
   h1 {
